@@ -47,8 +47,8 @@ const Home = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       
-      <main className="flex-1 pb-24 md:pb-8">
-        <div className="max-w-2xl mx-auto p-4 md:p-6">
+      <main className="flex-1 pb-28 md:pb-8">
+        <div className="max-w-2xl mx-auto p-4 md:p-6 pt-6">
           {/* Stories */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}

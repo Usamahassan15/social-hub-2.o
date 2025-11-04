@@ -25,8 +25,8 @@ const Profile = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       
-      <main className="flex-1 pb-24 md:pb-8">
-        <div className="max-w-4xl mx-auto">
+      <main className="flex-1 pb-28 md:pb-8">
+        <div className="max-w-4xl mx-auto pt-4 md:pt-0">
           {/* Cover Photo */}
           <motion.div
             initial={{ opacity: 0 }}
