@@ -8,6 +8,8 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
+import Notifications from "./pages/Notifications";
+import Jobs from "./pages/Jobs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,7 +26,8 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/messages" element={<Messages />} />
-          <Route path="/notifications" element={<Home />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/jobs" element={<Jobs />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
