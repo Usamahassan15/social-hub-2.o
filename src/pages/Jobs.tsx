@@ -79,18 +79,18 @@ export default function Jobs() {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       
-      <main className="flex-1 md:ml-64 pb-28 md:pb-6">
-        <div className="max-w-4xl mx-auto px-4 pt-6">
+      <main className="flex-1 pb-20 sm:pb-24 md:pb-8 lg:pb-10">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-5 md:pt-6 lg:pt-8">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-4 sm:mb-5 md:mb-6 lg:mb-8"
           >
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 sm:mb-2">
               Job Board
             </h1>
-            <p className="text-muted-foreground">Find your next opportunity</p>
+            <p className="text-sm sm:text-base text-muted-foreground">Find your next opportunity</p>
           </motion.div>
 
           {/* Search */}
@@ -98,13 +98,13 @@ export default function Jobs() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-6"
+            className="mb-4 sm:mb-5 md:mb-6"
           >
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
               <Input 
                 placeholder="Search jobs, companies, or keywords..." 
-                className="pl-10 h-12"
+                className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-sm sm:text-base rounded-lg"
               />
             </div>
           </motion.div>
@@ -114,17 +114,17 @@ export default function Jobs() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex gap-2 mb-6 overflow-x-auto pb-2"
+            className="flex gap-2 sm:gap-2.5 md:gap-3 mb-4 sm:mb-5 md:mb-6 overflow-x-auto pb-2 scrollbar-hide"
           >
-            <Button variant="outline" size="sm">All Jobs</Button>
-            <Button variant="outline" size="sm">Full-time</Button>
-            <Button variant="outline" size="sm">Remote</Button>
-            <Button variant="outline" size="sm">Contract</Button>
-            <Button variant="outline" size="sm">Saved</Button>
+            <Button variant="outline" size="sm" className="whitespace-nowrap text-xs sm:text-sm">All Jobs</Button>
+            <Button variant="outline" size="sm" className="whitespace-nowrap text-xs sm:text-sm">Full-time</Button>
+            <Button variant="outline" size="sm" className="whitespace-nowrap text-xs sm:text-sm">Remote</Button>
+            <Button variant="outline" size="sm" className="whitespace-nowrap text-xs sm:text-sm">Contract</Button>
+            <Button variant="outline" size="sm" className="whitespace-nowrap text-xs sm:text-sm">Saved</Button>
           </motion.div>
 
           {/* Jobs List */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
             {jobs.map((job, index) => (
               <motion.div
                 key={job.id}
@@ -132,79 +132,79 @@ export default function Jobs() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
               >
-                <Card className="hover:shadow-lg transition-all cursor-pointer">
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-start gap-4 flex-1 min-w-0">
-                        <Avatar className="w-12 h-12 flex-shrink-0">
+                <Card className="hover:shadow-lg transition-all cursor-pointer rounded-lg sm:rounded-xl">
+                  <CardHeader className="p-4 sm:p-5 md:p-6">
+                    <div className="flex items-start justify-between gap-3 sm:gap-4">
+                      <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+                        <Avatar className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex-shrink-0">
                           <AvatarImage src={job.logo} />
                           <AvatarFallback>{job.company[0]}</AvatarFallback>
                         </Avatar>
                         
                         <div className="flex-1 min-w-0">
-                          <CardTitle className="text-lg mb-1">{job.title}</CardTitle>
-                          <CardDescription className="text-sm">{job.company}</CardDescription>
+                          <CardTitle className="text-base sm:text-lg md:text-xl mb-0.5 sm:mb-1 truncate">{job.title}</CardTitle>
+                          <CardDescription className="text-xs sm:text-sm truncate">{job.company}</CardDescription>
                         </div>
                       </div>
 
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="flex-shrink-0"
+                        className="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleSave(job.id);
                         }}
                       >
                         <Bookmark 
-                          className={`w-5 h-5 ${savedJobs.includes(job.id) ? 'fill-primary text-primary' : ''}`} 
+                          className={`w-4 h-4 sm:w-5 sm:h-5 ${savedJobs.includes(job.id) ? 'fill-primary text-primary' : ''}`} 
                         />
                       </Button>
                     </div>
                   </CardHeader>
 
-                  <CardContent>
-                    <div className="space-y-3">
+                  <CardContent className="p-4 sm:p-5 md:p-6 pt-0">
+                    <div className="space-y-2.5 sm:space-y-3 md:space-y-4">
                       {/* Job Info */}
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{job.location}</span>
+                      <div className="flex flex-wrap gap-3 sm:gap-4 md:gap-5 text-xs sm:text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1 sm:gap-1.5">
+                          <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                          <span className="truncate">{job.location}</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Briefcase className="w-4 h-4" />
+                        <div className="flex items-center gap-1 sm:gap-1.5">
+                          <Briefcase className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                           <span>{job.type}</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="w-4 h-4" />
-                          <span>{job.salary}</span>
+                        <div className="flex items-center gap-1 sm:gap-1.5">
+                          <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                          <span className="whitespace-nowrap">{job.salary}</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
+                        <div className="flex items-center gap-1 sm:gap-1.5">
+                          <Clock className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
                           <span>{job.posted}</span>
                         </div>
                       </div>
 
                       {/* Description */}
-                      <p className="text-sm text-muted-foreground line-clamp-2">
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                         {job.description}
                       </p>
 
                       {/* Tags */}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {job.tags.map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
+                          <Badge key={tag} variant="secondary" className="text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1">
                             {tag}
                           </Badge>
                         ))}
                       </div>
 
                       {/* Actions */}
-                      <div className="flex gap-2 pt-2">
-                        <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-2.5 md:gap-3 pt-2 sm:pt-3">
+                        <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80 h-9 sm:h-10 text-sm sm:text-base">
                           Apply Now
                         </Button>
-                        <Button variant="outline" className="flex-1">
+                        <Button variant="outline" className="flex-1 h-9 sm:h-10 text-sm sm:text-base">
                           View Details
                         </Button>
                       </div>

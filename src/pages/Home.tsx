@@ -47,19 +47,19 @@ const Home = () => {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       
-      <main className="flex-1 pb-28 md:pb-8">
-        <div className="max-w-2xl mx-auto p-4 md:p-6 pt-6">
+      <main className="flex-1 pb-20 sm:pb-24 md:pb-8 lg:pb-10">
+        <div className="max-w-2xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-5 md:pt-6 lg:pt-8">
           {/* Stories */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-4 sm:mb-5 md:mb-6 lg:mb-8"
           >
             <Stories />
           </motion.div>
 
           {/* Posts Feed */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
             {posts.map((post, index) => (
               <motion.div
                 key={post.id}
@@ -80,14 +80,14 @@ const Home = () => {
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-24 md:bottom-8 right-6 z-40"
+        className="fixed bottom-20 sm:bottom-24 md:bottom-8 lg:bottom-10 right-4 sm:right-5 md:right-6 lg:right-8 z-40"
       >
         <Button
           size="icon"
           onClick={() => setIsCreatePostOpen(true)}
-          className="w-14 h-14 rounded-full bg-gradient-to-r from-primary to-primary-glow shadow-lg glow-effect"
+          className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-primary to-primary-glow shadow-lg hover:shadow-xl glow-effect"
         >
-          <Plus className="w-6 h-6" />
+          <Plus className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
         </Button>
       </motion.div>
 
