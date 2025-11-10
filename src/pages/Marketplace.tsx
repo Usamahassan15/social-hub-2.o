@@ -125,18 +125,18 @@ export default function Marketplace() {
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       
-      <main className="flex-1 md:ml-64 pb-28 md:pb-6">
-        <div className="max-w-7xl mx-auto px-4 pt-6">
+      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-4 sm:mb-5 md:mb-6"
           >
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 sm:mb-2">
               Marketplace
             </h1>
-            <p className="text-muted-foreground">Buy and sell items in your community</p>
+            <p className="text-sm sm:text-base text-muted-foreground">Buy and sell items in your community</p>
           </motion.div>
 
           {/* Search and Filter */}
@@ -172,7 +172,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
