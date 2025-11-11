@@ -148,33 +148,39 @@ export default function Marketplace() {
             transition={{ delay: 0.1 }}
             className="mb-6 space-y-4"
           >
-            {/* Search Bar */}
-            <div className="flex gap-2">
+            {/* Search Bar and Post Button */}
+            <div className="flex gap-2 md:gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input 
                   placeholder="Search for items..." 
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 rounded-lg"
                 />
               </div>
-              <Button variant="outline" size="icon" className="h-12 w-12 flex-shrink-0">
+              <Button variant="outline" size="icon" className="h-12 w-12 flex-shrink-0 rounded-lg">
                 <Filter className="w-5 h-5" />
+              </Button>
+              <Button 
+                className="h-12 px-4 md:px-6 flex-shrink-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg font-semibold"
+              >
+                <ShoppingBag className="w-5 h-5 md:mr-2" />
+                <span className="hidden md:inline">Post Listing</span>
               </Button>
             </div>
 
             {/* Category Filters */}
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              <Button variant="default" size="sm" className="flex-shrink-0">All</Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0">Electronics</Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0">Fashion</Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0">Gaming</Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0">Sports</Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0">Photography</Button>
+              <Button variant="default" size="sm" className="flex-shrink-0 rounded-full">All</Button>
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full">Electronics</Button>
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full">Fashion</Button>
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full">Gaming</Button>
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full">Sports</Button>
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full">Photography</Button>
             </div>
           </motion.div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -182,75 +188,57 @@ export default function Marketplace() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
               >
-                <Card className="overflow-hidden hover:shadow-md transition-all cursor-pointer group">
+                <Card className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-xl border-border/50">
                   {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden bg-muted h-32 md:h-48">
+                  <div className="relative aspect-square overflow-hidden bg-muted">
                     <img 
                       src={product.image} 
                       alt={product.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-xl"
                     />
                     
-                    {/* Overlay Actions */}
-                    <div className="absolute top-2 right-2 flex gap-2">
+                    {/* Heart Icon */}
+                    <div className="absolute top-3 right-3">
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm"
+                        className="h-9 w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleLike(product.id);
                         }}
                       >
                         <Heart 
-                          className={`w-4 h-4 ${likedProducts.includes(product.id) ? 'fill-red-500 text-red-500' : ''}`} 
+                          className={`w-4 h-4 transition-colors ${likedProducts.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} 
                         />
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="icon"
-                        className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Share2 className="w-4 h-4" />
                       </Button>
                     </div>
 
                     {/* Condition Badge */}
-                    <div className="absolute bottom-2 left-2">
-                      <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
+                    <div className="absolute bottom-3 left-3">
+                      <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm shadow-sm text-xs">
                         {product.condition}
                       </Badge>
                     </div>
                   </div>
 
-                  <CardContent className="p-2 md:p-4">
+                  <CardContent className="p-4">
                     {/* Product Info */}
-                    <div className="space-y-1 md:space-y-2">
-                      <h3 className="font-semibold text-xs md:text-sm text-foreground line-clamp-2">
+                    <div className="space-y-2">
+                      <h3 className="font-semibold text-sm md:text-base text-foreground line-clamp-2 min-h-[2.5rem]">
                         {product.title}
                       </h3>
 
-                      <p className="text-base md:text-xl font-bold text-primary">
+                      <p className="text-lg md:text-xl font-bold text-primary">
                         {product.price}
                       </p>
 
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <MapPin className="w-3 h-3" />
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground pt-1">
+                        <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                         <span className="line-clamp-1">{product.location}</span>
                       </div>
                     </div>
                   </CardContent>
-
-                  <CardFooter className="p-2 md:p-4 pt-0 flex items-center gap-2">
-                    <Avatar className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0">
-                      <AvatarImage src={product.sellerAvatar} />
-                      <AvatarFallback>{product.seller[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs md:text-sm font-medium line-clamp-1">{product.seller}</p>
-                    </div>
-                  </CardFooter>
                 </Card>
               </motion.div>
             ))}
