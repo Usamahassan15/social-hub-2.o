@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Search, Send, MoreVertical, Phone, Video } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
+import TopBar from "@/components/TopBar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -101,9 +102,10 @@ const Messages = () => {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
+      <TopBar />
       
-      <main className="flex-1 pb-28 md:pb-8">
-        <div className="h-[calc(100vh-7rem)] md:h-[calc(100vh-2rem)] flex">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
+        <div className="h-[calc(100vh-8rem)] md:h-[calc(100vh-2rem)] flex">
           {/* Conversations List */}
           <div
             className={`${

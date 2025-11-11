@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
+import TopBar from "@/components/TopBar";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,9 +125,10 @@ export default function Marketplace() {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
+      <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-4 md:pt-6">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -172,7 +174,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -180,9 +182,9 @@ export default function Marketplace() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
               >
-                <Card className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
+                <Card className="overflow-hidden hover:shadow-md transition-all cursor-pointer group">
                   {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden bg-muted">
+                  <div className="relative aspect-square overflow-hidden bg-muted h-32 md:h-48">
                     <img 
                       src={product.image} 
                       alt={product.title}
@@ -222,37 +224,31 @@ export default function Marketplace() {
                     </div>
                   </div>
 
-                  <CardContent className="p-4">
+                  <CardContent className="p-2 md:p-4">
                     {/* Product Info */}
-                    <div className="space-y-2">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-semibold text-foreground line-clamp-1 flex-1">
-                          {product.title}
-                        </h3>
-                        <Badge variant="outline" className="flex-shrink-0">
-                          <Tag className="w-3 h-3 mr-1" />
-                          {product.category}
-                        </Badge>
-                      </div>
+                    <div className="space-y-1 md:space-y-2">
+                      <h3 className="font-semibold text-xs md:text-sm text-foreground line-clamp-2">
+                        {product.title}
+                      </h3>
 
-                      <p className="text-2xl font-bold text-primary">
+                      <p className="text-base md:text-xl font-bold text-primary">
                         {product.price}
                       </p>
 
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <MapPin className="w-4 h-4" />
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <MapPin className="w-3 h-3" />
                         <span className="line-clamp-1">{product.location}</span>
                       </div>
                     </div>
                   </CardContent>
 
-                  <CardFooter className="p-4 pt-0 flex items-center gap-3">
-                    <Avatar className="w-8 h-8 flex-shrink-0">
+                  <CardFooter className="p-2 md:p-4 pt-0 flex items-center gap-2">
+                    <Avatar className="w-6 h-6 md:w-8 md:h-8 flex-shrink-0">
                       <AvatarImage src={product.sellerAvatar} />
                       <AvatarFallback>{product.seller[0]}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium line-clamp-1">{product.seller}</p>
+                      <p className="text-xs md:text-sm font-medium line-clamp-1">{product.seller}</p>
                     </div>
                   </CardFooter>
                 </Card>

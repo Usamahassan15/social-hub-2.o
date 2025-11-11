@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
+import TopBar from "@/components/TopBar";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 
@@ -16,9 +17,10 @@ const Explore = () => {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
+      <TopBar />
       
-      <main className="flex-1 pb-28 md:pb-8">
-        <div className="max-w-4xl mx-auto p-4 md:p-6 pt-6">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-4 md:pt-6">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

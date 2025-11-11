@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
+import TopBar from "@/components/TopBar";
 import Post from "@/components/Post";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -48,9 +49,10 @@ export default function Profile() {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
+      <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8">
-        <div className="max-w-2xl lg:max-w-3xl mx-auto px-3 sm:px-4 md:px-6">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
+        <div className="max-w-xl mx-auto px-4 md:px-6">
           {/* Cover Photo */}
           <motion.div 
             initial={{ opacity: 0 }}
