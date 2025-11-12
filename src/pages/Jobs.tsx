@@ -126,7 +126,7 @@ export default function Jobs() {
           </motion.div>
 
           {/* Jobs List */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+          <div className="space-y-2.5 sm:space-y-3 md:space-y-4 lg:space-y-5">
             {jobs.map((job, index) => (
               <motion.div
                 key={job.id}
@@ -188,7 +188,7 @@ export default function Jobs() {
                       </div>
 
                       {/* Description */}
-                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 max-w-full overflow-hidden">
                         {job.description}
                       </p>
 

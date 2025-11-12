@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const trendingTopics = [
   { id: 1, tag: "#Technology", posts: "45.2K posts" },
@@ -14,18 +16,31 @@ const trendingTopics = [
 ];
 
 const Explore = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-4 md:pt-6">
+      {/* Mobile: Full-screen overlay with close button */}
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0 fixed md:relative inset-0 md:inset-auto z-50 md:z-auto bg-background">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-4 md:pt-6 h-full overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-3xl font-bold gradient-text mb-6">Explore</h1>
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] bg-clip-text text-transparent">Explore</h1>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate(-1)}
+                className="md:hidden h-9 w-9"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
             
             <div className="relative mb-8">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />

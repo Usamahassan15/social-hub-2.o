@@ -180,7 +180,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -188,53 +188,53 @@ export default function Marketplace() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
               >
-                <Card className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-xl border-border/50">
+                <Card className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-lg sm:rounded-xl border-border/50">
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden bg-muted">
                     <img 
                       src={product.image} 
                       alt={product.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-xl"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     
                     {/* Heart Icon */}
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="h-9 w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
+                        className="h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleLike(product.id);
                         }}
                       >
                         <Heart 
-                          className={`w-4 h-4 transition-colors ${likedProducts.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} 
+                          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-colors ${likedProducts.includes(product.id) ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} 
                         />
                       </Button>
                     </div>
 
                     {/* Condition Badge */}
-                    <div className="absolute bottom-3 left-3">
-                      <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm shadow-sm text-xs">
+                    <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3">
+                      <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm shadow-sm text-[10px] sm:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
                         {product.condition}
                       </Badge>
                     </div>
                   </div>
 
-                  <CardContent className="p-4">
+                  <CardContent className="p-2 sm:p-3 md:p-4">
                     {/* Product Info */}
-                    <div className="space-y-2">
-                      <h3 className="font-semibold text-sm md:text-base text-foreground line-clamp-2 min-h-[2.5rem]">
+                    <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
+                      <h3 className="font-semibold text-xs sm:text-sm md:text-base text-foreground line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem]">
                         {product.title}
                       </h3>
 
-                      <p className="text-lg md:text-xl font-bold text-primary">
+                      <p className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] bg-clip-text text-transparent">
                         {product.price}
                       </p>
 
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground pt-1">
-                        <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                      <div className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-muted-foreground pt-0.5 sm:pt-1">
+                        <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
                         <span className="line-clamp-1">{product.location}</span>
                       </div>
                     </div>

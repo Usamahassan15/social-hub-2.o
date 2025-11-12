@@ -30,7 +30,7 @@ const NavItem = ({ icon: Icon, path }: { icon: any; path: string }) => (
           isActive ? "text-primary" : "text-muted-foreground"
         }`}
       >
-        <Icon className="w-5 h-5" />
+        <Icon className="w-6 h-6" />
       </div>
     )}
   </NavLink>

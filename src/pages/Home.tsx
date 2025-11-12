@@ -50,18 +50,18 @@ const Home = () => {
       <TopBar />
       
       <main className="flex-1 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="max-w-xl mx-auto px-4 md:px-6 pt-4 md:pt-8">
+        <div className="max-w-xl mx-auto px-3 sm:px-4 md:px-6 pt-3 sm:pt-4 md:pt-8">
           {/* Stories */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 sm:mb-5 md:mb-6 lg:mb-8"
+            className="mb-3 sm:mb-4 md:mb-5 lg:mb-6"
           >
             <Stories />
           </motion.div>
 
           {/* Posts Feed */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+          <div className="space-y-2.5 sm:space-y-3 md:space-y-4 lg:space-y-5">
             {posts.map((post, index) => (
               <motion.div
                 key={post.id}
@@ -78,16 +78,16 @@ const Home = () => {
 
       <MobileNav />
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button - Centered on Mobile */}
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-20 md:bottom-8 right-4 md:right-6 z-40"
+        className="fixed bottom-20 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:bottom-8 md:right-6 z-40"
       >
         <Button
           size="icon"
           onClick={() => setIsCreatePostOpen(true)}
-          className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-primary to-primary-glow shadow-lg hover:shadow-xl"
+          className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] shadow-lg hover:shadow-xl"
         >
           <Plus className="w-6 h-6 md:w-7 md:h-7" />
         </Button>
