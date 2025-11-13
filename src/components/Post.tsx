@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface PostProps {
   author: string;
@@ -70,7 +71,9 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             whileHover={{ scale: 1.01 }}
             className="rounded-md sm:rounded-lg overflow-hidden mb-1.5 sm:mb-2 md:mb-3 bg-muted"
           >
-            <img src={image} alt="Post" className="w-full object-cover max-h-48 sm:max-h-64 md:max-h-80 lg:max-h-96" />
+            <AspectRatio ratio={4 / 5}>
+              <img src={image} alt="Post" className="w-full h-full object-cover" />
+            </AspectRatio>
           </motion.div>
         )}
 
