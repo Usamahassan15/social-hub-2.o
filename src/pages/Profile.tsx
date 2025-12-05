@@ -76,10 +76,18 @@ export default function Profile() {
             className="px-3 sm:px-4 md:px-6 pb-4 sm:pb-6"
           >
             <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 -mt-12 sm:-mt-14 md:-mt-16">
-              <Avatar className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 border-3 sm:border-4 border-background shadow-lg">
-                <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" />
-                <AvatarFallback>AJ</AvatarFallback>
-              </Avatar>
+              <div className="relative">
+                <Avatar className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 border-3 sm:border-4 border-background shadow-lg">
+                  <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" />
+                  <AvatarFallback>AJ</AvatarFallback>
+                </Avatar>
+                <label className="absolute -bottom-1 -right-1 cursor-pointer">
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => console.log("Profile photo:", e.target.files?.[0])} />
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                    <Camera className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
+                  </div>
+                </label>
+              </div>
               <div className="flex flex-wrap gap-2 sm:mt-16 md:mt-20 w-full sm:w-auto">
                 <Button 
                   variant="default" 

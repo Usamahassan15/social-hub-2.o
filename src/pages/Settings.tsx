@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
+import TopBar from "@/components/TopBar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -18,7 +19,13 @@ import {
   LogOut, 
   Trash2, 
   Camera,
-  Lock
+  Lock,
+  Heart,
+  UserPlus,
+  Bookmark,
+  HeadphonesIcon,
+  Ban,
+  ChevronRight
 } from "lucide-react";
 import {
   AlertDialog,
@@ -31,11 +38,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import InviteFriendsDialog from "@/components/InviteFriendsDialog";
+import SavedPostsDialog from "@/components/SavedPostsDialog";
+import BlockedPeopleDialog from "@/components/BlockedPeopleDialog";
 
 export default function Settings() {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
   const [deleteReason, setDeleteReason] = useState("");
+  const [showInviteFriends, setShowInviteFriends] = useState(false);
+  const [showSavedPosts, setShowSavedPosts] = useState(false);
+  const [showBlockedPeople, setShowBlockedPeople] = useState(false);
   const [notifications, setNotifications] = useState({
     likes: true,
     comments: true,
@@ -70,8 +83,9 @@ export default function Settings() {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
+      <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8">
+      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8 pt-14 md:pt-0">
         <div className="max-w-2xl lg:max-w-3xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6">
           {/* Header */}
           <motion.div 
@@ -91,6 +105,56 @@ export default function Settings() {
             transition={{ delay: 0.1 }}
             className="space-y-4 sm:space-y-5 md:space-y-6"
           >
+            {/* Quick Actions - Desktop Only */}
+            <Card className="hidden md:block">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base sm:text-lg">Quick Actions</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Frequently used settings</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-3">
+                <Button
+                  variant="outline"
+                  className="h-12 justify-start gap-3"
+                  onClick={() => console.log("My Interests")}
+                >
+                  <Heart className="w-5 h-5 text-primary" />
+                  My Interests
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 justify-start gap-3"
+                  onClick={() => setShowInviteFriends(true)}
+                >
+                  <UserPlus className="w-5 h-5 text-primary" />
+                  Invite Friends
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 justify-start gap-3"
+                  onClick={() => setShowSavedPosts(true)}
+                >
+                  <Bookmark className="w-5 h-5 text-primary" />
+                  Saved Lists
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 justify-start gap-3"
+                  onClick={() => console.log("Support")}
+                >
+                  <HeadphonesIcon className="w-5 h-5 text-primary" />
+                  Support
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 justify-start gap-3 col-span-2"
+                  onClick={() => setShowBlockedPeople(true)}
+                >
+                  <Ban className="w-5 h-5 text-primary" />
+                  Blocked People
+                  <ChevronRight className="w-4 h-4 ml-auto" />
+                </Button>
+              </CardContent>
+            </Card>
             {/* Profile Settings */}
             <Card>
               <CardHeader className="pb-3 sm:pb-6">
@@ -327,6 +391,10 @@ export default function Settings() {
       </main>
 
       <MobileNav />
+
+      <InviteFriendsDialog isOpen={showInviteFriends} onClose={() => setShowInviteFriends(false)} />
+      <SavedPostsDialog isOpen={showSavedPosts} onClose={() => setShowSavedPosts(false)} />
+      <BlockedPeopleDialog isOpen={showBlockedPeople} onClose={() => setShowBlockedPeople(false)} />
     </div>
   );
 }
