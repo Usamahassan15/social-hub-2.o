@@ -1,4 +1,4 @@
-import { Compass, Menu } from "lucide-react";
+import { Search, Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
@@ -14,16 +14,7 @@ const TopBar = () => {
         <div className="flex items-center justify-between h-14 px-4">
           <h1 className="text-xl font-bold gradient-text">SocialApp</h1>
           
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/explore")}
-              className="h-9 w-9"
-            >
-              <Compass className="w-5 h-5" />
-            </Button>
-            
+          <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
@@ -31,6 +22,24 @@ const TopBar = () => {
               className="h-9 w-9"
             >
               <Menu className="w-5 h-5" />
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/explore")}
+              className="h-9 w-9"
+            >
+              <Search className="w-5 h-5" />
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/notifications")}
+              className="h-9 w-9"
+            >
+              <Bell className="w-5 h-5" />
             </Button>
           </div>
         </div>

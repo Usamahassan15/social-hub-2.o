@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Image, Camera } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -247,8 +247,20 @@ const Messages = () => {
             </ScrollArea>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-border bg-card">
+            <div className="p-3 sm:p-4 border-t border-border bg-card">
               <div className="flex items-center gap-2 max-w-3xl mx-auto">
+                <label className="cursor-pointer">
+                  <input type="file" accept="image/*" className="hidden" />
+                  <div className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
+                    <Image className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                </label>
+                <label className="cursor-pointer">
+                  <input type="file" accept="image/*" capture="environment" className="hidden" />
+                  <div className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
+                    <Camera className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                </label>
                 <Input
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}

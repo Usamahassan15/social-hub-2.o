@@ -1,4 +1,4 @@
-import { Home, MessageCircle, Bell, User, ShoppingBag, Briefcase } from "lucide-react";
+import { Home, MessageCircle, User, ShoppingBag, Briefcase, Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const MobileNav = () => {
@@ -7,8 +7,8 @@ const MobileNav = () => {
     { icon: ShoppingBag, label: "Marketplace", path: "/marketplace" },
     { icon: MessageCircle, label: "Messages", path: "/messages" },
     { icon: Briefcase, label: "Jobs", path: "/jobs" },
-    { icon: Bell, label: "Notifications", path: "/notifications" },
     { icon: User, label: "Profile", path: "/profile" },
+    { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
   return (

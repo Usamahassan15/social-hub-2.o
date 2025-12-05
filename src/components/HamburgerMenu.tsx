@@ -1,9 +1,10 @@
-import { X, Heart, UserPlus, Bookmark, HeadphonesIcon } from "lucide-react";
+import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useState } from "react";
 import SavedPostsDialog from "./SavedPostsDialog";
 import InviteFriendsDialog from "./InviteFriendsDialog";
+import BlockedPeopleDialog from "./BlockedPeopleDialog";
 
 interface HamburgerMenuProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface HamburgerMenuProps {
 const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const [showInviteFriends, setShowInviteFriends] = useState(false);
+  const [showBlockedPeople, setShowBlockedPeople] = useState(false);
 
   const menuItems = [
     {
@@ -43,6 +45,13 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       onClick: () => {
         console.log("Support clicked");
         onClose();
+      },
+    },
+    {
+      icon: Ban,
+      label: "Blocked People",
+      onClick: () => {
+        setShowBlockedPeople(true);
       },
     },
   ];
@@ -85,6 +94,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
           setShowInviteFriends(false);
           onClose();
         }} 
+      />
+
+      <BlockedPeopleDialog
+        isOpen={showBlockedPeople}
+        onClose={() => {
+          setShowBlockedPeople(false);
+          onClose();
+        }}
       />
     </>
   );
