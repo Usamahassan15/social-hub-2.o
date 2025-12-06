@@ -115,13 +115,13 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
         {/* Content */}
         <p className="text-xs sm:text-sm text-foreground px-2 sm:px-3 pb-2">{content}</p>
 
-        {/* Image - Edge to edge on mobile */}
+        {/* Image - Smaller on mobile */}
         {image && (
           <motion.div
             whileHover={{ scale: 1.01 }}
             className="overflow-hidden bg-muted"
           >
-            <AspectRatio ratio={4 / 5}>
+            <AspectRatio ratio={4 / 5} className="max-h-[280px] sm:max-h-[400px] md:max-h-none">
               <img src={image} alt="Post" className="w-full h-full object-cover" />
             </AspectRatio>
           </motion.div>

@@ -1,7 +1,8 @@
-import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban } from "lucide-react";
+import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SavedPostsDialog from "./SavedPostsDialog";
 import InviteFriendsDialog from "./InviteFriendsDialog";
 import BlockedPeopleDialog from "./BlockedPeopleDialog";
@@ -15,8 +16,17 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
+  const navigate = useNavigate();
 
   const menuItems = [
+    {
+      icon: Calendar,
+      label: "Events",
+      onClick: () => {
+        navigate("/events");
+        onClose();
+      },
+    },
     {
       icon: Heart,
       label: "My Interests",

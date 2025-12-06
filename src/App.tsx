@@ -11,6 +11,8 @@ import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
 import Jobs from "./pages/Jobs";
 import Marketplace from "./pages/Marketplace";
+import Events from "./pages/Events";
+import Services from "./pages/Services";
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import NotFound from "./pages/NotFound";
@@ -32,7 +34,9 @@ const App = () => (
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/marketplace" element={<Marketplace />} />
-        <Route path="/settings" element={<Settings />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/settings" element={<Settings />} />
         <Route path="/change-password" element={<ChangePassword />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -189,8 +189,8 @@ export default function Marketplace() {
                 transition={{ delay: 0.05 * index }}
               >
                 <Card className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-lg sm:rounded-xl border-border/50">
-                  {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden bg-muted">
+                  {/* Product Image - Smaller on mobile */}
+                  <div className="relative aspect-square max-h-[120px] sm:max-h-[160px] md:max-h-none overflow-hidden bg-muted">
                     <img 
                       src={product.image} 
                       alt={product.title}
