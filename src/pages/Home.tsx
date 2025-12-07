@@ -50,7 +50,7 @@ const Home = () => {
       <TopBar />
       
       <main className="flex-1 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="w-full max-w-[340px] sm:max-w-md md:max-w-xl mx-auto px-3 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8">
+        <div className="w-full max-w-full sm:max-w-md md:max-w-xl mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8">
           {/* Stories */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}

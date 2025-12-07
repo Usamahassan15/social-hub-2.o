@@ -52,7 +52,7 @@ export default function Profile() {
       <TopBar />
       
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="max-w-xl mx-auto px-4 md:px-6">
+        <div className="max-w-full sm:max-w-xl mx-auto px-0 sm:px-4 md:px-6">
           {/* Cover Photo */}
           <motion.div 
             initial={{ opacity: 0 }}
@@ -157,7 +157,7 @@ export default function Profile() {
           </motion.div>
 
           {/* Posts */}
-          <div className="px-3 sm:px-4 md:px-6 space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+          <div className="px-0 sm:px-4 md:px-6 space-y-3 sm:space-y-4 mt-4 sm:mt-6">
             <h2 className="text-lg sm:text-xl font-bold text-foreground">Posts</h2>
             {userPosts.map((post) => (
               <Post key={post.id} {...post} />
