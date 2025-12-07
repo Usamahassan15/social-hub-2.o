@@ -126,7 +126,7 @@ export default function Services() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-[340px] sm:max-w-md md:max-w-4xl mx-auto px-3 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
