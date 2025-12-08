@@ -1,6 +1,7 @@
-import { Handshake, Search, Filter, MapPin, Star, Clock, MessageCircle, Plus } from "lucide-react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { Handshake, Search, Filter, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -14,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
+import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 
 const services = [
   {
@@ -28,6 +30,7 @@ const services = [
     rating: 4.9,
     reviews: 128,
     responseTime: "Usually responds within 1 hour",
+    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop",
   },
   {
     id: 2,
@@ -41,6 +44,7 @@ const services = [
     rating: 4.8,
     reviews: 89,
     responseTime: "Usually responds within 2 hours",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
   },
   {
     id: 3,
@@ -54,6 +58,7 @@ const services = [
     rating: 4.7,
     reviews: 156,
     responseTime: "Usually responds within 30 mins",
+    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop",
   },
   {
     id: 4,
@@ -67,6 +72,7 @@ const services = [
     rating: 4.9,
     reviews: 203,
     responseTime: "Usually responds within 3 hours",
+    image: "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&h=300&fit=crop",
   },
   {
     id: 5,
@@ -80,6 +86,7 @@ const services = [
     rating: 4.8,
     reviews: 92,
     responseTime: "Usually responds within 1 hour",
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=300&fit=crop",
   },
 ];
 
@@ -97,9 +104,13 @@ const categories = [
 ];
 
 export default function Services() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [showPostDialog, setShowPostDialog] = useState(false);
+  const [showProjectsBidding, setShowProjectsBidding] = useState(false);
+  const [serviceImages, setServiceImages] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [newService, setNewService] = useState({
     title: "",
     description: "",
@@ -108,16 +119,32 @@ export default function Services() {
     location: "",
   });
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      Array.from(files).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target?.result && serviceImages.length < 3) {
+            setServiceImages((prev) => [...prev, event.target!.result as string]);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
   const handlePostService = () => {
     if (newService.title && newService.description && newService.category) {
       toast({ title: "Service posted successfully!" });
       setShowPostDialog(false);
       setNewService({ title: "", description: "", category: "", price: "", location: "" });
+      setServiceImages([]);
     }
   };
 
   const handleContact = (providerName: string) => {
-    toast({ title: `Message sent to ${providerName}` });
+    navigate("/messages");
   };
 
   return (
@@ -126,20 +153,33 @@ export default function Services() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="w-full max-w-[340px] sm:max-w-md md:max-w-4xl mx-auto px-3 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-2 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-4 sm:mb-5 md:mb-6"
           >
-            <div className="flex items-center gap-3 mb-1 sm:mb-2">
-              <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                Services
-              </h1>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3 mb-1 sm:mb-2">
+                <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                  Services
+                </h1>
+              </div>
+              {/* Projects Button */}
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={() => setShowProjectsBidding(true)}
+              >
+                <FolderKanban className="w-4 h-4" />
+                <span className="hidden sm:inline">Projects</span>
+              </Button>
             </div>
-            <p className="text-sm sm:text-base text-muted-foreground">Find and offer services in your community</p>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Find and offer services in your community
+            </p>
           </motion.div>
 
           {/* Search and Filters */}
@@ -147,34 +187,78 @@ export default function Services() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-6 space-y-3"
+            className="mb-4 sm:mb-6 space-y-3"
           >
             {/* Search Bar and Post Button */}
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
                 <Input
                   placeholder="Search services..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-12 rounded-lg"
+                  className="pl-9 sm:pl-10 h-10 sm:h-12 rounded-lg text-sm sm:text-base"
                 />
               </div>
-              <Button variant="outline" size="icon" className="h-12 w-12 flex-shrink-0 rounded-lg">
-                <Filter className="w-5 h-5" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 rounded-lg"
+              >
+                <Filter className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
               <Dialog open={showPostDialog} onOpenChange={setShowPostDialog}>
                 <DialogTrigger asChild>
-                  <Button className="h-12 px-4 md:px-6 flex-shrink-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg font-semibold">
-                    <Plus className="w-5 h-5 md:mr-2" />
+                  <Button className="h-10 sm:h-12 px-3 sm:px-4 md:px-6 flex-shrink-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg font-semibold">
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 md:mr-2" />
                     <span className="hidden md:inline">Post Service</span>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-md">
+                <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>Post Your Service</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4 mt-4">
+                    {/* Image Upload */}
+                    <div>
+                      <Label className="mb-2 block">Add Images (up to 3)</Label>
+                      <div className="flex gap-2">
+                        {serviceImages.map((img, index) => (
+                          <div
+                            key={index}
+                            className="relative w-20 h-20 rounded-lg overflow-hidden bg-muted"
+                          >
+                            <img src={img} alt="" className="w-full h-full object-cover" />
+                            <button
+                              onClick={() =>
+                                setServiceImages((prev) => prev.filter((_, i) => i !== index))
+                              }
+                              className="absolute top-1 right-1 w-5 h-5 bg-destructive text-destructive-foreground rounded-full text-xs"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                        {serviceImages.length < 3 && (
+                          <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-20 h-20 rounded-lg border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 flex flex-col items-center justify-center gap-1 transition-colors"
+                          >
+                            <ImagePlus className="w-5 h-5 text-muted-foreground" />
+                            <span className="text-[10px] text-muted-foreground">Add</span>
+                          </button>
+                        )}
+                      </div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </div>
+
                     <div>
                       <Label htmlFor="title">Service Title</Label>
                       <Input
@@ -195,7 +279,9 @@ export default function Services() {
                         </SelectTrigger>
                         <SelectContent>
                           {categories.slice(1).map((cat) => (
-                            <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                            <SelectItem key={cat} value={cat}>
+                              {cat}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -224,7 +310,9 @@ export default function Services() {
                         id="description"
                         placeholder="Describe your service..."
                         value={newService.description}
-                        onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                        onChange={(e) =>
+                          setNewService({ ...newService, description: e.target.value })
+                        }
                         rows={4}
                       />
                     </div>
@@ -243,7 +331,7 @@ export default function Services() {
                   key={cat}
                   variant={selectedCategory === cat ? "default" : "outline"}
                   size="sm"
-                  className="flex-shrink-0 rounded-full"
+                  className="flex-shrink-0 rounded-full text-xs sm:text-sm"
                   onClick={() => setSelectedCategory(cat)}
                 >
                   {cat === "All Categories" ? "All" : cat}
@@ -252,23 +340,23 @@ export default function Services() {
             </div>
 
             {/* Additional Filters */}
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
+            <div className="flex gap-2 flex-wrap">
+              <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm">
                 <MapPin className="w-3 h-3" />
                 Location
               </Button>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="text-xs sm:text-sm">
                 Price Range
               </Button>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-1 sm:gap-2 text-xs sm:text-sm">
                 <Star className="w-3 h-3" />
                 Rating
               </Button>
             </div>
           </motion.div>
 
-          {/* Services List */}
-          <div className="space-y-4">
+          {/* Services Grid/List */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {services.map((service, index) => (
               <motion.div
                 key={service.id}
@@ -276,68 +364,79 @@ export default function Services() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
               >
-                <Card className="overflow-hidden hover:shadow-lg transition-all">
-                  <CardContent className="p-4">
-                    <div className="flex gap-3">
-                      {/* Provider Avatar */}
-                      <Avatar className="w-12 h-12 flex-shrink-0">
-                        <AvatarImage src={service.providerAvatar} />
-                        <AvatarFallback>{service.provider[0]}</AvatarFallback>
-                      </Avatar>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <Badge variant="secondary" className="text-[10px] sm:text-xs">
-                                {service.category}
-                              </Badge>
-                              <div className="flex items-center gap-1 text-yellow-500">
-                                <Star className="w-3 h-3 fill-current" />
-                                <span className="text-xs font-medium">{service.rating}</span>
-                                <span className="text-xs text-muted-foreground">({service.reviews})</span>
-                              </div>
+                <Card className="overflow-hidden hover:shadow-lg transition-all h-full">
+                  {/* Service Image */}
+                  <div className="aspect-video overflow-hidden bg-muted">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <CardContent className="p-3 sm:p-4">
+                    <div className="space-y-2 sm:space-y-3">
+                      {/* Header */}
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="secondary" className="text-[10px] sm:text-xs">
+                              {service.category}
+                            </Badge>
+                            <div className="flex items-center gap-1 text-yellow-500">
+                              <Star className="w-3 h-3 fill-current" />
+                              <span className="text-xs font-medium">{service.rating}</span>
                             </div>
-                            <h3 className="font-semibold text-sm sm:text-base text-foreground">
-                              {service.title}
-                            </h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">
-                              by {service.provider}
-                            </p>
                           </div>
-                          <div className="text-right flex-shrink-0">
-                            <p className="font-bold text-primary text-sm sm:text-base">{service.price}</p>
-                          </div>
+                          <h3 className="font-semibold text-sm sm:text-base text-foreground line-clamp-1">
+                            {service.title}
+                          </h3>
                         </div>
-
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mt-2">
-                          {service.description}
+                        <p className="font-bold text-primary text-sm sm:text-base flex-shrink-0">
+                          {service.price}
                         </p>
+                      </div>
 
-                        <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground flex-wrap">
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            <span>{service.location}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            <span>{service.responseTime}</span>
-                          </div>
-                        </div>
+                      {/* Provider */}
+                      <div className="flex items-center gap-2">
+                        <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
+                          <AvatarImage src={service.providerAvatar} />
+                          <AvatarFallback>{service.provider[0]}</AvatarFallback>
+                        </Avatar>
+                        <span className="text-xs sm:text-sm text-muted-foreground">
+                          {service.provider}
+                        </span>
+                      </div>
 
-                        <div className="flex gap-2 mt-3">
-                          <Button
-                            size="sm"
-                            className="flex-1 sm:flex-none"
-                            onClick={() => handleContact(service.provider)}
-                          >
-                            <MessageCircle className="w-3 h-3 mr-1" />
-                            Contact
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            View Profile
-                          </Button>
+                      {/* Description */}
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
+                        {service.description}
+                      </p>
+
+                      {/* Meta Info */}
+                      <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-muted-foreground flex-wrap">
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          <span>{service.location}</span>
                         </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span className="line-clamp-1">{service.responseTime}</span>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-2 pt-1">
+                        <Button
+                          size="sm"
+                          className="flex-1 text-xs sm:text-sm"
+                          onClick={() => handleContact(service.provider)}
+                        >
+                          <MessageCircle className="w-3 h-3 mr-1" />
+                          Contact
+                        </Button>
+                        <Button variant="outline" size="sm" className="text-xs sm:text-sm">
+                          View Profile
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -351,7 +450,7 @@ export default function Services() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="mt-8 text-center pb-6"
+            className="mt-6 sm:mt-8 text-center pb-6"
           >
             <Button variant="outline" className="w-full sm:w-auto">
               <Handshake className="w-4 h-4 mr-2" />
@@ -362,6 +461,12 @@ export default function Services() {
       </main>
 
       <MobileNav />
+
+      {/* Projects & Bidding Full Screen */}
+      <ServiceProjectsBidding
+        isOpen={showProjectsBidding}
+        onClose={() => setShowProjectsBidding(false)}
+      />
     </div>
   );
 }
