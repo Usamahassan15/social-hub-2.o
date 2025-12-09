@@ -1,6 +1,6 @@
-import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban } from "lucide-react";
+import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban, Camera, Smile } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ShareSheet from "./ShareSheet";
 import ReportDialog from "./ReportDialog";
+import { EmojiPicker } from "./EmojiPicker";
 import { toast } from "@/hooks/use-toast";
 
 interface PostProps {
@@ -36,6 +37,8 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const [likeCount, setLikeCount] = useState(likes);
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [showReportDialog, setShowReportDialog] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -56,6 +59,18 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
 
   const handleBlock = () => {
     toast({ title: `${author} has been blocked` });
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      toast({ title: "Image attached to comment" });
+    }
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setComment(prev => prev + emoji);
+    setShowEmojiPicker(false);
   };
 
   return (
@@ -200,7 +215,39 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="flex gap-1.5 px-2 sm:px-3 py-2 border-t border-border">
+              <div className="relative flex items-center gap-1 px-2 sm:px-3 py-2 border-t border-border">
+                {/* Camera Icon */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageSelect}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="h-8 w-8 flex-shrink-0 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                >
+                  <Camera className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                </button>
+
+                {/* Emoji Picker */}
+                <div className="relative flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                  >
+                    <Smile className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                  </button>
+                  <EmojiPicker
+                    isOpen={showEmojiPicker}
+                    onClose={() => setShowEmojiPicker(false)}
+                    onEmojiSelect={handleEmojiSelect}
+                  />
+                </div>
+
                 <Input 
                   placeholder="Write a comment..."
                   value={comment}
