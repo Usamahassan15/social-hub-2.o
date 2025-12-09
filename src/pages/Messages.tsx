@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Image, Camera } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { EmojiPicker } from "@/components/EmojiPicker";
+import { toast } from "@/hooks/use-toast";
 
 interface Conversation {
   id: number;
@@ -89,12 +97,26 @@ const Messages = () => {
   const [selectedConversation, setSelectedConversation] = useState<number>(1);
   const [messageInput, setMessageInput] = useState("");
   const [showConversationList, setShowConversationList] = useState(true);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
       console.log("Sending message:", messageInput);
       setMessageInput("");
     }
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setMessageInput(prev => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
+  const handleDeleteConversation = () => {
+    toast({ title: "Conversation deleted" });
+  };
+
+  const handleClearChat = () => {
+    toast({ title: "Chat cleared" });
   };
 
   const selectedUser = conversations.find(c => c.id === selectedConversation);
@@ -205,9 +227,33 @@ const Messages = () => {
                 <Button variant="ghost" size="icon">
                   <Video className="w-5 h-5" />
                 </Button>
-                <Button variant="ghost" size="icon">
-                  <MoreVertical className="w-5 h-5" />
-                </Button>
+                {/* 3-dot Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreVertical className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={handleClearChat}>
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Clear Chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy Conversation
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Forward className="w-4 h-4 mr-2" />
+                      Forward Messages
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleDeleteConversation} className="text-destructive">
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete Conversation
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
@@ -249,18 +295,33 @@ const Messages = () => {
             {/* Message Input */}
             <div className="p-3 sm:p-4 border-t border-border bg-card">
               <div className="flex items-center gap-2 max-w-3xl mx-auto">
-                <label className="cursor-pointer">
+                <label className="cursor-pointer flex-shrink-0">
                   <input type="file" accept="image/*" className="hidden" />
                   <div className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
                     <Image className="w-5 h-5 text-muted-foreground" />
                   </div>
                 </label>
-                <label className="cursor-pointer">
+                <label className="cursor-pointer flex-shrink-0">
                   <input type="file" accept="image/*" capture="environment" className="hidden" />
                   <div className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
                     <Camera className="w-5 h-5 text-muted-foreground" />
                   </div>
                 </label>
+                {/* Emoji Picker */}
+                <div className="relative flex-shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                  >
+                    <Smile className="w-5 h-5 text-muted-foreground" />
+                  </button>
+                  <EmojiPicker
+                    isOpen={showEmojiPicker}
+                    onClose={() => setShowEmojiPicker(false)}
+                    onEmojiSelect={handleEmojiSelect}
+                  />
+                </div>
                 <Input
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
@@ -271,7 +332,7 @@ const Messages = () => {
                 <Button
                   size="icon"
                   onClick={handleSendMessage}
-                  className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90"
+                  className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 flex-shrink-0"
                 >
                   <Send className="w-5 h-5" />
                 </Button>

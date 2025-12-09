@@ -1,6 +1,7 @@
 import { Calendar, MapPin, Link as LinkIcon, Camera, Edit, Plus, Settings, Image, Type } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -26,6 +27,7 @@ const userPosts = [
 ];
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isStoryOptionsOpen, setIsStoryOptionsOpen] = useState(false);
   const [isTextStoryOpen, setIsTextStoryOpen] = useState(false);
@@ -44,6 +46,10 @@ export default function Profile() {
       console.log("Image selected:", file);
       setIsStoryOptionsOpen(false);
     }
+  };
+
+  const handleSettingsClick = () => {
+    navigate('/settings');
   };
 
   return (
@@ -111,7 +117,7 @@ export default function Profile() {
                   variant="outline" 
                   size="icon" 
                   className="h-9 w-9 sm:h-10 sm:w-10"
-                  onClick={() => window.location.href = '/settings'}
+                  onClick={handleSettingsClick}
                 >
                   <Settings className="w-4 h-4" />
                 </Button>
@@ -158,7 +164,7 @@ export default function Profile() {
 
           {/* Posts */}
           <div className="px-0 sm:px-4 md:px-6 space-y-3 sm:space-y-4 mt-4 sm:mt-6">
-            <h2 className="text-lg sm:text-xl font-bold text-foreground">Posts</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-foreground px-2 sm:px-0">Posts</h2>
             {userPosts.map((post) => (
               <Post key={post.id} {...post} />
             ))}
