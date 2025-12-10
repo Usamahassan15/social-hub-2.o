@@ -125,9 +125,9 @@ export default function Services() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-1 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-1 sm:px-0">
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-2 sm:px-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3 mb-1 sm:mb-2">
                 <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
@@ -142,7 +142,7 @@ export default function Services() {
           </motion.div>
 
           {/* Search and Filters */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4 sm:mb-6 space-y-3 px-1 sm:px-0">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4 sm:mb-6 space-y-3 px-2 sm:px-0">
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
@@ -195,7 +195,7 @@ export default function Services() {
           </motion.div>
 
           {/* Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 px-1 sm:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 md:gap-4 px-2 sm:px-0">
             {services.map((service, index) => (
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
                 <Card className="overflow-hidden hover:shadow-lg transition-all h-full">
