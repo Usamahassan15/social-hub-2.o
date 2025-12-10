@@ -12,6 +12,17 @@ import {
   Calendar,
   Briefcase,
   Award,
+  Search,
+  Filter,
+  Layers,
+  TrendingUp,
+  FileText,
+  MapPin,
+  Globe,
+  Timer,
+  Wrench,
+  Languages,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,7 +33,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "@/hooks/use-toast";
+
+const filterOptions = {
+  category: ["Web Development", "Mobile Development", "Design", "Writing", "Marketing", "Data Science", "Video & Animation"],
+  experienceLevel: ["Entry Level", "Intermediate", "Expert"],
+  jobType: ["Hourly", "Fixed-Price"],
+  projectLength: ["Less than 1 month", "1-3 months", "3-6 months", "More than 6 months"],
+  hoursPerWeek: ["Less than 30 hrs/week", "More than 30 hrs/week"],
+  clientHistory: ["No hires", "1-9 hires", "10+ hires"],
+};
 
 interface Project {
   id: number;
@@ -137,6 +161,21 @@ export default function ServiceProjectsBidding({ isOpen, onClose }: ServiceProje
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showBidForm, setShowBidForm] = useState(false);
   const [bids, setBids] = useState<Bid[]>(mockBids);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    category: "",
+    experienceLevel: "",
+    jobType: "",
+    projectLength: "",
+    hoursPerWeek: "",
+    clientHistory: "",
+    fixedPrice: false,
+    clientLocation: "",
+    clientTimezone: "",
+    skills: "",
+    languages: "",
+  });
   const [bidForm, setBidForm] = useState({
     amount: "",
     deliveryTime: "",
@@ -165,6 +204,208 @@ export default function ServiceProjectsBidding({ isOpen, onClose }: ServiceProje
     setBidForm({ amount: "", deliveryTime: "", proposal: "" });
   };
 
+  const clearFilters = () => {
+    setFilters({
+      category: "",
+      experienceLevel: "",
+      jobType: "",
+      projectLength: "",
+      hoursPerWeek: "",
+      clientHistory: "",
+      fixedPrice: false,
+      clientLocation: "",
+      clientTimezone: "",
+      skills: "",
+      languages: "",
+    });
+  };
+
+  const filteredProjects = mockProjects.filter(project => {
+    if (searchQuery && !project.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
+        !project.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    if (filters.category && project.category !== filters.category) return false;
+    return true;
+  });
+
+  const FiltersContent = () => (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold text-foreground">Filters</h3>
+        <Button variant="ghost" size="sm" onClick={clearFilters} className="text-xs text-primary">
+          Clear all
+        </Button>
+      </div>
+
+      {/* Category */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Layers className="w-4 h-4 text-muted-foreground" />
+          Category
+        </Label>
+        <Select value={filters.category} onValueChange={(v) => setFilters({...filters, category: v})}>
+          <SelectTrigger className="w-full"><SelectValue placeholder="All categories" /></SelectTrigger>
+          <SelectContent>
+            {filterOptions.category.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Experience Level */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <TrendingUp className="w-4 h-4 text-muted-foreground" />
+          Experience Level
+        </Label>
+        <Select value={filters.experienceLevel} onValueChange={(v) => setFilters({...filters, experienceLevel: v})}>
+          <SelectTrigger className="w-full"><SelectValue placeholder="All levels" /></SelectTrigger>
+          <SelectContent>
+            {filterOptions.experienceLevel.map(lvl => <SelectItem key={lvl} value={lvl}>{lvl}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Job Type */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Briefcase className="w-4 h-4 text-muted-foreground" />
+          Job Type
+        </Label>
+        <Select value={filters.jobType} onValueChange={(v) => setFilters({...filters, jobType: v})}>
+          <SelectTrigger className="w-full"><SelectValue placeholder="All types" /></SelectTrigger>
+          <SelectContent>
+            {filterOptions.jobType.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Fixed Price */}
+      <div className="flex items-center gap-2">
+        <Checkbox 
+          id="fixedPrice" 
+          checked={filters.fixedPrice} 
+          onCheckedChange={(checked) => setFilters({...filters, fixedPrice: checked as boolean})} 
+        />
+        <Label htmlFor="fixedPrice" className="flex items-center gap-2 text-sm cursor-pointer">
+          <DollarSign className="w-4 h-4 text-muted-foreground" />
+          Fixed-Price Only
+        </Label>
+      </div>
+
+      {/* Number of Proposals */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <FileText className="w-4 h-4 text-muted-foreground" />
+          Number of Proposals
+        </Label>
+        <Select>
+          <SelectTrigger className="w-full"><SelectValue placeholder="Any" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0-5">Less than 5</SelectItem>
+            <SelectItem value="5-10">5 to 10</SelectItem>
+            <SelectItem value="10-15">10 to 15</SelectItem>
+            <SelectItem value="15+">15+</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Client Info */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <User className="w-4 h-4 text-muted-foreground" />
+          Client History
+        </Label>
+        <Select value={filters.clientHistory} onValueChange={(v) => setFilters({...filters, clientHistory: v})}>
+          <SelectTrigger className="w-full"><SelectValue placeholder="Any history" /></SelectTrigger>
+          <SelectContent>
+            {filterOptions.clientHistory.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Client Location */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <MapPin className="w-4 h-4 text-muted-foreground" />
+          Client Location
+        </Label>
+        <Input 
+          placeholder="Any location" 
+          value={filters.clientLocation} 
+          onChange={(e) => setFilters({...filters, clientLocation: e.target.value})} 
+        />
+      </div>
+
+      {/* Client Timezone */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Globe className="w-4 h-4 text-muted-foreground" />
+          Client Time Zones
+        </Label>
+        <Input 
+          placeholder="Any timezone" 
+          value={filters.clientTimezone} 
+          onChange={(e) => setFilters({...filters, clientTimezone: e.target.value})} 
+        />
+      </div>
+
+      {/* Project Length */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Timer className="w-4 h-4 text-muted-foreground" />
+          Project Length
+        </Label>
+        <Select value={filters.projectLength} onValueChange={(v) => setFilters({...filters, projectLength: v})}>
+          <SelectTrigger className="w-full"><SelectValue placeholder="Any duration" /></SelectTrigger>
+          <SelectContent>
+            {filterOptions.projectLength.map(len => <SelectItem key={len} value={len}>{len}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Skills */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Wrench className="w-4 h-4 text-muted-foreground" />
+          Skills
+        </Label>
+        <Input 
+          placeholder="e.g. React, Python" 
+          value={filters.skills} 
+          onChange={(e) => setFilters({...filters, skills: e.target.value})} 
+        />
+      </div>
+
+      {/* Hours per Week */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Clock className="w-4 h-4 text-muted-foreground" />
+          Hours per Week
+        </Label>
+        <Select value={filters.hoursPerWeek} onValueChange={(v) => setFilters({...filters, hoursPerWeek: v})}>
+          <SelectTrigger className="w-full"><SelectValue placeholder="Any" /></SelectTrigger>
+          <SelectContent>
+            {filterOptions.hoursPerWeek.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Languages */}
+      <div className="space-y-2">
+        <Label className="flex items-center gap-2 text-sm font-medium">
+          <Languages className="w-4 h-4 text-muted-foreground" />
+          Languages
+        </Label>
+        <Input 
+          placeholder="e.g. English, Spanish" 
+          value={filters.languages} 
+          onChange={(e) => setFilters({...filters, languages: e.target.value})} 
+        />
+      </div>
+    </div>
+  );
+
   if (!isOpen) return null;
 
   return (
@@ -175,87 +416,144 @@ export default function ServiceProjectsBidding({ isOpen, onClose }: ServiceProje
           <Button variant="ghost" size="icon" onClick={selectedProject ? () => setSelectedProject(null) : onClose}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg sm:text-xl font-bold">
+          <h1 className="text-lg sm:text-xl font-bold flex-1">
             {selectedProject ? selectedProject.title : "Projects & Bidding"}
           </h1>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
             {!selectedProject ? (
-              /* Projects List */
+              /* Projects List with Filters */
               <motion.div
                 key="projects"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="p-4 space-y-4 max-w-4xl mx-auto"
+                className="h-full flex"
               >
-                {mockProjects.map((project, index) => (
-                  <motion.div
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Card
-                      className="cursor-pointer hover:shadow-lg transition-all"
-                      onClick={() => setSelectedProject(project)}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <Avatar className="w-10 h-10 flex-shrink-0">
-                            <AvatarImage src={project.clientAvatar} />
-                            <AvatarFallback>{project.client[0]}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-2">
-                              <div>
-                                <Badge variant="secondary" className="text-xs mb-1">
-                                  {project.category}
-                                </Badge>
-                                <h3 className="font-semibold text-foreground line-clamp-1">
-                                  {project.title}
-                                </h3>
-                                <p className="text-xs text-muted-foreground">{project.client}</p>
-                              </div>
-                              <p className="font-bold text-primary text-sm flex-shrink-0">
-                                {project.budget}
-                              </p>
+                {/* Desktop Filters Panel */}
+                <aside className="hidden lg:block w-72 xl:w-80 border-r border-border bg-card/50 overflow-y-auto">
+                  <ScrollArea className="h-full">
+                    <div className="p-4">
+                      <FiltersContent />
+                    </div>
+                  </ScrollArea>
+                </aside>
+
+                {/* Main Content */}
+                <div className="flex-1 flex flex-col overflow-hidden">
+                  {/* Search Bar */}
+                  <div className="p-3 sm:p-4 border-b border-border bg-card/30">
+                    <div className="flex gap-2 max-w-4xl mx-auto">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search projects..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-10 h-10 sm:h-11"
+                        />
+                      </div>
+                      {/* Mobile Filters Button */}
+                      <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
+                        <SheetTrigger asChild>
+                          <Button variant="outline" size="icon" className="lg:hidden h-10 w-10 sm:h-11 sm:w-11 flex-shrink-0">
+                            <Filter className="w-4 h-4" />
+                          </Button>
+                        </SheetTrigger>
+                        <SheetContent side="right" className="w-[85vw] sm:w-[380px] p-0">
+                          <SheetHeader className="p-4 border-b border-border">
+                            <SheetTitle>Filter Projects</SheetTitle>
+                          </SheetHeader>
+                          <ScrollArea className="h-[calc(100vh-60px)]">
+                            <div className="p-4">
+                              <FiltersContent />
                             </div>
-                            <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
-                              {project.description}
-                            </p>
-                            <div className="flex flex-wrap gap-1 mt-2">
-                              {project.skills.slice(0, 3).map((skill) => (
-                                <Badge key={skill} variant="outline" className="text-xs">
-                                  {skill}
-                                </Badge>
-                              ))}
-                              {project.skills.length > 3 && (
-                                <Badge variant="outline" className="text-xs">
-                                  +{project.skills.length - 3}
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {project.deadline}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <User className="w-3 h-3" />
-                                {project.proposals} proposals
-                              </span>
-                              <span>{project.postedDate}</span>
-                            </div>
-                          </div>
+                          </ScrollArea>
+                        </SheetContent>
+                      </Sheet>
+                    </div>
+                  </div>
+
+                  {/* Projects List */}
+                  <ScrollArea className="flex-1">
+                    <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 max-w-4xl mx-auto">
+                      {filteredProjects.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground">
+                          <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p>No projects found</p>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
+                      ) : (
+                        filteredProjects.map((project, index) => (
+                          <motion.div
+                            key={project.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                          >
+                            <Card
+                              className="cursor-pointer hover:shadow-lg transition-all"
+                              onClick={() => setSelectedProject(project)}
+                            >
+                              <CardContent className="p-3 sm:p-4">
+                                <div className="flex items-start gap-3">
+                                  <Avatar className="w-10 h-10 flex-shrink-0">
+                                    <AvatarImage src={project.clientAvatar} />
+                                    <AvatarFallback>{project.client[0]}</AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-start justify-between gap-2">
+                                      <div>
+                                        <Badge variant="secondary" className="text-xs mb-1">
+                                          {project.category}
+                                        </Badge>
+                                        <h3 className="font-semibold text-foreground line-clamp-1">
+                                          {project.title}
+                                        </h3>
+                                        <p className="text-xs text-muted-foreground">{project.client}</p>
+                                      </div>
+                                      <p className="font-bold text-primary text-sm flex-shrink-0">
+                                        {project.budget}
+                                      </p>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground line-clamp-2 mt-2">
+                                      {project.description}
+                                    </p>
+                                    <div className="flex flex-wrap gap-1 mt-2">
+                                      {project.skills.slice(0, 3).map((skill) => (
+                                        <Badge key={skill} variant="outline" className="text-xs">
+                                          {skill}
+                                        </Badge>
+                                      ))}
+                                      {project.skills.length > 3 && (
+                                        <Badge variant="outline" className="text-xs">
+                                          +{project.skills.length - 3}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+                                      <span className="flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {project.deadline}
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <User className="w-3 h-3" />
+                                        {project.proposals} proposals
+                                      </span>
+                                      <span>{project.postedDate}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
+                  </ScrollArea>
+                </div>
               </motion.div>
             ) : (
               /* Project Detail View */
@@ -264,10 +562,11 @@ export default function ServiceProjectsBidding({ isOpen, onClose }: ServiceProje
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="max-w-4xl mx-auto"
+                className="h-full overflow-y-auto"
               >
+                <div className="max-w-4xl mx-auto">
                 <Tabs defaultValue="details" className="w-full">
-                  <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
+                  <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent sticky top-0 z-10 bg-background">
                     <TabsTrigger
                       value="details"
                       className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary"
@@ -410,6 +709,7 @@ export default function ServiceProjectsBidding({ isOpen, onClose }: ServiceProje
                     ))}
                   </TabsContent>
                 </Tabs>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
