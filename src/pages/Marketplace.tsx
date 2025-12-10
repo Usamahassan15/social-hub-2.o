@@ -154,12 +154,12 @@ export default function Marketplace() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-1 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 sm:mb-5 md:mb-6"
+            className="mb-4 sm:mb-5 md:mb-6 px-2 sm:px-0"
           >
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 sm:mb-2">
               Marketplace
@@ -174,7 +174,7 @@ export default function Marketplace() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-4 sm:mb-6 space-y-3 sm:space-y-4"
+            className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 px-2 sm:px-0"
           >
             {/* Search Bar and Post Button */}
             <div className="flex gap-2 md:gap-3">
@@ -222,7 +222,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 px-2 sm:px-0">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
