@@ -125,7 +125,7 @@ export default function Services() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-5xl mx-auto px-0.5 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-[98%] sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-5xl mx-auto px-0 sm:px-4 md:px-6 pt-1 sm:pt-4 md:pt-6">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-1 sm:px-0">
             <div className="flex items-center justify-between">
@@ -195,36 +195,36 @@ export default function Services() {
           </motion.div>
 
           {/* Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1.5 sm:gap-3 md:gap-4 px-0.5 sm:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1.5 sm:gap-3 md:gap-4 px-0 sm:px-0">
             {services.map((service, index) => (
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
                 <Card className="overflow-hidden hover:shadow-lg transition-all h-full">
                   <div className="aspect-video overflow-hidden bg-muted">
                     <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                   </div>
-                  <CardContent className="p-2 sm:p-3 md:p-4">
-                    <div className="space-y-2">
-                      <div className="flex items-start justify-between gap-2">
+                    <CardContent className="p-1.5 sm:p-3 md:p-4">
+                    <div className="space-y-1.5 sm:space-y-2">
+                      <div className="flex items-start justify-between gap-1.5 sm:gap-2">
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="secondary" className="text-[10px] sm:text-xs">{service.category}</Badge>
-                            <div className="flex items-center gap-1 text-yellow-500"><Star className="w-3 h-3 fill-current" /><span className="text-xs font-medium">{service.rating}</span></div>
+                          <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                            <Badge variant="secondary" className="text-[9px] sm:text-xs px-1.5 py-0">{service.category}</Badge>
+                            <div className="flex items-center gap-0.5 text-yellow-500"><Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-current" /><span className="text-[10px] sm:text-xs font-medium">{service.rating}</span></div>
                           </div>
-                          <h3 className="font-semibold text-sm sm:text-base text-foreground line-clamp-1">{service.title}</h3>
+                          <h3 className="font-semibold text-xs sm:text-base text-foreground line-clamp-1">{service.title}</h3>
                         </div>
-                        <p className="font-bold text-primary text-sm sm:text-base flex-shrink-0">{service.price}</p>
+                        <p className="font-bold text-primary text-xs sm:text-base flex-shrink-0">{service.price}</p>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Avatar className="w-6 h-6"><AvatarImage src={service.providerAvatar} /><AvatarFallback>{service.provider[0]}</AvatarFallback></Avatar>
-                        <span className="text-xs sm:text-sm text-muted-foreground">{service.provider}</span>
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <Avatar className="w-5 h-5 sm:w-6 sm:h-6"><AvatarImage src={service.providerAvatar} /><AvatarFallback>{service.provider[0]}</AvatarFallback></Avatar>
+                        <span className="text-[10px] sm:text-sm text-muted-foreground">{service.provider}</span>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{service.description}</p>
-                      <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                        <MapPin className="w-3 h-3" /><span>{service.location}</span>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground line-clamp-2">{service.description}</p>
+                      <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px] text-muted-foreground">
+                        <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3" /><span>{service.location}</span>
                       </div>
-                      <div className="flex gap-2 pt-1">
-                        <Button size="sm" className="flex-1 text-xs" onClick={() => handleContact(service.provider)}><MessageCircle className="w-3 h-3 mr-1" />Contact</Button>
-                        <Button variant="outline" size="sm" className="text-xs" onClick={() => setSelectedService(service)}>View Profile</Button>
+                      <div className="flex gap-1.5 sm:gap-2 pt-0.5 sm:pt-1">
+                        <Button size="sm" className="flex-1 h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3" onClick={() => handleContact(service.provider)}><MessageCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-0.5 sm:mr-1" />Contact</Button>
+                        <Button variant="outline" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3" onClick={() => setSelectedService(service)}>View Profile</Button>
                       </div>
                     </div>
                   </CardContent>
