@@ -1,11 +1,13 @@
-import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, Calendar } from "lucide-react";
+import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, Calendar, Users, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SavedPostsDialog from "./SavedPostsDialog";
 import InviteFriendsDialog from "./InviteFriendsDialog";
 import BlockedPeopleDialog from "./BlockedPeopleDialog";
+import { toast } from "@/hooks/use-toast";
 
 interface HamburgerMenuProps {
   isOpen: boolean;
@@ -24,6 +26,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       label: "Events",
       onClick: () => {
         navigate("/events");
+        onClose();
+      },
+    },
+    {
+      icon: Users,
+      label: "Groups",
+      onClick: () => {
+        navigate("/groups");
         onClose();
       },
     },
@@ -50,6 +60,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       },
     },
     {
+      icon: Settings,
+      label: "Settings",
+      onClick: () => {
+        navigate("/settings");
+        onClose();
+      },
+    },
+    {
       icon: HeadphonesIcon,
       label: "Support",
       onClick: () => {
@@ -66,15 +84,24 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
     },
   ];
 
+  const handleLogout = () => {
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+    navigate("/auth");
+    onClose();
+  };
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={onClose}>
-        <SheetContent side="right" className="w-72">
+        <SheetContent side="right" className="w-72 flex flex-col">
           <SheetHeader>
             <SheetTitle>Menu</SheetTitle>
           </SheetHeader>
           
-          <div className="mt-6 space-y-2">
+          <div className="flex-1 mt-6 space-y-2">
             {menuItems.map((item) => (
               <Button
                 key={item.label}
@@ -86,6 +113,18 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
                 <span className="text-base">{item.label}</span>
               </Button>
             ))}
+          </div>
+
+          <div className="mt-auto pb-4">
+            <Separator className="mb-4" />
+            <Button
+              variant="ghost"
+              className="w-full justify-start gap-3 h-12 text-destructive hover:text-destructive hover:bg-destructive/10"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="text-base">Logout</span>
+            </Button>
           </div>
         </SheetContent>
       </Sheet>

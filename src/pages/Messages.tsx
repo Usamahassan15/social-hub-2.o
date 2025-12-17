@@ -126,8 +126,8 @@ const Messages = () => {
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="h-[calc(100vh-8rem)] md:h-[calc(100vh-2rem)] flex">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
+        <div className="h-[calc(100vh-8rem)] md:h-[calc(100vh-4rem)] flex max-w-6xl mx-auto">
           {/* Conversations List */}
           <div
             className={`${

@@ -1,5 +1,7 @@
 import { Bell, Heart, MessageCircle, UserPlus, Share2, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -74,33 +76,47 @@ const NotificationIcon = ({ type }: { type: string }) => {
 };
 
 export default function Notifications() {
+  const navigate = useNavigate();
+
+  // Redirect to home on desktop - notifications are in dropdown
+  useEffect(() => {
+    const checkScreenSize = () => {
+      if (window.innerWidth >= 768) {
+        navigate("/");
+      }
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, [navigate]);
+
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background md:hidden">
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="max-w-2xl mx-auto px-4 md:px-6 pt-4 md:pt-6">
+      <main className="flex-1 pb-16 pt-14">
+        <div className="max-w-lg mx-auto px-2 sm:px-4 pt-4">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6"
+            className="mb-4 sm:mb-6"
           >
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               Notifications
             </h1>
           </motion.div>
 
           {/* Tabs */}
           <Tabs defaultValue="all" className="mb-6">
-            <TabsList className="w-full grid grid-cols-3 mb-6">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="unread">Unread</TabsTrigger>
-              <TabsTrigger value="mentions">Mentions</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-3 mb-4">
+              <TabsTrigger value="all" className="text-sm">All</TabsTrigger>
+              <TabsTrigger value="unread" className="text-sm">Unread</TabsTrigger>
+              <TabsTrigger value="mentions" className="text-sm">Mentions</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="all" className="space-y-3">
+            <TabsContent value="all" className="space-y-2 sm:space-y-3">
               {notifications.map((notification, index) => (
                 <motion.div
                   key={notification.id}
@@ -108,12 +124,12 @@ export default function Notifications() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className={`p-4 hover:shadow-md transition-all cursor-pointer ${
+                  <Card className={`p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer ${
                     notification.unread ? 'bg-accent/30 border-primary/20' : ''
                   }`}>
                     <div className="flex items-start gap-3">
                       <div className="relative">
-                        <Avatar className="w-12 h-12">
+                        <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
                           <AvatarImage src={notification.avatar} />
                           <AvatarFallback>{notification.user[0]}</AvatarFallback>
                         </Avatar>
@@ -140,7 +156,7 @@ export default function Notifications() {
               ))}
             </TabsContent>
 
-            <TabsContent value="unread" className="space-y-3">
+            <TabsContent value="unread" className="space-y-2 sm:space-y-3">
               {notifications.filter(n => n.unread).map((notification, index) => (
                 <motion.div
                   key={notification.id}
@@ -148,10 +164,10 @@ export default function Notifications() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="p-4 bg-accent/30 border-primary/20 hover:shadow-md transition-all cursor-pointer">
+                  <Card className="p-3 sm:p-4 bg-accent/30 border-primary/20 hover:shadow-md transition-all cursor-pointer">
                     <div className="flex items-start gap-3">
                       <div className="relative">
-                        <Avatar className="w-12 h-12">
+                        <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
                           <AvatarImage src={notification.avatar} />
                           <AvatarFallback>{notification.user[0]}</AvatarFallback>
                         </Avatar>
