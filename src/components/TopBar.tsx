@@ -1,37 +1,37 @@
-import { Search, Bell, Menu } from "lucide-react";
+import { Search, Bell, Menu, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import HamburgerMenu from "./HamburgerMenu";
 import { useNavigate } from "react-router-dom";
 import NotificationsDropdown from "./NotificationsDropdown";
+import CreatePost from "./CreatePost";
 
 const TopBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showMobileSearch, setShowMobileSearch] = useState(true);
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-card border-b border-border md:hidden">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-card md:hidden">
         <div className="flex items-center justify-between h-14 px-2 sm:px-4 gap-2">
-          {/* Logo - only show when search is collapsed on very small screens */}
-          <h1 className="text-lg font-bold gradient-text flex-shrink-0 hidden xs:block sm:block">
+          {/* Logo */}
+          <h1 className="text-lg font-bold gradient-text flex-shrink-0">
             SocialApp
           </h1>
           
-          {/* Search Bar - visible on mobile */}
-          <div className="flex-1 max-w-[200px] sm:max-w-xs">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                className="pl-8 h-9 text-sm rounded-full bg-muted/50"
-              />
-            </div>
-          </div>
-          
           <div className="flex items-center gap-0.5 sm:gap-1">
+            {/* Search Icon - navigates to Explore */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/explore")}
+              className="h-9 w-9"
+            >
+              <Search className="w-5 h-5" />
+            </Button>
+
+            {/* Notifications */}
             <Button
               variant="ghost"
               size="icon"
@@ -40,8 +40,18 @@ const TopBar = () => {
             >
               <Bell className="w-5 h-5" />
             </Button>
+
+            {/* Create Post */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsCreatePostOpen(true)}
+              className="h-9 w-9"
+            >
+              <Plus className="w-5 h-5" />
+            </Button>
             
-            {/* Hamburger Menu */}
+            {/* Hamburger Menu - far right */}
             <Button
               variant="ghost"
               size="icon"
@@ -55,15 +65,16 @@ const TopBar = () => {
       </header>
 
       {/* Desktop Header with Notifications Dropdown */}
-      <header className="hidden md:flex fixed top-0 left-64 right-0 z-40 bg-card border-b border-border h-14 items-center justify-between px-6">
+      <header className="hidden md:flex fixed top-0 left-64 right-0 z-40 bg-card h-14 items-center justify-between px-6">
         <div className="flex-1 max-w-md">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search..."
-              className="pl-10 h-10 rounded-full bg-muted/50"
-            />
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/explore")}
+            className="h-10 w-10"
+          >
+            <Search className="w-5 h-5" />
+          </Button>
         </div>
         <div className="flex items-center gap-2">
           <NotificationsDropdown />
@@ -71,6 +82,8 @@ const TopBar = () => {
       </header>
 
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <CreatePost isOpen={isCreatePostOpen} onClose={() => setIsCreatePostOpen(false)} />
+
     </>
   );
 };
