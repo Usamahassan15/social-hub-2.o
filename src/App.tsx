@@ -15,6 +15,7 @@ import Events from "./pages/Events";
 import Services from "./pages/Services";
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
+import Groups from "./pages/Groups";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,7 +38,8 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/services" element={<Services />} />
           <Route path="/settings" element={<Settings />} />
-        <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/groups" element={<Groups />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

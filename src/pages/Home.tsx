@@ -49,8 +49,8 @@ const Home = () => {
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="w-full max-w-full sm:max-w-md md:max-w-xl mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
+        <div className="w-full max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8">
           {/* Stories */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -78,18 +78,18 @@ const Home = () => {
 
       <MobileNav />
 
-      {/* Floating Action Button - Centered on Mobile */}
+      {/* Floating Action Button - Hidden on Mobile, visible on Desktop */}
       <motion.div
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-20 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:bottom-8 md:right-6 z-40"
+        className="hidden md:block fixed bottom-8 right-6 z-40"
       >
         <Button
           size="icon"
           onClick={() => setIsCreatePostOpen(true)}
-          className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] shadow-lg hover:shadow-xl"
+          className="w-16 h-16 rounded-full bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] shadow-lg hover:shadow-xl"
         >
-          <Plus className="w-6 h-6 md:w-7 md:h-7" />
+          <Plus className="w-7 h-7" />
         </Button>
       </motion.div>
 

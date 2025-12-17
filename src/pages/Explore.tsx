@@ -24,8 +24,8 @@ const Explore = () => {
       <TopBar />
       
       {/* Mobile: Full-screen overlay with close button */}
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0 fixed md:relative inset-0 md:inset-auto z-50 md:z-auto bg-background">
-        <div className="max-w-4xl mx-auto px-4 md:px-6 pt-4 md:pt-6 h-full overflow-y-auto">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14 fixed md:relative inset-0 md:inset-auto z-50 md:z-auto bg-background">
+        <div className="max-w-3xl lg:max-w-4xl mx-auto px-4 md:px-6 pt-4 md:pt-6 h-full overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
