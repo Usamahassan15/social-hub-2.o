@@ -50,7 +50,7 @@ const Home = () => {
       <TopBar />
       
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto px-1 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8">
+        <div className="w-full max-w-[95%] sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto px-0 sm:px-4 md:px-6 pt-1 sm:pt-4 md:pt-8">
           {/* Stories */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -61,7 +61,7 @@ const Home = () => {
           </motion.div>
 
           {/* Posts Feed */}
-          <div className="space-y-2.5 sm:space-y-3 md:space-y-4 lg:space-y-5">
+          <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5">
             {posts.map((post, index) => (
               <motion.div
                 key={post.id}
