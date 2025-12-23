@@ -25,7 +25,8 @@ import {
   Bookmark,
   HeadphonesIcon,
   Ban,
-  ChevronRight
+  ChevronRight,
+  Share2
 } from "lucide-react";
 import {
   AlertDialog,
@@ -41,6 +42,7 @@ import {
 import InviteFriendsDialog from "@/components/InviteFriendsDialog";
 import SavedPostsDialog from "@/components/SavedPostsDialog";
 import BlockedPeopleDialog from "@/components/BlockedPeopleDialog";
+import ShareProfileModal from "@/components/ShareProfileModal";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -49,6 +51,7 @@ export default function Settings() {
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
+  const [showShareProfile, setShowShareProfile] = useState(false);
   const [notifications, setNotifications] = useState({
     likes: true,
     comments: true,
@@ -146,7 +149,15 @@ export default function Settings() {
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-12 justify-start gap-3 col-span-2"
+                  className="h-12 justify-start gap-3"
+                  onClick={() => setShowShareProfile(true)}
+                >
+                  <Share2 className="w-5 h-5 text-primary" />
+                  Share Profile
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 justify-start gap-3"
                   onClick={() => setShowBlockedPeople(true)}
                 >
                   <Ban className="w-5 h-5 text-primary" />
@@ -395,6 +406,7 @@ export default function Settings() {
       <InviteFriendsDialog isOpen={showInviteFriends} onClose={() => setShowInviteFriends(false)} />
       <SavedPostsDialog isOpen={showSavedPosts} onClose={() => setShowSavedPosts(false)} />
       <BlockedPeopleDialog isOpen={showBlockedPeople} onClose={() => setShowBlockedPeople(false)} />
+      <ShareProfileModal isOpen={showShareProfile} onClose={() => setShowShareProfile(false)} />
     </div>
   );
 }
