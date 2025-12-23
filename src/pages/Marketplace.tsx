@@ -154,17 +154,17 @@ export default function Marketplace() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-none sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-5xl mx-0 sm:mx-auto px-3 sm:px-4 md:px-6 pt-0 sm:pt-4 md:pt-6">
+        <div className="w-full md:max-w-4xl lg:max-w-5xl xl:max-w-5xl md:mx-auto px-0 md:px-6 pt-0 md:pt-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 sm:mb-5 md:mb-6 px-1 sm:px-0"
+            className="mb-4 md:mb-6 px-3 md:px-0"
           >
-            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 sm:mb-2">
+            <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 md:mb-2">
               Marketplace
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground">
+            <p className="text-sm md:text-base text-muted-foreground">
               Buy and sell items in your community
             </p>
           </motion.div>
@@ -174,55 +174,55 @@ export default function Marketplace() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 px-1 sm:px-0"
+            className="mb-4 md:mb-6 space-y-3 md:space-y-4 px-3 md:px-0"
           >
             {/* Search Bar and Post Button */}
             <div className="flex gap-2 md:gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input placeholder="Search for items..." className="pl-10 h-10 sm:h-12 rounded-lg" />
+                <Input placeholder="Search for items..." className="pl-10 h-10 md:h-12 rounded-lg" />
               </div>
               <Button
                 variant="outline"
                 size="icon"
-                className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 rounded-lg"
+                className="h-10 w-10 md:h-12 md:w-12 flex-shrink-0 rounded-lg"
               >
-                <Filter className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Filter className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
               <Button
-                className="h-10 sm:h-12 px-3 sm:px-4 md:px-6 flex-shrink-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg font-semibold"
+                className="h-10 md:h-12 px-3 md:px-6 flex-shrink-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg font-semibold"
                 onClick={() => setShowCreateListing(true)}
               >
-                <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 md:mr-2" />
+                <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 md:mr-2" />
                 <span className="hidden md:inline">Post Listing</span>
               </Button>
             </div>
 
             {/* Category Filters */}
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              <Button variant="default" size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm">
+              <Button variant="default" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 All
               </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm">
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 Electronics
               </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm">
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 Fashion
               </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm">
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 Gaming
               </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm">
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 Sports
               </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm">
+              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 Photography
               </Button>
             </div>
           </motion.div>
 
-          {/* Products Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-3 md:gap-4 px-0 sm:px-0">
+          {/* Products Grid - Single column on mobile, multi-column on desktop */}
+          <div className="flex flex-col gap-3 px-3 md:px-0 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -231,11 +231,11 @@ export default function Marketplace() {
                 transition={{ delay: 0.05 * index }}
               >
                 <Card
-                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-lg sm:rounded-xl border border-border/50"
+                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-none md:rounded-xl border-x-0 md:border-x border-t-0 border-b border-border/50 md:border"
                   onClick={() => setSelectedProduct(product)}
                 >
-                  {/* Product Image */}
-                  <div className="relative aspect-[4/3] sm:aspect-square max-h-none sm:max-h-[180px] md:max-h-none overflow-hidden bg-muted">
+                  {/* Product Image - Full width on mobile */}
+                  <div className="relative aspect-[16/10] md:aspect-square overflow-hidden bg-muted">
                     <img
                       src={product.image}
                       alt={product.title}
@@ -243,18 +243,18 @@ export default function Marketplace() {
                     />
 
                     {/* Heart Icon */}
-                    <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 md:top-3 md:right-3">
+                    <div className="absolute top-2 right-2 md:top-3 md:right-3">
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
+                        className="h-9 w-9 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleLike(product.id);
                         }}
                       >
                         <Heart
-                          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 transition-colors ${
+                          className={`w-4 h-4 transition-colors ${
                             likedProducts.includes(product.id)
                               ? "fill-red-500 text-red-500"
                               : "text-muted-foreground"
@@ -264,29 +264,29 @@ export default function Marketplace() {
                     </div>
 
                     {/* Condition Badge */}
-                    <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 md:bottom-3 md:left-3">
+                    <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3">
                       <Badge
                         variant="secondary"
-                        className="bg-background/90 backdrop-blur-sm shadow-sm text-[9px] sm:text-[10px] md:text-xs px-1.5 py-0.5 sm:px-2 sm:py-1"
+                        className="bg-background/90 backdrop-blur-sm shadow-sm text-xs md:text-xs px-2 py-1"
                       >
                         {product.condition}
                       </Badge>
                     </div>
                   </div>
 
-                  <CardContent className="p-1.5 sm:p-3 md:p-4">
-                    {/* Product Info */}
-                    <div className="space-y-0.5 sm:space-y-1 md:space-y-2">
-                      <h3 className="font-semibold text-[11px] sm:text-xs md:text-sm lg:text-base text-foreground line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem]">
+                  <CardContent className="p-3 md:p-4">
+                    {/* Product Info - Larger text on mobile for readability */}
+                    <div className="space-y-1 md:space-y-2">
+                      <h3 className="font-semibold text-base md:text-sm lg:text-base text-foreground line-clamp-2">
                         {product.title}
                       </h3>
 
-                      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-bold bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] bg-clip-text text-transparent">
+                      <p className="text-lg md:text-lg lg:text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                         {product.price}
                       </p>
 
-                      <div className="flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-[10px] md:text-xs text-muted-foreground pt-0.5 sm:pt-1">
-                        <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 flex-shrink-0" />
+                      <div className="flex items-center gap-1.5 text-sm md:text-xs text-muted-foreground pt-1">
+                        <MapPin className="w-4 h-4 md:w-3.5 md:h-3.5 flex-shrink-0" />
                         <span className="line-clamp-1">{product.location}</span>
                       </div>
                     </div>
