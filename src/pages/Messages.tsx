@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward, X, Reply } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
+import MessageBubble from "@/components/MessageBubble";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,10 @@ interface Message {
   sender: "user" | "other";
   content: string;
   time: string;
+  replyTo?: {
+    content: string;
+    sender: string;
+  };
 }
 
 const conversations: Conversation[] = [
@@ -66,7 +71,7 @@ const conversations: Conversation[] = [
   },
 ];
 
-const mockMessages: Message[] = [
+const initialMessages: Message[] = [
   {
     id: 1,
     sender: "other",
@@ -98,12 +103,31 @@ const Messages = () => {
   const [messageInput, setMessageInput] = useState("");
   const [showConversationList, setShowConversationList] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [replyingTo, setReplyingTo] = useState<Message | null>(null);
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
-      console.log("Sending message:", messageInput);
+      const newMessage: Message = {
+        id: messages.length + 1,
+        sender: "user",
+        content: messageInput,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        ...(replyingTo && {
+          replyTo: {
+            content: replyingTo.content,
+            sender: replyingTo.sender === "user" ? "You" : conversations.find(c => c.id === selectedConversation)?.user || "User"
+          }
+        })
+      };
+      setMessages(prev => [...prev, newMessage]);
       setMessageInput("");
+      setReplyingTo(null);
     }
+  };
+
+  const handleReply = (message: Message) => {
+    setReplyingTo(message);
   };
 
   const handleEmojiSelect = (emoji: string) => {
@@ -260,37 +284,49 @@ const Messages = () => {
             {/* Messages */}
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4 max-w-3xl mx-auto">
-                {mockMessages.map((message) => (
-                  <motion.div
+                {messages.map((message) => (
+                  <MessageBubble
                     key={message.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex ${
-                      message.sender === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={`max-w-[70%] ${
-                        message.sender === "user"
-                          ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground"
-                          : "bg-muted text-foreground"
-                      } rounded-2xl px-4 py-3`}
-                    >
-                      <p className="text-sm">{message.content}</p>
-                      <p
-                        className={`text-xs mt-1 ${
-                          message.sender === "user"
-                            ? "text-primary-foreground/70"
-                            : "text-muted-foreground"
-                        }`}
-                      >
-                        {message.time}
-                      </p>
-                    </div>
-                  </motion.div>
+                    message={message}
+                    onReply={handleReply}
+                  />
                 ))}
               </div>
             </ScrollArea>
+
+            {/* Reply Preview */}
+            <AnimatePresence>
+              {replyingTo && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="border-t border-border bg-muted/50 px-4 py-2"
+                >
+                  <div className="flex items-center justify-between max-w-3xl mx-auto">
+                    <div className="flex items-center gap-2">
+                      <Reply className="w-4 h-4 text-primary" />
+                      <div>
+                        <p className="text-xs font-medium text-primary">
+                          Replying to {replyingTo.sender === "user" ? "yourself" : selectedUser?.user}
+                        </p>
+                        <p className="text-xs text-muted-foreground line-clamp-1">
+                          {replyingTo.content}
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() => setReplyingTo(null)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Message Input */}
             <div className="p-3 sm:p-4 border-t border-border bg-card">
@@ -326,7 +362,7 @@ const Messages = () => {
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                  placeholder="Type a message..."
+                  placeholder={replyingTo ? "Type your reply..." : "Type a message..."}
                   className="flex-1"
                 />
                 <Button

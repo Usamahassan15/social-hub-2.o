@@ -64,9 +64,9 @@ const TopBar = () => {
         </div>
       </header>
 
-      {/* Desktop Header with Notifications Dropdown */}
-      <header className="hidden md:flex fixed top-0 left-64 right-0 z-40 bg-card h-14 items-center justify-between px-6">
-        <div className="flex-1 max-w-md">
+      {/* Desktop Header with Notifications Dropdown - Search moved to right */}
+      <header className="hidden md:flex fixed top-0 left-64 right-0 z-40 bg-card h-14 items-center justify-end px-6">
+        <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
@@ -75,8 +75,6 @@ const TopBar = () => {
           >
             <Search className="w-5 h-5" />
           </Button>
-        </div>
-        <div className="flex items-center gap-2">
           <NotificationsDropdown />
         </div>
       </header>

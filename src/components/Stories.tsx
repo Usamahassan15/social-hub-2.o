@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const stories = [
@@ -12,8 +13,31 @@ const stories = [
 ];
 
 const Stories = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleYourStoryClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      console.log("Selected file for story:", file);
+      // Handle the file upload/story creation here
+    }
+  };
+
   return (
     <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+      {/* Hidden file input for Your Story */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,video/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      
       {stories.map((story, index) => (
         <motion.div
           key={story.id}
@@ -23,6 +47,7 @@ const Stories = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="flex-shrink-0 cursor-pointer"
+          onClick={story.isAdd ? handleYourStoryClick : undefined}
         >
           <div className="relative">
             {story.isAdd ? (
