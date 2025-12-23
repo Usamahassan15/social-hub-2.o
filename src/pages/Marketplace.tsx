@@ -154,7 +154,7 @@ export default function Marketplace() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-[98%] sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-5xl mx-auto px-0 sm:px-4 md:px-6 pt-1 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-full sm:max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-5xl mx-auto px-0 sm:px-4 md:px-6 pt-0 sm:pt-4 md:pt-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -222,7 +222,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1 sm:gap-3 md:gap-4 px-0 sm:px-0">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-0.5 sm:gap-3 md:gap-4 px-1 sm:px-0">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -231,11 +231,11 @@ export default function Marketplace() {
                 transition={{ delay: 0.05 * index }}
               >
                 <Card
-                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-lg sm:rounded-xl border-border/50"
+                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-none sm:rounded-xl border-0 sm:border border-border/50"
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image */}
-                  <div className="relative aspect-square max-h-[120px] sm:max-h-[160px] md:max-h-none overflow-hidden bg-muted">
+                  <div className="relative aspect-square max-h-[150px] sm:max-h-[180px] md:max-h-none overflow-hidden bg-muted">
                     <img
                       src={product.image}
                       alt={product.title}
