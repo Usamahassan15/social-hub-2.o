@@ -80,7 +80,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className="p-0 overflow-hidden hover-lift rounded-none sm:rounded-xl border-x-0 sm:border-x border-border/30 sm:border-border">
+      <Card className="p-0 overflow-hidden hover-lift rounded-none sm:rounded-xl border-0 sm:border border-border/30 sm:border-border">
         {/* Header */}
         <div className="flex items-center justify-between px-2 sm:px-3 py-2">
           <div className="flex items-center gap-2">
@@ -136,7 +136,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             whileHover={{ scale: 1.01 }}
             className="overflow-hidden bg-muted"
           >
-            <AspectRatio ratio={4 / 5} className="max-h-[300px] sm:max-h-[350px] md:max-h-none">
+            <AspectRatio ratio={4 / 3} className="max-h-none sm:max-h-[350px] md:max-h-none">
               <img src={image} alt="Post" className="w-full h-full object-cover" />
             </AspectRatio>
           </motion.div>
