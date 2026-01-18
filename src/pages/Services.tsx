@@ -199,7 +199,7 @@ export default function Services() {
             {services.map((service, index) => (
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
                 <Card className="overflow-hidden hover:shadow-lg transition-all h-full rounded-lg sm:rounded-xl border border-border/50">
-                  <div className="aspect-video overflow-hidden bg-muted">
+                  <div className="aspect-[4/5] sm:aspect-video overflow-hidden bg-muted">
                     <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                   </div>
                     <CardContent className="p-1.5 sm:p-3 md:p-4">
