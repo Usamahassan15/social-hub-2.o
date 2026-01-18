@@ -221,21 +221,22 @@ export default function Marketplace() {
             </div>
           </motion.div>
 
-          {/* Products Grid - Single column on mobile, multi-column on desktop */}
-          <div className="flex flex-col gap-3 px-3 md:px-0 md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-4">
+          {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 px-2 sm:px-3 md:px-0">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
+                className="w-full"
               >
                 <Card
-                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group rounded-none md:rounded-xl border-x-0 md:border-x border-t-0 border-b border-border/50 md:border"
+                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group w-full h-auto rounded-lg md:rounded-xl border border-border/50"
                   onClick={() => setSelectedProduct(product)}
                 >
-                  {/* Product Image - Full width on mobile */}
-                  <div className="relative aspect-[16/10] md:aspect-square overflow-hidden bg-muted">
+                  {/* Product Image - Responsive aspect ratio */}
+                  <div className="relative aspect-square overflow-hidden bg-muted">
                     <img
                       src={product.image}
                       alt={product.title}
@@ -243,18 +244,18 @@ export default function Marketplace() {
                     />
 
                     {/* Heart Icon */}
-                    <div className="absolute top-2 right-2 md:top-3 md:right-3">
+                    <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 md:top-3 md:right-3">
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="h-9 w-9 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
+                        className="h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleLike(product.id);
                         }}
                       >
                         <Heart
-                          className={`w-4 h-4 transition-colors ${
+                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors ${
                             likedProducts.includes(product.id)
                               ? "fill-red-500 text-red-500"
                               : "text-muted-foreground"
@@ -264,30 +265,30 @@ export default function Marketplace() {
                     </div>
 
                     {/* Condition Badge */}
-                    <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3">
+                    <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 md:bottom-3 md:left-3">
                       <Badge
                         variant="secondary"
-                        className="bg-background/90 backdrop-blur-sm shadow-sm text-xs md:text-xs px-2 py-1"
+                        className="bg-background/90 backdrop-blur-sm shadow-sm text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1"
                       >
                         {product.condition}
                       </Badge>
                     </div>
                   </div>
 
-                  <CardContent className="p-3 md:p-4">
-                    {/* Product Info - Larger text on mobile for readability */}
-                    <div className="space-y-1 md:space-y-2">
-                      <h3 className="font-semibold text-base md:text-sm lg:text-base text-foreground line-clamp-2">
+                  <CardContent className="p-2 sm:p-3 md:p-4">
+                    {/* Product Info - Responsive text sizing */}
+                    <div className="space-y-0.5 sm:space-y-1 md:space-y-2">
+                      <h3 className="font-semibold text-xs sm:text-sm md:text-base text-foreground line-clamp-2 leading-tight">
                         {product.title}
                       </h3>
 
-                      <p className="text-lg md:text-lg lg:text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                      <p className="text-sm sm:text-base md:text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                         {product.price}
                       </p>
 
-                      <div className="flex items-center gap-1.5 text-sm md:text-xs text-muted-foreground pt-1">
-                        <MapPin className="w-4 h-4 md:w-3.5 md:h-3.5 flex-shrink-0" />
-                        <span className="line-clamp-1">{product.location}</span>
+                      <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+                        <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
+                        <span className="line-clamp-1 break-all">{product.location}</span>
                       </div>
                     </div>
                   </CardContent>
