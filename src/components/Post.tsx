@@ -80,7 +80,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className="p-0 overflow-hidden hover-lift rounded-lg sm:rounded-xl border border-border/30 sm:border-border">
+      <Card className="p-0 overflow-hidden hover-lift rounded-lg sm:rounded-xl border border-border/30 sm:border-border max-w-full">
         {/* Header */}
         <div className="flex items-center justify-between px-2 sm:px-3 py-2">
           <div className="flex items-center gap-2">
