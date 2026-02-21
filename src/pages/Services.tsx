@@ -125,7 +125,7 @@ export default function Services() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="max-w-[92%] sm:max-w-xl lg:max-w-2xl mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-2xl mx-auto px-1 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6 overflow-hidden">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-3 sm:px-0">
             <div className="flex items-center justify-between">
@@ -198,8 +198,8 @@ export default function Services() {
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
             {services.map((service, index) => (
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
-                <Card className="overflow-hidden hover:shadow-lg transition-all h-full rounded-xl border border-border/50">
-                  <div className="aspect-[4/3] sm:aspect-video overflow-hidden bg-muted">
+                <Card className="overflow-hidden hover:shadow-lg transition-all h-full rounded-lg sm:rounded-xl border border-border/30 sm:border-border/50 max-w-full">
+                  <div className="aspect-[4/3] sm:aspect-video overflow-hidden bg-muted w-full">
                     <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                   </div>
                     <CardContent className="p-1.5 sm:p-3 md:p-4">
