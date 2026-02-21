@@ -154,7 +154,7 @@ export default function Marketplace() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full md:max-w-4xl lg:max-w-5xl xl:max-w-5xl md:mx-auto px-0 md:px-6 pt-0 md:pt-6">
+        <div className="w-full max-w-[100vw] sm:max-w-xl md:max-w-4xl lg:max-w-5xl xl:max-w-5xl mx-auto px-1 sm:px-4 md:px-6 pt-0 md:pt-6 overflow-hidden">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -222,7 +222,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 px-2 sm:px-3 md:px-0">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-3 md:gap-4 px-1 sm:px-3 md:px-0">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
