@@ -62,6 +62,7 @@ export default function Settings() {
     profileVisible: true,
     showEmail: false,
     allowMessages: true,
+    privateAccount: false,
   });
 
   const handleDarkModeToggle = (checked: boolean) => {
@@ -330,6 +331,37 @@ export default function Settings() {
                     }
                   />
                 </div>
+                <Separator />
+                <div className="flex items-center justify-between gap-3">
+                  <div className="space-y-0.5 flex-1">
+                    <Label htmlFor="private-account" className="text-sm sm:text-base font-semibold">Private Account</Label>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      Only approved followers can see your posts and profile content
+                    </p>
+                  </div>
+                  <Switch
+                    id="private-account"
+                    checked={privacy.privateAccount}
+                    onCheckedChange={(checked) => 
+                      setPrivacy({ ...privacy, privateAccount: checked })
+                    }
+                  />
+                </div>
+                {privacy.privateAccount && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="rounded-lg bg-muted/50 p-3 space-y-1.5"
+                  >
+                    <p className="text-xs font-medium text-foreground">🔒 Private Mode Active</p>
+                    <ul className="text-xs text-muted-foreground space-y-1 list-disc pl-4">
+                      <li>Only approved followers can see your posts</li>
+                      <li>New followers must send a request</li>
+                      <li>Your profile info is hidden from non-followers</li>
+                    </ul>
+                  </motion.div>
+                )}
                 <Separator />
                 <Button 
                   variant="outline" 

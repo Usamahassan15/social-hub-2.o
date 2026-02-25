@@ -20,15 +20,15 @@ const TopBar = () => {
             SocialApp
           </h1>
           
-          <div className="flex items-center gap-1 sm:gap-1.5">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Search Icon - navigates to Explore */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate("/explore")}
-              className="h-10 w-10"
+              className="h-11 w-11"
             >
-              <Search className="w-[22px] h-[22px]" />
+              <Search className="w-6 h-6" />
             </Button>
 
             {/* Notifications */}
@@ -36,9 +36,9 @@ const TopBar = () => {
               variant="ghost"
               size="icon"
               onClick={() => navigate("/notifications")}
-              className="h-10 w-10"
+              className="h-11 w-11"
             >
-              <Bell className="w-[22px] h-[22px]" />
+              <Bell className="w-6 h-6" />
             </Button>
 
             {/* Create Post */}
@@ -46,9 +46,9 @@ const TopBar = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsCreatePostOpen(true)}
-              className="h-10 w-10"
+              className="h-11 w-11"
             >
-              <Plus className="w-[22px] h-[22px]" />
+              <Plus className="w-6 h-6" />
             </Button>
             
             {/* Hamburger Menu - far right */}
@@ -56,9 +56,9 @@ const TopBar = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsMenuOpen(true)}
-              className="h-10 w-10"
+              className="h-11 w-11"
             >
-              <Menu className="w-[22px] h-[22px]" />
+              <Menu className="w-6 h-6" />
             </Button>
           </div>
         </div>
