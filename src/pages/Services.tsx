@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Handshake, Search, Filter, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban } from "lucide-react";
+import { Handshake, Search, Filter, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -89,6 +89,16 @@ export default function Services() {
   const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newService, setNewService] = useState({ title: "", description: "", category: "", price: "", location: "" });
+  const [likedServices, setLikedServices] = useState<Set<number>>(new Set());
+
+  const toggleLike = useCallback((e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    setLikedServices(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -200,23 +210,33 @@ export default function Services() {
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
                 {/* Mobile: horizontal narrow card */}
                 <Card
-                  className="sm:hidden overflow-hidden hover:shadow-md transition-all rounded-xl border border-border/40 cursor-pointer"
+                  className="sm:hidden overflow-hidden hover:shadow-md transition-all rounded-xl border border-border/40 cursor-pointer relative"
                   onClick={() => setSelectedService(service)}
                 >
+                  <button
+                    onClick={(e) => toggleLike(e, service.id)}
+                    className="absolute top-1.5 right-1.5 z-10 p-1 rounded-full bg-background/70 backdrop-blur-sm"
+                  >
+                    <Heart
+                      className={`w-4 h-4 transition-colors ${likedServices.has(service.id) ? "fill-destructive text-destructive" : "text-muted-foreground"}`}
+                    />
+                  </button>
                   <div className="flex">
                     <div className="w-28 h-24 flex-shrink-0 overflow-hidden bg-muted">
                       <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
                     </div>
-                    <CardContent className="flex-1 p-2.5 flex flex-col justify-center min-w-0">
-                      <h3 className="font-semibold text-sm text-foreground line-clamp-1">{service.title}</h3>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <div className="flex items-center gap-0.5 text-yellow-500">
-                          <Star className="w-3 h-3 fill-current" />
-                          <span className="text-xs font-medium text-foreground">{service.rating}</span>
+                    <CardContent className="flex-1 p-2.5 flex flex-col justify-between min-w-0">
+                      <div>
+                        <h3 className="font-semibold text-sm text-foreground line-clamp-1 pr-6">{service.title}</h3>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <div className="flex items-center gap-0.5 text-yellow-500">
+                            <Star className="w-3 h-3 fill-current" />
+                            <span className="text-xs font-medium text-foreground">{service.rating}</span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">({service.reviews})</span>
                         </div>
-                        <span className="text-xs text-muted-foreground">({service.reviews})</span>
                       </div>
-                      <p className="text-xs font-semibold text-primary mt-1">From {service.price}</p>
+                      <p className="text-xs text-muted-foreground self-end">From <span className="font-bold text-primary">{service.price}</span></p>
                     </CardContent>
                   </div>
                 </Card>
