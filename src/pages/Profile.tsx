@@ -1,6 +1,6 @@
 import { Calendar, MapPin, Link as LinkIcon, Camera, Edit, Plus, Settings, Image, Type, Briefcase, Users } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import WorkProfile from "@/components/profile/WorkProfile";
 import SocialProfile from "@/components/profile/SocialProfile";
 
@@ -21,6 +22,10 @@ export default function Profile() {
   const [isTextStoryOpen, setIsTextStoryOpen] = useState(false);
   const [storyBackground, setStoryBackground] = useState("#199AE3");
   const [profileMode, setProfileMode] = useState<"social" | "work">("social");
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const [coverImage, setCoverImage] = useState<string | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [isCoverPreviewOpen, setIsCoverPreviewOpen] = useState(false);
   
   const [profileData, setProfileData] = useState({
     name: "Alex Johnson",
@@ -37,6 +42,31 @@ export default function Profile() {
     }
   };
 
+  const handleCoverSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setCoverPreview(url);
+      setIsCoverPreviewOpen(true);
+    }
+    // Reset input so same file can be re-selected
+    if (coverInputRef.current) coverInputRef.current.value = "";
+  };
+
+  const saveCoverImage = () => {
+    if (coverPreview) {
+      setCoverImage(coverPreview);
+      setIsCoverPreviewOpen(false);
+      toast({ title: "Cover photo updated" });
+    }
+  };
+
+  const cancelCoverPreview = () => {
+    if (coverPreview) URL.revokeObjectURL(coverPreview);
+    setCoverPreview(null);
+    setIsCoverPreviewOpen(false);
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
@@ -50,10 +80,21 @@ export default function Profile() {
             animate={{ opacity: 1 }}
             className="relative h-40 sm:h-48 md:h-56 lg:h-64 bg-gradient-to-r from-primary to-primary-glow rounded-b-xl md:rounded-b-2xl overflow-hidden"
           >
+            {coverImage && (
+              <img src={coverImage} alt="Cover" className="w-full h-full object-cover absolute inset-0" />
+            )}
+            <input
+              ref={coverInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleCoverSelect}
+            />
             <Button 
               variant="secondary" 
               size="sm"
               className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 gap-2 h-8 sm:h-9 text-xs sm:text-sm"
+              onClick={() => coverInputRef.current?.click()}
             >
               <Camera className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Edit Cover</span>
@@ -80,30 +121,13 @@ export default function Profile() {
                 </label>
               </div>
               <div className="flex flex-wrap gap-2 sm:mt-16 md:mt-20 w-full sm:w-auto">
-                <Button 
-                  variant="default" 
-                  size="sm" 
-                  className="gap-2 flex-1 sm:flex-none h-9 sm:h-10"
-                  onClick={() => setIsEditProfileOpen(true)}
-                >
-                  <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-                  Edit Profile
+                <Button variant="default" size="sm" className="gap-2 flex-1 sm:flex-none h-9 sm:h-10" onClick={() => setIsEditProfileOpen(true)}>
+                  <Edit className="w-3 h-3 sm:w-4 sm:h-4" /> Edit Profile
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="gap-2 flex-1 sm:flex-none h-9 sm:h-10"
-                  onClick={() => setIsStoryOptionsOpen(true)}
-                >
-                  <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
-                  Your Story
+                <Button variant="outline" size="sm" className="gap-2 flex-1 sm:flex-none h-9 sm:h-10" onClick={() => setIsStoryOptionsOpen(true)}>
+                  <Plus className="w-3 h-3 sm:w-4 sm:h-4" /> Your Story
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  className="h-9 w-9 sm:h-10 sm:w-10"
-                  onClick={() => navigate('/settings')}
-                >
+                <Button variant="outline" size="icon" className="h-9 w-9 sm:h-10 sm:w-10" onClick={() => navigate('/settings')}>
                   <Settings className="w-4 h-4" />
                 </Button>
               </div>
@@ -114,35 +138,15 @@ export default function Profile() {
                 <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-1">{profileData.name}</h1>
                 <p className="text-sm sm:text-base text-muted-foreground">{profileData.bio}</p>
               </div>
-
               <div className="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span>{profileData.location}</span>
-                </div>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <span>Joined March 2024</span>
-                </div>
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  <a href="#" className="text-primary hover:underline">{profileData.website}</a>
-                </div>
+                <div className="flex items-center gap-1.5 sm:gap-2"><MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" /><span>{profileData.location}</span></div>
+                <div className="flex items-center gap-1.5 sm:gap-2"><Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" /><span>Joined March 2024</span></div>
+                <div className="flex items-center gap-1.5 sm:gap-2"><LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /><a href="#" className="text-primary hover:underline">{profileData.website}</a></div>
               </div>
-
               <div className="flex gap-4 sm:gap-6 text-sm sm:text-base">
-                <div>
-                  <span className="font-bold text-foreground">1.2K</span>
-                  <span className="text-muted-foreground ml-1 text-xs sm:text-sm">Followers</span>
-                </div>
-                <div>
-                  <span className="font-bold text-foreground">842</span>
-                  <span className="text-muted-foreground ml-1 text-xs sm:text-sm">Following</span>
-                </div>
-                <div>
-                  <span className="font-bold text-foreground">145</span>
-                  <span className="text-muted-foreground ml-1 text-xs sm:text-sm">Posts</span>
-                </div>
+                <div><span className="font-bold text-foreground">1.2K</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Followers</span></div>
+                <div><span className="font-bold text-foreground">842</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Following</span></div>
+                <div><span className="font-bold text-foreground">145</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Posts</span></div>
               </div>
             </div>
           </motion.div>
@@ -150,27 +154,13 @@ export default function Profile() {
           {/* Work / Social Toggle */}
           <div className="px-3 sm:px-4 md:px-6 mb-4">
             <div className="flex rounded-xl bg-muted p-1 gap-1">
-              <button
-                onClick={() => setProfileMode("social")}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  profileMode === "social"
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Users className="w-4 h-4" />
-                Social
+              <button onClick={() => setProfileMode("social")}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${profileMode === "social" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
+                <Users className="w-4 h-4" /> Social
               </button>
-              <button
-                onClick={() => setProfileMode("work")}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  profileMode === "work"
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Briefcase className="w-4 h-4" />
-                Work
+              <button onClick={() => setProfileMode("work")}
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${profileMode === "work" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
+                <Briefcase className="w-4 h-4" /> Work
               </button>
             </div>
           </div>
@@ -178,13 +168,7 @@ export default function Profile() {
           {/* Dynamic Content */}
           <div className="px-0 sm:px-4 md:px-6">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={profileMode}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-              >
+              <motion.div key={profileMode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                 {profileMode === "social" ? <SocialProfile /> : <WorkProfile />}
               </motion.div>
             </AnimatePresence>
@@ -194,6 +178,25 @@ export default function Profile() {
 
       <MobileNav />
 
+      {/* Cover Photo Preview Dialog */}
+      <Dialog open={isCoverPreviewOpen} onOpenChange={(open) => !open && cancelCoverPreview()}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Preview Cover Photo</DialogTitle>
+            <DialogDescription>Review your new cover photo before saving.</DialogDescription>
+          </DialogHeader>
+          {coverPreview && (
+            <div className="rounded-lg overflow-hidden">
+              <img src={coverPreview} alt="Cover preview" className="w-full aspect-[16/6] object-cover" />
+            </div>
+          )}
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" onClick={cancelCoverPreview}>Cancel</Button>
+            <Button onClick={saveCoverImage}>Save Cover</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Edit Profile Dialog */}
       <Dialog open={isEditProfileOpen} onOpenChange={setIsEditProfileOpen}>
         <DialogContent className="max-w-md">
@@ -202,22 +205,10 @@ export default function Profile() {
             <DialogDescription>Update your personal information</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 pt-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" value={profileData.name} onChange={(e) => setProfileData({...profileData, name: e.target.value})} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bio">Bio</Label>
-              <Textarea id="bio" value={profileData.bio} onChange={(e) => setProfileData({...profileData, bio: e.target.value})} rows={3} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
-              <Input id="location" value={profileData.location} onChange={(e) => setProfileData({...profileData, location: e.target.value})} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="website">Website</Label>
-              <Input id="website" value={profileData.website} onChange={(e) => setProfileData({...profileData, website: e.target.value})} />
-            </div>
+            <div className="space-y-2"><Label htmlFor="name">Name</Label><Input id="name" value={profileData.name} onChange={(e) => setProfileData({...profileData, name: e.target.value})} /></div>
+            <div className="space-y-2"><Label htmlFor="bio">Bio</Label><Textarea id="bio" value={profileData.bio} onChange={(e) => setProfileData({...profileData, bio: e.target.value})} rows={3} /></div>
+            <div className="space-y-2"><Label htmlFor="location">Location</Label><Input id="location" value={profileData.location} onChange={(e) => setProfileData({...profileData, location: e.target.value})} /></div>
+            <div className="space-y-2"><Label htmlFor="website">Website</Label><Input id="website" value={profileData.website} onChange={(e) => setProfileData({...profileData, website: e.target.value})} /></div>
             <Button className="w-full" onClick={() => setIsEditProfileOpen(false)}>Save Changes</Button>
           </div>
         </DialogContent>
@@ -233,16 +224,10 @@ export default function Profile() {
           <div className="space-y-3 pt-4">
             <label className="block">
               <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-              <Button variant="outline" className="w-full gap-2 h-12" asChild>
-                <span className="cursor-pointer">
-                  <Image className="w-5 h-5" />
-                  Create a Photo Story
-                </span>
-              </Button>
+              <Button variant="outline" className="w-full gap-2 h-12" asChild><span className="cursor-pointer"><Image className="w-5 h-5" /> Create a Photo Story</span></Button>
             </label>
             <Button variant="outline" className="w-full gap-2 h-12" onClick={() => { setIsStoryOptionsOpen(false); setIsTextStoryOpen(true); }}>
-              <Type className="w-5 h-5" />
-              Create a Text Story
+              <Type className="w-5 h-5" /> Create a Text Story
             </Button>
           </div>
         </DialogContent>
