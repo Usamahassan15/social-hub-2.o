@@ -378,7 +378,18 @@ const Messages = () => {
         </div>
       </main>
 
-      <MobileNav />
+      <AnimatePresence>
+        {showConversationList && (
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            transition={{ duration: 0.2 }}
+          >
+            <MobileNav />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
