@@ -28,7 +28,7 @@ const TopBar = () => {
               onClick={() => navigate("/explore")}
               className="h-12 w-12"
             >
-              <Search className="w-7 h-7" />
+              <Search className="w-8 h-8" />
             </Button>
 
             {/* Notifications */}
@@ -38,7 +38,7 @@ const TopBar = () => {
               onClick={() => navigate("/notifications")}
               className="h-12 w-12"
             >
-              <Bell className="w-7 h-7" />
+              <Bell className="w-8 h-8" />
             </Button>
 
             {/* Create Post */}
@@ -48,7 +48,7 @@ const TopBar = () => {
               onClick={() => setIsCreatePostOpen(true)}
               className="h-12 w-12"
             >
-              <Plus className="w-7 h-7" />
+              <Plus className="w-8 h-8" />
             </Button>
             
             {/* Hamburger Menu - far right */}
@@ -58,7 +58,7 @@ const TopBar = () => {
               onClick={() => setIsMenuOpen(true)}
               className="h-12 w-12"
             >
-              <Menu className="w-7 h-7" />
+              <Menu className="w-8 h-8" />
             </Button>
           </div>
         </div>
