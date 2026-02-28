@@ -1,4 +1,5 @@
 import { ShoppingBag, Search, Filter, MapPin, Heart } from "lucide-react";
+import ImagePreview from "@/components/ImagePreview";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -134,6 +135,8 @@ export default function Marketplace() {
   );
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
   const [showCreateListing, setShowCreateListing] = useState(false);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
+  const [imagePreviewSrc, setImagePreviewSrc] = useState("");
 
   const toggleLike = (productId: number) => {
     setLikedProducts((prev) =>
@@ -240,7 +243,12 @@ export default function Marketplace() {
                     <img
                       src={product.image}
                       alt={product.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setImagePreviewSrc(product.image);
+                        setImagePreviewOpen(true);
+                      }}
                     />
 
                     {/* Heart Icon */}
@@ -328,6 +336,12 @@ export default function Marketplace() {
       <CreateListingModal
         isOpen={showCreateListing}
         onClose={() => setShowCreateListing(false)}
+      />
+
+      <ImagePreview
+        images={imagePreviewSrc ? [imagePreviewSrc] : []}
+        isOpen={imagePreviewOpen}
+        onClose={() => setImagePreviewOpen(false)}
       />
     </div>
   );

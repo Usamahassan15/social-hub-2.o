@@ -16,6 +16,7 @@ import {
 import ShareSheet from "./ShareSheet";
 import ReportDialog from "./ReportDialog";
 import { EmojiPicker } from "./EmojiPicker";
+import ImagePreview from "./ImagePreview";
 import { toast } from "@/hooks/use-toast";
 
 interface PostProps {
@@ -38,6 +39,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [showReportDialog, setShowReportDialog] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showImagePreview, setShowImagePreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLike = () => {
@@ -134,7 +136,8 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
         {image && (
           <motion.div
             whileHover={{ scale: 1.01 }}
-            className="overflow-hidden bg-muted"
+            className="overflow-hidden bg-muted cursor-pointer"
+            onClick={() => setShowImagePreview(true)}
           >
             <AspectRatio ratio={4 / 3} className="w-full">
               <img src={image} alt="Post" className="w-full h-full object-cover" />
@@ -271,6 +274,13 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
 
       <ShareSheet isOpen={showShareSheet} onClose={() => setShowShareSheet(false)} />
       <ReportDialog isOpen={showReportDialog} onClose={() => setShowReportDialog(false)} type="post" />
+      {image && (
+        <ImagePreview
+          images={[image]}
+          isOpen={showImagePreview}
+          onClose={() => setShowImagePreview(false)}
+        />
+      )}
     </motion.div>
   );
 };

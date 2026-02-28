@@ -1,4 +1,5 @@
 import { Image, MoreVertical, Edit, Trash2, Pin } from "lucide-react";
+import ImagePreview from "@/components/ImagePreview";
 import { motion } from "framer-motion";
 import { useState, useCallback } from "react";
 import Post from "@/components/Post";
@@ -65,6 +66,8 @@ export default function SocialProfile() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
 
   const sortedPosts = [...posts].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
@@ -164,6 +167,7 @@ export default function SocialProfile() {
             {userPhotos.map((photo, index) => (
               <motion.div key={index} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.05 }}
                 className="aspect-square overflow-hidden rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => { setPreviewIndex(index); setPreviewOpen(true); }}
               >
                 <img src={photo} alt={`Photo ${index + 1}`} className="w-full h-full object-cover" />
               </motion.div>
@@ -185,6 +189,12 @@ export default function SocialProfile() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <ImagePreview
+        images={userPhotos}
+        initialIndex={previewIndex}
+        isOpen={previewOpen}
+        onClose={() => setPreviewOpen(false)}
+      />
     </>
   );
 }
