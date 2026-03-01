@@ -20,45 +20,18 @@ const TopBar = () => {
             SocialApp
           </h1>
           
-          <div className="flex items-center gap-0.5 sm:gap-1">
-            {/* Search Icon - navigates to Explore */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/explore")}
-              className="h-12 w-12"
-            >
-              <Search className="w-8 h-8" />
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-11 w-11">
+              <Search className="w-[26px] h-[26px]" />
             </Button>
-
-            {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/notifications")}
-              className="h-12 w-12"
-            >
-              <Bell className="w-8 h-8" />
+            <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-11 w-11">
+              <Bell className="w-[26px] h-[26px]" />
             </Button>
-
-            {/* Create Post */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsCreatePostOpen(true)}
-              className="h-12 w-12"
-            >
-              <Plus className="w-8 h-8" />
+            <Button variant="ghost" size="icon" onClick={() => setIsCreatePostOpen(true)} className="h-11 w-11">
+              <Plus className="w-[26px] h-[26px]" />
             </Button>
-            
-            {/* Hamburger Menu - far right */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(true)}
-              className="h-12 w-12"
-            >
-              <Menu className="w-8 h-8" />
+            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(true)} className="h-11 w-11">
+              <Menu className="w-[26px] h-[26px]" />
             </Button>
           </div>
         </div>
