@@ -43,6 +43,7 @@ import InviteFriendsDialog from "@/components/InviteFriendsDialog";
 import SavedPostsDialog from "@/components/SavedPostsDialog";
 import BlockedPeopleDialog from "@/components/BlockedPeopleDialog";
 import ShareProfileModal from "@/components/ShareProfileModal";
+import SupportDialog from "@/components/SupportDialog";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ export default function Settings() {
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
   const [showShareProfile, setShowShareProfile] = useState(false);
+  const [showSupport, setShowSupport] = useState(false);
   const [notifications, setNotifications] = useState({
     likes: true,
     comments: true,
@@ -143,7 +145,7 @@ export default function Settings() {
                 <Button
                   variant="outline"
                   className="h-12 justify-start gap-3"
-                  onClick={() => console.log("Support")}
+                  onClick={() => setShowSupport(true)}
                 >
                   <HeadphonesIcon className="w-5 h-5 text-primary" />
                   Support
@@ -439,6 +441,7 @@ export default function Settings() {
       <SavedPostsDialog isOpen={showSavedPosts} onClose={() => setShowSavedPosts(false)} />
       <BlockedPeopleDialog isOpen={showBlockedPeople} onClose={() => setShowBlockedPeople(false)} />
       <ShareProfileModal isOpen={showShareProfile} onClose={() => setShowShareProfile(false)} />
+      <SupportDialog isOpen={showSupport} onClose={() => setShowSupport(false)} />
     </div>
   );
 }

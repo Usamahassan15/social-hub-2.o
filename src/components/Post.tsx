@@ -18,6 +18,7 @@ import ReportDialog from "./ReportDialog";
 import { EmojiPicker } from "./EmojiPicker";
 import ImagePreview from "./ImagePreview";
 import { toast } from "@/hooks/use-toast";
+import { useHeartSound } from "@/hooks/use-heart-sound";
 
 interface PostProps {
   author: string;
@@ -41,8 +42,10 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showImagePreview, setShowImagePreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const playPop = useHeartSound();
 
   const handleLike = () => {
+    if (!isLiked) playPop();
     setIsLiked(!isLiked);
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
   };
@@ -163,15 +166,17 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
               {isLiked ? (
                 <motion.div
                   key="liked"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [0, 1.3, 1] }}
+                  initial={{ scale: 0, rotate: -15 }}
+                  animate={{ scale: [0, 1.4, 0.9, 1.1, 1], rotate: [-15, 10, -5, 0] }}
                   exit={{ scale: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   <Heart className="w-4 h-4 sm:w-5 sm:h-5 fill-red-500 text-red-500" />
                 </motion.div>
               ) : (
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
+                <motion.div key="not-liked" initial={{ scale: 1 }} animate={{ scale: 1 }}>
+                  <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
+                </motion.div>
               )}
             </AnimatePresence>
             <span className="text-[10px] sm:text-xs font-medium text-foreground">Like</span>
