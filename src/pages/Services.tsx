@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Handshake, Search, Filter, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban, Heart } from "lucide-react";
+import { Handshake, Search, SlidersHorizontal, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban, Heart, Gavel } from "lucide-react";
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -143,10 +143,16 @@ export default function Services() {
                 <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Services</h1>
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => setShowProjectsBidding(true)}>
-                <FolderKanban className="w-4 h-4" />
-                <span className="hidden sm:inline">Projects</span>
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" className="gap-2" onClick={() => setShowProjectsBidding(true)}>
+                  <FolderKanban className="w-4 h-4" />
+                  <span className="hidden sm:inline">Projects</span>
+                </Button>
+                <Button variant="outline" className="gap-2" onClick={() => setShowProjectsBidding(true)}>
+                  <Gavel className="w-4 h-4" />
+                  <span className="hidden sm:inline">Bidding</span>
+                </Button>
+              </div>
             </div>
             <p className="text-sm sm:text-base text-muted-foreground">Find and offer services in your community</p>
           </motion.div>
@@ -159,7 +165,7 @@ export default function Services() {
                 <Input placeholder="Search services..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-9 sm:pl-10 h-10 sm:h-12 rounded-lg text-sm sm:text-base" />
               </div>
               <Button variant="outline" size="icon" className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 rounded-lg">
-                <Filter className="w-4 h-4 sm:w-5 sm:h-5" />
+                <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </Button>
               <Dialog open={showPostDialog} onOpenChange={setShowPostDialog}>
                 <DialogTrigger asChild>

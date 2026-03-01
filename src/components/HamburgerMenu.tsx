@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SavedPostsDialog from "./SavedPostsDialog";
 import InviteFriendsDialog from "./InviteFriendsDialog";
 import BlockedPeopleDialog from "./BlockedPeopleDialog";
+import SupportDialog from "./SupportDialog";
 import { toast } from "@/hooks/use-toast";
 
 interface HamburgerMenuProps {
@@ -18,6 +19,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const [showSavedPosts, setShowSavedPosts] = useState(false);
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
+  const [showSupport, setShowSupport] = useState(false);
   const navigate = useNavigate();
 
   const menuItems = [
@@ -71,8 +73,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       icon: HeadphonesIcon,
       label: "Support",
       onClick: () => {
-        console.log("Support clicked");
-        onClose();
+        setShowSupport(true);
       },
     },
     {
@@ -149,6 +150,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
         isOpen={showBlockedPeople}
         onClose={() => {
           setShowBlockedPeople(false);
+          onClose();
+        }}
+      />
+
+      <SupportDialog
+        isOpen={showSupport}
+        onClose={() => {
+          setShowSupport(false);
           onClose();
         }}
       />
