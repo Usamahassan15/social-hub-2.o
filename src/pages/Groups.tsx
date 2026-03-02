@@ -104,7 +104,7 @@ export default function Groups() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-0">
-        <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-4xl mx-auto lg:mx-0 lg:ml-8 px-2 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}

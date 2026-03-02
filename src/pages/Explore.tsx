@@ -75,7 +75,7 @@ const Explore = () => {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14 fixed md:relative inset-0 md:inset-auto z-50 md:z-auto bg-background">
-        <div className="w-full max-w-3xl lg:max-w-4xl mx-auto px-2 sm:px-4 md:px-6 pt-4 md:pt-6 h-full overflow-y-auto">
+        <div className="w-full max-w-3xl lg:max-w-4xl mx-auto lg:mx-0 lg:ml-8 px-2 sm:px-4 md:px-6 pt-4 md:pt-6 h-full overflow-y-auto">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Explore</h1>

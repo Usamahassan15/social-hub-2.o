@@ -92,7 +92,7 @@ export default function Settings() {
       <TopBar />
       
       <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8 pt-14 md:pt-14">
-        <div className="max-w-2xl lg:max-w-3xl mx-auto px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6">
+        <div className="max-w-2xl lg:max-w-3xl mx-auto lg:mx-0 lg:ml-8 px-3 sm:px-4 md:px-6 pt-4 sm:pt-5 md:pt-6">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
