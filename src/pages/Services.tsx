@@ -85,6 +85,7 @@ export default function Services() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [showProjectsBidding, setShowProjectsBidding] = useState(false);
+  const [projectsBiddingTab, setProjectsBiddingTab] = useState<"projects" | "bidding">("projects");
   const [serviceImages, setServiceImages] = useState<string[]>([]);
   const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -144,11 +145,11 @@ export default function Services() {
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Services</h1>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" className="gap-2" onClick={() => setShowProjectsBidding(true)}>
+                <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("projects"); setShowProjectsBidding(true); }}>
                   <FolderKanban className="w-4 h-4" />
                   <span className="hidden sm:inline">Projects</span>
                 </Button>
-                <Button variant="outline" className="gap-2" onClick={() => setShowProjectsBidding(true)}>
+                <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("bidding"); setShowProjectsBidding(true); }}>
                   <Gavel className="w-4 h-4" />
                   <span className="hidden sm:inline">Bidding</span>
                 </Button>
@@ -286,7 +287,7 @@ export default function Services() {
       </main>
 
       <MobileNav />
-      <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => setShowProjectsBidding(false)} />
+      <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => setShowProjectsBidding(false)} initialTab={projectsBiddingTab} />
       <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} />
     </div>
   );
