@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const stories = [
@@ -27,8 +27,33 @@ const Stories = () => {
     }
   };
 
+  const storiesContainerRef = useRef<HTMLDivElement>(null);
+
+  // Mark touch events originating from stories to prevent page navigation
+  useEffect(() => {
+    const el = storiesContainerRef.current;
+    if (!el) return;
+
+    const markEvent = (e: TouchEvent) => {
+      (e as any).__storySwipe = true;
+    };
+
+    el.addEventListener('touchstart', markEvent, { passive: true });
+    el.addEventListener('touchend', markEvent, { passive: true });
+    el.addEventListener('touchmove', markEvent, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', markEvent);
+      el.removeEventListener('touchend', markEvent);
+      el.removeEventListener('touchmove', markEvent);
+    };
+  }, []);
+
   return (
-    <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+    <div
+      ref={storiesContainerRef}
+      className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide"
+    >
       {/* Hidden file input for Your Story */}
       <input
         ref={fileInputRef}
