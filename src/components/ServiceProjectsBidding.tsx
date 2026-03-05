@@ -2,7 +2,7 @@ import { useState, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ChevronUp, ChevronDown, Clock, DollarSign, User, Send, Star,
-  Calendar, Briefcase, Award, Search, Filter, Layers, TrendingUp, FileText,
+  Calendar, Briefcase, Award, Search, SlidersHorizontal, Layers, TrendingUp, FileText,
   MapPin, Globe, Timer, Wrench, Languages, X, Plus, Paperclip, Bookmark,
   BookmarkCheck, Eye, SortAsc,
 } from "lucide-react";
@@ -386,8 +386,9 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
                     </Select>
                     <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
                       <SheetTrigger asChild>
-                        <Button variant="outline" size="icon" className="lg:hidden h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0">
-                          <Filter className="w-4 h-4" />
+                        <Button variant="outline" className="lg:hidden h-9 sm:h-10 px-3 gap-2 flex-shrink-0 hover:bg-accent/60 transition-colors min-w-[40px]">
+                          <SlidersHorizontal className="w-5 h-5 text-green-500" />
+                          <span className="text-sm font-medium hidden sm:inline">Filter</span>
                         </Button>
                       </SheetTrigger>
                       <SheetContent side="right" className="w-[85vw] sm:w-[380px] p-0">
