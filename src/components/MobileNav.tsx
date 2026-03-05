@@ -22,11 +22,13 @@ const MobileNav = () => {
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
+      if ((e as any).__storySwipe) return;
       setStartX(e.touches[0].clientX);
       setIsDragging(true);
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
+      if ((e as any).__storySwipe) return;
       if (!isDragging) return;
       
       const endX = e.changedTouches[0].clientX;
