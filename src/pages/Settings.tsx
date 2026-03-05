@@ -26,7 +26,8 @@ import {
   HeadphonesIcon,
   Ban,
   ChevronRight,
-  Share2
+  Share2,
+  Volume2
 } from "lucide-react";
 import {
   AlertDialog,
@@ -48,6 +49,9 @@ import SupportDialog from "@/components/SupportDialog";
 export default function Settings() {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    try { return localStorage.getItem("sound-effects-enabled") !== "false"; } catch { return true; }
+  });
   const [deleteReason, setDeleteReason] = useState("");
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showSavedPosts, setShowSavedPosts] = useState(false);
@@ -221,6 +225,33 @@ export default function Settings() {
                     id="dark-mode"
                     checked={darkMode}
                     onCheckedChange={handleDarkModeToggle}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Sound Effects */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Sound Effects</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">Control interaction sounds</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="sound-effects" className="text-sm sm:text-base">Enable Sound Effects</Label>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Play subtle sounds on like, share, save & more</p>
+                  </div>
+                  <Switch
+                    id="sound-effects"
+                    checked={soundEnabled}
+                    onCheckedChange={(checked) => {
+                      setSoundEnabled(checked);
+                      localStorage.setItem("sound-effects-enabled", String(checked));
+                    }}
                   />
                 </div>
               </CardContent>

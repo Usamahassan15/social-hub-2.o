@@ -129,22 +129,13 @@ All colors MUST be HSL.
   h2 { @apply text-lg sm:text-xl md:text-2xl font-semibold leading-tight; }
   h3 { @apply text-base sm:text-lg font-semibold leading-snug; }
   
-  /* Smooth scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  /* Hide scrollbar globally while keeping scroll */
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-muted;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-primary/30 rounded-full;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary/50;
+  *::-webkit-scrollbar {
+    display: none;
   }
 }
 

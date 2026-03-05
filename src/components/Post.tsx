@@ -18,7 +18,7 @@ import ReportDialog from "./ReportDialog";
 import { EmojiPicker } from "./EmojiPicker";
 import ImagePreview from "./ImagePreview";
 import { toast } from "@/hooks/use-toast";
-import { useHeartSound } from "@/hooks/use-heart-sound";
+import { useUISound } from "@/hooks/use-ui-sound";
 
 interface PostProps {
   author: string;
@@ -42,16 +42,20 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showImagePreview, setShowImagePreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const playPop = useHeartSound();
+  const playLike = useUISound("like");
+  const playComment = useUISound("comment");
+  const playShare = useUISound("share");
+  const playSave = useUISound("save");
 
   const handleLike = () => {
-    if (!isLiked) playPop();
+    if (!isLiked) playLike();
     setIsLiked(!isLiked);
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
   };
 
   const handleComment = () => {
     if (comment.trim()) {
+      playComment();
       toast({ title: "Comment posted!" });
       setComment("");
     }
@@ -195,7 +199,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setShowShareSheet(true)}
+            onClick={() => { playShare(); setShowShareSheet(true); }}
             className="flex flex-col sm:flex-row items-center justify-center gap-0.5 px-1 py-1.5 rounded-md hover:bg-muted transition-colors"
           >
             <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
@@ -205,7 +209,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setIsSaved(!isSaved)}
+            onClick={() => { playSave(); setIsSaved(!isSaved); }}
             className="flex flex-col sm:flex-row items-center justify-center gap-0.5 px-1 py-1.5 rounded-md hover:bg-muted transition-colors"
           >
             <Bookmark className={`w-4 h-4 sm:w-5 sm:h-5 ${isSaved ? 'fill-primary text-primary' : 'text-foreground'}`} />
