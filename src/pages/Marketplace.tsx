@@ -1,7 +1,7 @@
 import { ShoppingBag, Search, Filter, MapPin, Heart } from "lucide-react";
 import ImagePreview from "@/components/ImagePreview";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -137,6 +137,23 @@ export default function Marketplace() {
   const [showCreateListing, setShowCreateListing] = useState(false);
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [imagePreviewSrc, setImagePreviewSrc] = useState("");
+  const categoryTabsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = categoryTabsRef.current;
+    if (!el) return;
+    const markEvent = (e: TouchEvent) => {
+      (e as any).__storySwipe = true;
+    };
+    el.addEventListener('touchstart', markEvent, { passive: true });
+    el.addEventListener('touchend', markEvent, { passive: true });
+    el.addEventListener('touchmove', markEvent, { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', markEvent);
+      el.removeEventListener('touchend', markEvent);
+      el.removeEventListener('touchmove', markEvent);
+    };
+  }, []);
 
   const toggleLike = (productId: number) => {
     setLikedProducts((prev) =>
@@ -202,7 +219,7 @@ export default function Marketplace() {
             </div>
 
             {/* Category Filters */}
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <div ref={categoryTabsRef} className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
               <Button variant="default" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 All
               </Button>
