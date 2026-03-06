@@ -104,14 +104,7 @@ export default function ServiceProviderProfile({
           <div className="flex flex-col h-full">
             {/* Header */}
             <div className="relative p-4 sm:p-6 border-b border-border bg-gradient-to-b from-primary/10 to-background">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10"
-                onClick={onClose}
-              >
-                <X className="w-5 h-5" />
-              </Button>
+              {/* Close button handled by DialogContent */}
               
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
                 <Avatar className="w-20 h-20 sm:w-24 sm:h-24 border-4 border-background shadow-lg">

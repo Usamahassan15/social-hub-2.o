@@ -22,16 +22,16 @@ const TopBar = () => {
           
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-11 w-11">
-              <Search className="w-[26px] h-[26px]" />
+              <Search className="w-[28px] h-[28px]" />
             </Button>
             <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-11 w-11">
-              <Bell className="w-[26px] h-[26px]" />
+              <Bell className="w-[28px] h-[28px]" />
             </Button>
             <Button variant="ghost" size="icon" onClick={() => setIsCreatePostOpen(true)} className="h-11 w-11">
-              <Plus className="w-[26px] h-[26px]" />
+              <Plus className="w-[28px] h-[28px]" />
             </Button>
             <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(true)} className="h-11 w-11">
-              <Menu className="w-[26px] h-[26px]" />
+              <Menu className="w-[28px] h-[28px]" />
             </Button>
           </div>
         </div>

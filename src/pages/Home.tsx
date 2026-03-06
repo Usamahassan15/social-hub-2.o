@@ -6,6 +6,7 @@ import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
 import Stories from "@/components/Stories";
 import Post from "@/components/Post";
+import PeopleYouMayKnow from "@/components/PeopleYouMayKnow";
 import CreatePost from "@/components/CreatePost";
 import { Button } from "@/components/ui/button";
 
@@ -59,6 +60,9 @@ const Home = () => {
           >
             <Stories />
           </motion.div>
+
+          {/* People You May Know */}
+          <PeopleYouMayKnow />
 
           {/* Posts Feed */}
           <div className="space-y-3 sm:space-y-4">
