@@ -99,8 +99,8 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             </Avatar>
             <div className="flex items-center gap-2">
               <div>
-                <h3 className="font-semibold text-xs sm:text-sm text-foreground leading-tight">{author}</h3>
-                <p className="text-[10px] sm:text-xs text-muted-foreground">{time}</p>
+                <h3 className="font-semibold text-sm sm:text-base text-foreground leading-tight">{author}</h3>
+                <p className="text-[11px] sm:text-xs text-muted-foreground">{time}</p>
               </div>
               <Button
                 variant="ghost"
@@ -137,7 +137,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
         </div>
 
         {/* Content */}
-        <p className="text-xs sm:text-sm text-foreground px-2 sm:px-3 pb-2">{content}</p>
+        <p className="text-sm sm:text-base text-foreground px-2 sm:px-3 pb-2 leading-relaxed">{content}</p>
 
         {/* Image - Smaller on mobile */}
         {image && (
