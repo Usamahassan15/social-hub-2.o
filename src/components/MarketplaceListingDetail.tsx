@@ -47,20 +47,12 @@ export default function MarketplaceListingDetail({
       <DialogContent className="max-w-lg sm:max-w-xl md:max-w-2xl p-0 overflow-hidden max-h-[90vh]">
         <div className="overflow-y-auto max-h-[90vh]">
           {/* Product Image */}
-          <div className="relative aspect-square max-h-[300px] sm:max-h-[400px] bg-muted">
+          <div className="relative w-full h-[300px] sm:h-[400px] bg-muted">
             <img
               src={product.image}
               alt={product.title}
               className="w-full h-full object-cover"
             />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm rounded-full"
-              onClick={onClose}
-            >
-              <X className="w-5 h-5" />
-            </Button>
             <div className="absolute bottom-3 left-3 flex gap-2">
               <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
                 {product.condition}
