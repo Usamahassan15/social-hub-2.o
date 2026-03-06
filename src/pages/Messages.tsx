@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward, X, Reply } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -105,6 +105,7 @@ const Messages = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
+  const [showMediaOptions, setShowMediaOptions] = useState(false);
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -223,7 +224,7 @@ const Messages = () => {
             } md:flex flex-1 flex-col bg-background`}
           >
             {/* Chat Header */}
-            <div className="p-4 border-b border-border bg-card flex items-center justify-between">
+            <div className="p-4 border-b border-border bg-card flex items-center justify-between sticky top-0 z-10">
               <div className="flex items-center gap-3">
                 <Button
                   variant="ghost"
@@ -331,39 +332,63 @@ const Messages = () => {
             {/* Message Input */}
             <div className="p-3 sm:p-4 border-t border-border bg-card">
               <div className="flex items-center gap-2 max-w-3xl mx-auto">
-                <label className="cursor-pointer flex-shrink-0">
-                  <input type="file" accept="image/*" className="hidden" />
-                  <div className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-                    <Image className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                </label>
-                <label className="cursor-pointer flex-shrink-0">
-                  <input type="file" accept="image/*" capture="environment" className="hidden" />
-                  <div className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-                    <Camera className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                </label>
-                {/* Emoji Picker */}
-                <div className="relative flex-shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                    className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
-                  >
-                    <Smile className="w-5 h-5 text-muted-foreground" />
-                  </button>
-                  <EmojiPicker
-                    isOpen={showEmojiPicker}
-                    onClose={() => setShowEmojiPicker(false)}
-                    onEmojiSelect={handleEmojiSelect}
-                  />
-                </div>
+                {/* Toggle button for media options */}
+                <motion.button
+                  type="button"
+                  onClick={() => setShowMediaOptions(!showMediaOptions)}
+                  className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors flex-shrink-0"
+                  animate={{ rotate: showMediaOptions ? 90 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                </motion.button>
+
+                {/* Expandable media options */}
+                <AnimatePresence>
+                  {showMediaOptions && (
+                    <motion.div
+                      initial={{ width: 0, opacity: 0 }}
+                      animate={{ width: "auto", opacity: 1 }}
+                      exit={{ width: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-1 overflow-hidden flex-shrink-0"
+                    >
+                      <label className="cursor-pointer flex-shrink-0">
+                        <input type="file" accept="image/*" className="hidden" />
+                        <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
+                          <Image className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                      </label>
+                      <label className="cursor-pointer flex-shrink-0">
+                        <input type="file" accept="image/*" capture="environment" className="hidden" />
+                        <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
+                          <Camera className="w-5 h-5 text-muted-foreground" />
+                        </div>
+                      </label>
+                      <div className="relative flex-shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                          className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                        >
+                          <Smile className="w-5 h-5 text-muted-foreground" />
+                        </button>
+                        <EmojiPicker
+                          isOpen={showEmojiPicker}
+                          onClose={() => setShowEmojiPicker(false)}
+                          onEmojiSelect={handleEmojiSelect}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <Input
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   placeholder={replyingTo ? "Type your reply..." : "Type a message..."}
-                  className="flex-1"
+                  className="flex-1 min-w-0"
                 />
                 <Button
                   size="icon"
