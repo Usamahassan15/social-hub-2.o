@@ -61,20 +61,21 @@ const Home = () => {
             <Stories />
           </motion.div>
 
-          {/* People You May Know */}
-          <PeopleYouMayKnow />
-
-          {/* Posts Feed */}
+          {/* Posts Feed with People You May Know inserted every 5 posts */}
           <div className="space-y-3 sm:space-y-4">
             {posts.map((post, index) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Post {...post} />
-              </motion.div>
+              <React.Fragment key={post.id}>
+                {index > 0 && index % 5 === 0 && (
+                  <PeopleYouMayKnow />
+                )}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Post {...post} />
+                </motion.div>
+              </React.Fragment>
             ))}
           </div>
         </div>
