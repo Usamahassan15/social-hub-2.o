@@ -1,7 +1,7 @@
-import { Users, ChevronRight, X } from "lucide-react";
+import { Users, ChevronRight, ChevronLeft, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -28,7 +28,16 @@ const PeopleYouMayKnow = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState(suggestedUsers);
   const [following, setFollowing] = useState<Set<number>>(new Set());
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const checkScrollButtons = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }, []);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -37,12 +46,22 @@ const PeopleYouMayKnow = () => {
     el.addEventListener("touchstart", mark, { passive: true });
     el.addEventListener("touchmove", mark, { passive: true });
     el.addEventListener("touchend", mark, { passive: true });
+    el.addEventListener("scroll", checkScrollButtons, { passive: true });
+    checkScrollButtons();
     return () => {
       el.removeEventListener("touchstart", mark);
       el.removeEventListener("touchmove", mark);
       el.removeEventListener("touchend", mark);
+      el.removeEventListener("scroll", checkScrollButtons);
     };
-  }, []);
+  }, [checkScrollButtons]);
+
+  const scroll = (direction: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = 280;
+    el.scrollBy({ left: direction === "right" ? scrollAmount : -scrollAmount, behavior: "smooth" });
+  };
 
   const handleFollow = (id: number, name: string) => {
     setFollowing(prev => {
@@ -81,42 +100,64 @@ const PeopleYouMayKnow = () => {
         </button>
       </div>
 
-      {/* Horizontal scroll */}
-      <div
-        ref={scrollRef}
-        className="flex gap-2.5 overflow-x-auto scrollbar-hide px-2 sm:px-0 pb-1"
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
-        {users.slice(0, 6).map((user, index) => (
-          <motion.div
-            key={user.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.05 }}
-            className="flex-shrink-0 w-[130px] bg-card border border-border rounded-xl p-3 flex flex-col items-center gap-1.5 relative"
+      {/* Horizontal scroll with desktop arrows */}
+      <div className="relative group">
+        {/* Left Arrow - Desktop only */}
+        {canScrollLeft && (
+          <button
+            onClick={() => scroll("left")}
+            className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-card border border-border shadow-md hover:bg-muted transition-colors"
           >
-            <button
-              onClick={() => handleRemove(user.id)}
-              className="absolute top-1.5 right-1.5 p-0.5 rounded-full hover:bg-muted transition-colors"
+            <ChevronLeft className="w-4 h-4 text-foreground" />
+          </button>
+        )}
+
+        {/* Right Arrow - Desktop only */}
+        {canScrollRight && (
+          <button
+            onClick={() => scroll("right")}
+            className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center rounded-full bg-card border border-border shadow-md hover:bg-muted transition-colors"
+          >
+            <ChevronRight className="w-4 h-4 text-foreground" />
+          </button>
+        )}
+
+        <div
+          ref={scrollRef}
+          className="flex gap-2.5 overflow-x-auto scrollbar-hide px-2 sm:px-0 lg:px-10 pb-1"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {users.slice(0, 6).map((user, index) => (
+            <motion.div
+              key={user.id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.05 }}
+              className="flex-shrink-0 w-[130px] bg-card border border-border rounded-xl p-3 flex flex-col items-center gap-1.5 relative"
             >
-              <X className="w-3 h-3 text-muted-foreground" />
-            </button>
-            <Avatar className="w-12 h-12">
-              <AvatarImage src={user.avatar} />
-              <AvatarFallback>{user.name[0]}</AvatarFallback>
-            </Avatar>
-            <p className="text-xs font-medium text-foreground text-center truncate w-full">{user.name}</p>
-            <p className="text-[10px] text-muted-foreground">{user.mutualFriends} mutual</p>
-            <Button
-              size="sm"
-              variant={following.has(user.id) ? "secondary" : "default"}
-              className="w-full h-7 text-[11px] rounded-lg"
-              onClick={() => handleFollow(user.id, user.name)}
-            >
-              {following.has(user.id) ? "Following" : "Follow"}
-            </Button>
-          </motion.div>
-        ))}
+              <button
+                onClick={() => handleRemove(user.id)}
+                className="absolute top-1.5 right-1.5 p-0.5 rounded-full hover:bg-muted transition-colors"
+              >
+                <X className="w-3 h-3 text-muted-foreground" />
+              </button>
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={user.avatar} />
+                <AvatarFallback>{user.name[0]}</AvatarFallback>
+              </Avatar>
+              <p className="text-xs font-medium text-foreground text-center truncate w-full">{user.name}</p>
+              <p className="text-[10px] text-muted-foreground">{user.mutualFriends} mutual</p>
+              <Button
+                size="sm"
+                variant={following.has(user.id) ? "secondary" : "default"}
+                className="w-full h-7 text-[11px] rounded-lg"
+                onClick={() => handleFollow(user.id, user.name)}
+              >
+                {following.has(user.id) ? "Following" : "Follow"}
+              </Button>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
