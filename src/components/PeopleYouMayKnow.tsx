@@ -28,7 +28,16 @@ const PeopleYouMayKnow = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState(suggestedUsers);
   const [following, setFollowing] = useState<Set<number>>(new Set());
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const checkScrollButtons = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }, []);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -37,12 +46,22 @@ const PeopleYouMayKnow = () => {
     el.addEventListener("touchstart", mark, { passive: true });
     el.addEventListener("touchmove", mark, { passive: true });
     el.addEventListener("touchend", mark, { passive: true });
+    el.addEventListener("scroll", checkScrollButtons, { passive: true });
+    checkScrollButtons();
     return () => {
       el.removeEventListener("touchstart", mark);
       el.removeEventListener("touchmove", mark);
       el.removeEventListener("touchend", mark);
+      el.removeEventListener("scroll", checkScrollButtons);
     };
-  }, []);
+  }, [checkScrollButtons]);
+
+  const scroll = (direction: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = 280;
+    el.scrollBy({ left: direction === "right" ? scrollAmount : -scrollAmount, behavior: "smooth" });
+  };
 
   const handleFollow = (id: number, name: string) => {
     setFollowing(prev => {
