@@ -55,13 +55,18 @@ const PeopleSuggestions = () => {
             transition={{ delay: index * 0.03 }}
             className="flex items-center gap-3 p-3 bg-card border border-border rounded-xl"
           >
-            <Avatar className="w-12 h-12">
-              <AvatarImage src={user.avatar} />
-              <AvatarFallback>{user.name[0]}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
-              <p className="text-xs text-muted-foreground">{user.mutualFriends} mutual friends</p>
+            <div
+              className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
+              onClick={() => navigate(`/user/${user.id}`)}
+            >
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={user.avatar} />
+                <AvatarFallback>{user.name[0]}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
+                <p className="text-xs text-muted-foreground">{user.mutualFriends} mutual friends</p>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <Button
