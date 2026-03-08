@@ -72,8 +72,8 @@ export default function Profile() {
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14 lg:-ml-0">
-        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-full mx-auto px-0 sm:px-4 md:px-0 lg:px-0">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
+        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-4xl mx-auto px-0 sm:px-4 md:px-6 lg:px-8">
           {/* Cover Photo */}
           <motion.div 
             initial={{ opacity: 0 }}
@@ -166,8 +166,8 @@ export default function Profile() {
           </div>
 
           {/* Dynamic Content */}
-          <div className="px-0 sm:px-4 md:px-6 lg:px-2">
-            <div className="w-full max-w-[680px]">
+          <div className="px-0 sm:px-4 md:px-6 lg:px-0">
+            <div className="w-full max-w-[680px] mx-auto">
               <AnimatePresence mode="wait">
                 <motion.div key={profileMode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                   {profileMode === "social" ? <SocialProfile /> : <WorkProfile />}
