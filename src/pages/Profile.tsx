@@ -166,8 +166,8 @@ export default function Profile() {
           </div>
 
           {/* Dynamic Content */}
-          <div className="px-0 sm:px-4 md:px-6 flex justify-center">
-            <div className="w-full lg:max-w-2xl">
+          <div className="px-0 sm:px-4 md:px-6 lg:flex lg:justify-center">
+            <div className="w-full lg:max-w-[680px] lg:mx-auto">
               <AnimatePresence mode="wait">
                 <motion.div key={profileMode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
                   {profileMode === "social" ? <SocialProfile /> : <WorkProfile />}
