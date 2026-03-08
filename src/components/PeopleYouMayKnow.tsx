@@ -141,12 +141,17 @@ const PeopleYouMayKnow = () => {
               >
                 <X className="w-3 h-3 text-muted-foreground" />
               </button>
-              <Avatar className="w-12 h-12">
-                <AvatarImage src={user.avatar} />
-                <AvatarFallback>{user.name[0]}</AvatarFallback>
-              </Avatar>
-              <p className="text-xs font-medium text-foreground text-center truncate w-full">{user.name}</p>
-              <p className="text-[10px] text-muted-foreground">{user.mutualFriends} mutual</p>
+              <div
+                className="flex flex-col items-center gap-1.5 cursor-pointer"
+                onClick={() => navigate(`/user/${user.id}`)}
+              >
+                <Avatar className="w-12 h-12">
+                  <AvatarImage src={user.avatar} />
+                  <AvatarFallback>{user.name[0]}</AvatarFallback>
+                </Avatar>
+                <p className="text-xs font-medium text-foreground text-center truncate w-full">{user.name}</p>
+                <p className="text-[10px] text-muted-foreground">{user.mutualFriends} mutual</p>
+              </div>
               <Button
                 size="sm"
                 variant={following.has(user.id) ? "secondary" : "default"}
