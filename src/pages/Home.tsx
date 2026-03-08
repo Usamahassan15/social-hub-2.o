@@ -65,7 +65,7 @@ const Home = () => {
           <div className="space-y-3 sm:space-y-4">
             {posts.map((post, index) => (
               <React.Fragment key={post.id}>
-                {index > 0 && index % 5 === 0 && (
+                {index === 2 && (
                   <PeopleYouMayKnow />
                 )}
                 <motion.div
