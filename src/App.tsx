@@ -18,6 +18,7 @@ import ChangePassword from "./pages/ChangePassword";
 import Groups from "./pages/Groups";
 import NotFound from "./pages/NotFound";
 import PeopleSuggestions from "./pages/PeopleSuggestions";
+import UserProfile from "./pages/UserProfile";
 
 const queryClient = new QueryClient();
 
