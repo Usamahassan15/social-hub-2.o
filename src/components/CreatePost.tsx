@@ -152,6 +152,7 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
       banEndsAt={moderationData?.ban_ends_at}
       message={moderationData?.message}
     />
+    </>
   );
 };
 
