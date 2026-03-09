@@ -407,6 +407,7 @@ const Messages = () => {
 
       <CreateOfferModal open={showOfferModal} onOpenChange={setShowOfferModal} />
     </div>
+  );
 };
 
 export default Messages;
