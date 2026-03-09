@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EmojiPicker } from "@/components/EmojiPicker";
+
 import { toast } from "@/hooks/use-toast";
 import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
 
