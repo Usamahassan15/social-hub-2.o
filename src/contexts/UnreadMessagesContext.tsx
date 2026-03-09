@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 
 interface UnreadMessagesContextType {
   unreadCount: number;
@@ -32,4 +33,32 @@ export const UnreadMessagesProvider = ({ children }: { children: ReactNode }) =>
       {children}
     </UnreadMessagesContext.Provider>
   );
+};
+
+/** Hook to simulate incoming messages when not on /messages page */
+export const useSimulateIncomingMessages = () => {
+  const { addUnread } = useUnreadMessages();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Only simulate incoming messages when NOT on messages page
+    if (location.pathname === "/messages") return;
+
+    // Simulate a new message arriving after 8 seconds
+    const timer = setTimeout(() => {
+      addUnread(1);
+    }, 8000);
+
+    // Then every 15 seconds
+    const interval = setInterval(() => {
+      if (location.pathname !== "/messages") {
+        addUnread(1);
+      }
+    }, 15000);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
+  }, [location.pathname, addUnread]);
 };
