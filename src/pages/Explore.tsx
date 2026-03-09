@@ -164,10 +164,10 @@ const Explore = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setSelectedCategory(selectedCategory === cat.name ? null : cat.name)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
                         selectedCategory === cat.name
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted/70 hover:bg-muted text-foreground"
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-muted/70 hover:bg-muted text-foreground border-border"
                       }`}
                     >
                       <span>{cat.emoji}</span>
