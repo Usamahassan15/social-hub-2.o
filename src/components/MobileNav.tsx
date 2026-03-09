@@ -14,8 +14,8 @@ const MobileNav = () => {
     { icon: ShoppingBag, label: "Marketplace", path: "/marketplace" },
     { icon: MessageCircle, label: "Messages", path: "/messages" },
     { icon: Briefcase, label: "Jobs", path: "/jobs" },
-    { icon: User, label: "Profile", path: "/profile" },
     { icon: Handshake, label: "Services", path: "/services" },
+    { icon: User, label: "Profile", path: "/profile" },
   ];
 
   const currentIndex = navItems.findIndex(item => item.path === location.pathname);
