@@ -9,13 +9,16 @@ const MobileNav = () => {
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
+  // Simulated unread message count - replace with real data later
+  const unreadMessages = 3;
+
   const navItems = [
-    { icon: Home, label: "Home", path: "/" },
-    { icon: ShoppingBag, label: "Marketplace", path: "/marketplace" },
-    { icon: MessageCircle, label: "Messages", path: "/messages" },
-    { icon: Briefcase, label: "Jobs", path: "/jobs" },
-    { icon: Handshake, label: "Services", path: "/services" },
-    { icon: User, label: "Profile", path: "/profile" },
+    { icon: Home, label: "Home", path: "/", badge: 0 },
+    { icon: ShoppingBag, label: "Marketplace", path: "/marketplace", badge: 0 },
+    { icon: MessageCircle, label: "Messages", path: "/messages", badge: unreadMessages },
+    { icon: Briefcase, label: "Jobs", path: "/jobs", badge: 0 },
+    { icon: Handshake, label: "Services", path: "/services", badge: 0 },
+    { icon: User, label: "Profile", path: "/profile", badge: 0 },
   ];
 
   const currentIndex = navItems.findIndex(item => item.path === location.pathname);
@@ -37,10 +40,8 @@ const MobileNav = () => {
 
       if (Math.abs(diff) > threshold) {
         if (diff > 0 && currentIndex < navItems.length - 1) {
-          // Swipe left - go to next tab
           navigate(navItems[currentIndex + 1].path);
         } else if (diff < 0 && currentIndex > 0) {
-          // Swipe right - go to previous tab
           navigate(navItems[currentIndex - 1].path);
         }
       }
@@ -48,7 +49,6 @@ const MobileNav = () => {
       setIsDragging(false);
     };
 
-    // Only add listeners on mobile
     if (window.innerWidth < 768) {
       document.addEventListener('touchstart', handleTouchStart, { passive: true });
       document.addEventListener('touchend', handleTouchEnd, { passive: true });
@@ -71,15 +71,22 @@ const MobileNav = () => {
   );
 };
 
-const NavItem = ({ icon: Icon, path, isActive }: { icon: any; path: string; isActive: boolean }) => (
+const NavItem = ({ icon: Icon, path, isActive, badge }: { icon: any; path: string; isActive: boolean; badge: number }) => (
   <NavLink to={path}>
     <motion.div
-      className={`flex flex-col items-center justify-center gap-1 transition-colors ${
+      className={`flex flex-col items-center justify-center gap-1 transition-colors relative ${
         isActive ? "text-primary" : "text-muted-foreground"
       }`}
       whileTap={{ scale: 0.9 }}
     >
-      <Icon className="w-6 h-6" />
+      <div className="relative">
+        <Icon className="w-6 h-6" />
+        {badge > 0 && (
+          <span className="absolute -top-2 -right-3 min-w-[18px] h-[18px] px-1 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+            {badge > 99 ? "99+" : badge}
+          </span>
+        )}
+      </div>
       {isActive && (
         <motion.div
           layoutId="activeTab"
