@@ -138,10 +138,7 @@ const Messages = () => {
     setReplyingTo(message);
   };
 
-  const handleEmojiSelect = (emoji: string) => {
-    setMessageInput(prev => prev + emoji);
-    setShowEmojiPicker(false);
-  };
+
 
   const handleDeleteConversation = () => {
     toast({ title: "Conversation deleted" });
