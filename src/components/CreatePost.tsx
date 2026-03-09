@@ -123,13 +123,34 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
               </Button>
             </div>
 
-            <Button className="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90">
-              Post
+            <Button
+              className="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90"
+              onClick={handlePost}
+              disabled={isChecking || !postContent.trim()}
+            >
+              {isChecking ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Checking content...
+                </>
+              ) : (
+                "Post"
+              )}
             </Button>
           </>
         )}
       </DialogContent>
     </Dialog>
+    
+    <ModerationWarningDialog
+      isOpen={showModerationWarning}
+      onClose={() => setShowModerationWarning(false)}
+      warningNumber={moderationData?.warning_number}
+      isBanned={moderationData?.is_banned}
+      banDurationHours={moderationData?.ban_duration_hours}
+      banEndsAt={moderationData?.ban_ends_at}
+      message={moderationData?.message}
+    />
   );
 };
 
