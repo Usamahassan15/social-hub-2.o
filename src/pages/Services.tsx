@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Handshake, Search, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban, Heart } from "lucide-react";
+import { Handshake, Search, MapPin, Star, Clock, MessageCircle, Plus, ImagePlus, FolderKanban, Heart, LayoutDashboard } from "lucide-react";
 import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
