@@ -105,6 +105,8 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
               <Textarea
                 placeholder="What's on your mind?"
                 className="min-h-32 resize-none"
+                value={postContent}
+                onChange={(e) => setPostContent(e.target.value)}
               />
             </div>
 
