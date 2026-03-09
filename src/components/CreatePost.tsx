@@ -30,6 +30,10 @@ const postTypes = [
 
 const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [postContent, setPostContent] = useState("");
+  const [showModerationWarning, setShowModerationWarning] = useState(false);
+  const [moderationData, setModerationData] = useState<any>(null);
+  const { moderateText, moderateImage, isChecking } = useContentModeration();
 
   const handleBack = () => {
     setSelectedType(null);
