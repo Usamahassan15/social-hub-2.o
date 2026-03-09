@@ -104,10 +104,10 @@ const Messages = () => {
   const [selectedConversation, setSelectedConversation] = useState<number>(1);
   const [messageInput, setMessageInput] = useState("");
   const [showConversationList, setShowConversationList] = useState(true);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [showMediaOptions, setShowMediaOptions] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
   const { clearUnread } = useUnreadMessages();
 
   // Clear unread count when user opens messages page
