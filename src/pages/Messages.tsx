@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
