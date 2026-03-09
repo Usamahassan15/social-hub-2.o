@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
 import MessageBubble from "@/components/MessageBubble";
+import CreateOfferModal from "@/components/CreateOfferModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { EmojiPicker } from "@/components/EmojiPicker";
+
 import { toast } from "@/hooks/use-toast";
 import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
 
@@ -103,10 +104,10 @@ const Messages = () => {
   const [selectedConversation, setSelectedConversation] = useState<number>(1);
   const [messageInput, setMessageInput] = useState("");
   const [showConversationList, setShowConversationList] = useState(true);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [showMediaOptions, setShowMediaOptions] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
   const { clearUnread } = useUnreadMessages();
 
   // Clear unread count when user opens messages page
@@ -138,10 +139,7 @@ const Messages = () => {
     setReplyingTo(message);
   };
 
-  const handleEmojiSelect = (emoji: string) => {
-    setMessageInput(prev => prev + emoji);
-    setShowEmojiPicker(false);
-  };
+
 
   const handleDeleteConversation = () => {
     toast({ title: "Conversation deleted" });
@@ -358,31 +356,18 @@ const Messages = () => {
                       className="flex items-center gap-1 overflow-hidden flex-shrink-0"
                     >
                       <label className="cursor-pointer flex-shrink-0">
-                        <input type="file" accept="image/*" className="hidden" />
+                        <input type="file" accept="*/*" className="hidden" />
                         <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-                          <Image className="w-5 h-5 text-muted-foreground" />
+                          <Paperclip className="w-5 h-5 text-muted-foreground" />
                         </div>
                       </label>
-                      <label className="cursor-pointer flex-shrink-0">
-                        <input type="file" accept="image/*" capture="environment" className="hidden" />
-                        <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-                          <Camera className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </label>
-                      <div className="relative flex-shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                          className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
-                        >
-                          <Smile className="w-5 h-5 text-muted-foreground" />
-                        </button>
-                        <EmojiPicker
-                          isOpen={showEmojiPicker}
-                          onClose={() => setShowEmojiPicker(false)}
-                          onEmojiSelect={handleEmojiSelect}
-                        />
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowOfferModal(true)}
+                        className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors flex-shrink-0"
+                      >
+                        <FileText className="w-5 h-5 text-muted-foreground" />
+                      </button>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -419,6 +404,8 @@ const Messages = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <CreateOfferModal open={showOfferModal} onOpenChange={setShowOfferModal} />
     </div>
   );
 };
