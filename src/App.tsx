@@ -13,6 +13,7 @@ import Jobs from "./pages/Jobs";
 import Marketplace from "./pages/Marketplace";
 import Events from "./pages/Events";
 import Services from "./pages/Services";
+import ServicesDashboard from "./pages/ServicesDashboard";
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import Groups from "./pages/Groups";
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/events" element={<Events />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/dashboard" element={<ServicesDashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/groups" element={<Groups />} />
