@@ -13,6 +13,7 @@ import Jobs from "./pages/Jobs";
 import Marketplace from "./pages/Marketplace";
 import Events from "./pages/Events";
 import Services from "./pages/Services";
+import ServicesDashboard from "./pages/ServicesDashboard";
 import Settings from "./pages/Settings";
 import ChangePassword from "./pages/ChangePassword";
 import Groups from "./pages/Groups";
