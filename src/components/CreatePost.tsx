@@ -41,7 +41,23 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
 
   const handleClose = () => {
     setSelectedType(null);
+    setPostContent("");
     onClose();
+  };
+
+  const handlePost = async () => {
+    if (!postContent.trim()) return;
+    
+    const result = await moderateText(postContent, selectedType || "text");
+    
+    if (!result.allowed) {
+      setModerationData(result);
+      setShowModerationWarning(true);
+      return;
+    }
+    
+    toast({ title: "Post published!" });
+    handleClose();
   };
 
   return (
