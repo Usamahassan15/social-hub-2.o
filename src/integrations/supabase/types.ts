@@ -14,16 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      content_violations: {
+        Row: {
+          ai_confidence: number | null
+          content_preview: string | null
+          content_type: string
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["violation_status"]
+          user_id: string
+          violation_type: Database["public"]["Enums"]["violation_type"]
+          warning_number: number
+        }
+        Insert: {
+          ai_confidence?: number | null
+          content_preview?: string | null
+          content_type: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["violation_status"]
+          user_id: string
+          violation_type: Database["public"]["Enums"]["violation_type"]
+          warning_number?: number
+        }
+        Update: {
+          ai_confidence?: number | null
+          content_preview?: string | null
+          content_type?: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["violation_status"]
+          user_id?: string
+          violation_type?: Database["public"]["Enums"]["violation_type"]
+          warning_number?: number
+        }
+        Relationships: []
+      }
+      user_bans: {
+        Row: {
+          ban_duration_hours: number
+          ban_status: Database["public"]["Enums"]["ban_status"]
+          created_at: string
+          ends_at: string
+          id: string
+          reason: string
+          starts_at: string
+          user_id: string
+          violation_id: string | null
+        }
+        Insert: {
+          ban_duration_hours: number
+          ban_status?: Database["public"]["Enums"]["ban_status"]
+          created_at?: string
+          ends_at: string
+          id?: string
+          reason: string
+          starts_at?: string
+          user_id: string
+          violation_id?: string | null
+        }
+        Update: {
+          ban_duration_hours?: number
+          ban_status?: Database["public"]["Enums"]["ban_status"]
+          created_at?: string
+          ends_at?: string
+          id?: string
+          reason?: string
+          starts_at?: string
+          user_id?: string
+          violation_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_bans_violation_id_fkey"
+            columns: ["violation_id"]
+            isOneToOne: false
+            referencedRelation: "content_violations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_moderation_stats: {
+        Row: {
+          created_at: string
+          current_ban_ends_at: string | null
+          id: string
+          is_currently_banned: boolean
+          total_violations: number
+          total_warnings: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_ban_ends_at?: string | null
+          id?: string
+          is_currently_banned?: boolean
+          total_violations?: number
+          total_warnings?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_ban_ends_at?: string | null
+          id?: string
+          is_currently_banned?: boolean
+          total_violations?: number
+          total_warnings?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_violation_count: {
+        Args: { check_user_id: string }
+        Returns: number
+      }
+      is_user_banned: { Args: { check_user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      ban_status: "active" | "expired" | "lifted"
+      violation_status: "pending" | "confirmed" | "dismissed"
+      violation_type:
+        | "nudity"
+        | "sexual_content"
+        | "explicit_text"
+        | "pornographic"
+        | "adult_services"
+        | "vulgar_content"
+        | "violence"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +276,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      ban_status: ["active", "expired", "lifted"],
+      violation_status: ["pending", "confirmed", "dismissed"],
+      violation_type: [
+        "nudity",
+        "sexual_content",
+        "explicit_text",
+        "pornographic",
+        "adult_services",
+        "vulgar_content",
+        "violence",
+        "other",
+      ],
+    },
   },
 } as const
