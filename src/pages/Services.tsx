@@ -136,7 +136,7 @@ export default function Services() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-[100vw] sm:max-w-2xl lg:max-w-[680px] lg:mx-0 lg:ml-8 mx-auto px-1 sm:px-4 md:px-6 lg:px-0 pt-2 sm:pt-4 md:pt-6 overflow-hidden">
+        <div className="w-full max-w-[100vw] sm:max-w-2xl lg:max-w-5xl mx-auto px-1 sm:px-4 md:px-6 lg:px-8 pt-2 sm:pt-4 md:pt-6 overflow-hidden">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-3 sm:px-0">
             <div className="flex items-center justify-between">
@@ -203,7 +203,7 @@ export default function Services() {
           </motion.div>
 
           {/* Services Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 px-1 sm:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 px-1 sm:px-0">
             {services.map((service, index) => (
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
                 {/* Mobile: horizontal narrow card */}
