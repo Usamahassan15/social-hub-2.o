@@ -2,7 +2,7 @@ import { Home, MessageCircle, User, ShoppingBag, Briefcase, Handshake } from "lu
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
+import { useUnreadMessages, useSimulateIncomingMessages } from "@/contexts/UnreadMessagesContext";
 
 const MobileNav = () => {
   const navigate = useNavigate();
@@ -10,6 +10,9 @@ const MobileNav = () => {
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const { unreadCount } = useUnreadMessages();
+
+  // Simulate incoming messages for demo
+  useSimulateIncomingMessages();
 
   const navItems = [
     { icon: Home, label: "Home", path: "/", badge: 0 },
