@@ -21,6 +21,7 @@ import Groups from "./pages/Groups";
 import NotFound from "./pages/NotFound";
 import PeopleSuggestions from "./pages/PeopleSuggestions";
 import UserProfile from "./pages/UserProfile";
+import AdminModeration from "./pages/AdminModeration";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/groups" element={<Groups />} />
             <Route path="/people-suggestions" element={<PeopleSuggestions />} />
             <Route path="/user/:id" element={<UserProfile />} />
+            <Route path="/admin/moderation" element={<AdminModeration />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

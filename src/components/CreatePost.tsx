@@ -1,4 +1,4 @@
-import { Image, Video, Smile, X, FileText, BarChart3, UserX, MessageSquare } from "lucide-react";
+import { Image, Video, Smile, X, FileText, BarChart3, UserX, MessageSquare, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useContentModeration } from "@/hooks/use-content-moderation";
+import ModerationWarningDialog from "./ModerationWarningDialog";
+import { toast } from "@/hooks/use-toast";
 
 interface CreatePostProps {
   isOpen: boolean;
@@ -27,6 +30,10 @@ const postTypes = [
 
 const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [postContent, setPostContent] = useState("");
+  const [showModerationWarning, setShowModerationWarning] = useState(false);
+  const [moderationData, setModerationData] = useState<any>(null);
+  const { moderateText, moderateImage, isChecking } = useContentModeration();
 
   const handleBack = () => {
     setSelectedType(null);
@@ -34,10 +41,27 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
 
   const handleClose = () => {
     setSelectedType(null);
+    setPostContent("");
     onClose();
   };
 
+  const handlePost = async () => {
+    if (!postContent.trim()) return;
+    
+    const result = await moderateText(postContent, selectedType || "text");
+    
+    if (!result.allowed) {
+      setModerationData(result);
+      setShowModerationWarning(true);
+      return;
+    }
+    
+    toast({ title: "Post published!" });
+    handleClose();
+  };
+
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <DialogContent className="w-[calc(100%-2rem)] max-w-lg mx-auto max-h-[85vh] overflow-y-auto rounded-lg">
         <DialogHeader>
@@ -82,6 +106,8 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
               <Textarea
                 placeholder="What's on your mind?"
                 className="min-h-32 resize-none"
+                value={postContent}
+                onChange={(e) => setPostContent(e.target.value)}
               />
             </div>
 
@@ -98,13 +124,35 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
               </Button>
             </div>
 
-            <Button className="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90">
-              Post
+            <Button
+              className="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:opacity-90"
+              onClick={handlePost}
+              disabled={isChecking || !postContent.trim()}
+            >
+              {isChecking ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Checking content...
+                </>
+              ) : (
+                "Post"
+              )}
             </Button>
           </>
         )}
       </DialogContent>
     </Dialog>
+    
+    <ModerationWarningDialog
+      isOpen={showModerationWarning}
+      onClose={() => setShowModerationWarning(false)}
+      warningNumber={moderationData?.warning_number}
+      isBanned={moderationData?.is_banned}
+      banDurationHours={moderationData?.ban_duration_hours}
+      banEndsAt={moderationData?.ban_ends_at}
+      message={moderationData?.message}
+    />
+    </>
   );
 };
 

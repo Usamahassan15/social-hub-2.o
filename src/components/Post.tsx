@@ -17,8 +17,10 @@ import ShareSheet from "./ShareSheet";
 import ReportDialog from "./ReportDialog";
 import { EmojiPicker } from "./EmojiPicker";
 import ImagePreview from "./ImagePreview";
+import ModerationWarningDialog from "./ModerationWarningDialog";
 import { toast } from "@/hooks/use-toast";
 import { useUISound } from "@/hooks/use-ui-sound";
+import { useContentModeration } from "@/hooks/use-content-moderation";
 
 interface PostProps {
   author: string;
@@ -42,10 +44,13 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showImagePreview, setShowImagePreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showModerationWarning, setShowModerationWarning] = useState(false);
+  const [moderationData, setModerationData] = useState<any>(null);
   const playLike = useUISound("like");
   const playComment = useUISound("comment");
   const playShare = useUISound("share");
   const playSave = useUISound("save");
+  const { moderateText, isChecking } = useContentModeration();
 
   const handleLike = () => {
     if (!isLiked) playLike();
@@ -53,8 +58,14 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
   };
 
-  const handleComment = () => {
+  const handleComment = async () => {
     if (comment.trim()) {
+      const result = await moderateText(comment, "comment");
+      if (!result.allowed) {
+        setModerationData(result);
+        setShowModerationWarning(true);
+        return;
+      }
       playComment();
       toast({ title: "Comment posted!" });
       setComment("");
@@ -290,6 +301,15 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
           onClose={() => setShowImagePreview(false)}
         />
       )}
+      <ModerationWarningDialog
+        isOpen={showModerationWarning}
+        onClose={() => setShowModerationWarning(false)}
+        warningNumber={moderationData?.warning_number}
+        isBanned={moderationData?.is_banned}
+        banDurationHours={moderationData?.ban_duration_hours}
+        banEndsAt={moderationData?.ban_ends_at}
+        message={moderationData?.message}
+      />
     </motion.div>
   );
 };
