@@ -50,6 +50,104 @@ export type Database = {
         }
         Relationships: []
       }
+      post_engagements: {
+        Row: {
+          created_at: string
+          duration_seconds: number | null
+          engagement_type: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_seconds?: number | null
+          engagement_type: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_seconds?: number | null
+          engagement_type?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_engagements_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          category: string | null
+          comments_count: number
+          content: string
+          created_at: string
+          engagement_rate: number | null
+          id: string
+          is_anonymous: boolean
+          is_featured: boolean
+          is_trending: boolean
+          likes_count: number
+          media_type: string | null
+          media_url: string | null
+          quality_score: number | null
+          saves_count: number
+          shares_count: number
+          updated_at: string
+          user_id: string
+          views_count: number
+        }
+        Insert: {
+          category?: string | null
+          comments_count?: number
+          content: string
+          created_at?: string
+          engagement_rate?: number | null
+          id?: string
+          is_anonymous?: boolean
+          is_featured?: boolean
+          is_trending?: boolean
+          likes_count?: number
+          media_type?: string | null
+          media_url?: string | null
+          quality_score?: number | null
+          saves_count?: number
+          shares_count?: number
+          updated_at?: string
+          user_id: string
+          views_count?: number
+        }
+        Update: {
+          category?: string | null
+          comments_count?: number
+          content?: string
+          created_at?: string
+          engagement_rate?: number | null
+          id?: string
+          is_anonymous?: boolean
+          is_featured?: boolean
+          is_trending?: boolean
+          likes_count?: number
+          media_type?: string | null
+          media_url?: string | null
+          quality_score?: number | null
+          saves_count?: number
+          shares_count?: number
+          updated_at?: string
+          user_id?: string
+          views_count?: number
+        }
+        Relationships: []
+      }
       spam_tracking: {
         Row: {
           action_type: string
@@ -73,6 +171,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      trending_posts: {
+        Row: {
+          calculated_at: string
+          id: string
+          post_id: string
+          trending_score: number
+          velocity: number
+        }
+        Insert: {
+          calculated_at?: string
+          id?: string
+          post_id: string
+          trending_score: number
+          velocity?: number
+        }
+        Update: {
+          calculated_at?: string
+          id?: string
+          post_id?: string
+          trending_score?: number
+          velocity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trending_posts_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: true
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_bans: {
         Row: {
@@ -117,6 +247,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      user_interests: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          interaction_count: number
+          interest_score: number
+          last_interaction_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          interaction_count?: number
+          interest_score?: number
+          last_interaction_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          interaction_count?: number
+          interest_score?: number
+          last_interaction_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_moderation_stats: {
         Row: {
