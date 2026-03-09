@@ -239,34 +239,30 @@ export default function Services() {
                   </div>
                 </Card>
 
-                {/* Desktop/Tablet: vertical card */}
+                {/* Desktop/Tablet: horizontal fiverr-style card */}
                 <Card className="hidden sm:block overflow-hidden hover:shadow-lg transition-all rounded-xl border border-border/50">
-                  <div className="aspect-video overflow-hidden bg-muted w-full">
+                  <div className="aspect-[4/2.5] overflow-hidden bg-muted w-full">
                     <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                   </div>
-                  <CardContent className="p-3 md:p-4">
-                    <div className="space-y-2">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="secondary" className="text-xs px-1.5 py-0">{service.category}</Badge>
-                            <div className="flex items-center gap-0.5 text-yellow-500"><Star className="w-3 h-3 fill-current" /><span className="text-xs font-medium">{service.rating}</span><span className="text-xs text-muted-foreground">({service.reviews})</span></div>
-                          </div>
-                          <h3 className="font-semibold text-base text-foreground line-clamp-1">{service.title}</h3>
+                  <CardContent className="p-2.5 md:p-3">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-1 mb-0.5">
+                        <Avatar className="w-5 h-5"><AvatarImage src={service.providerAvatar} /><AvatarFallback className="text-[10px]">{service.provider[0]}</AvatarFallback></Avatar>
+                        <span className="text-xs text-muted-foreground font-medium">{service.provider}</span>
+                        <Badge variant="secondary" className="text-[9px] px-1 py-0 ml-auto">{service.category}</Badge>
+                      </div>
+                      <h3 className="font-semibold text-sm text-foreground line-clamp-1 leading-tight">{service.title}</h3>
+                      <div className="flex items-center gap-1 text-yellow-500">
+                        <Star className="w-3 h-3 fill-current" />
+                        <span className="text-xs font-medium">{service.rating}</span>
+                        <span className="text-xs text-muted-foreground">({service.reviews})</span>
+                      </div>
+                      <div className="flex items-center justify-between pt-1">
+                        <div className="flex gap-1">
+                          <Button size="sm" className="h-6 text-[10px] px-2" onClick={() => handleContact(service.provider)}><MessageCircle className="w-2.5 h-2.5 mr-0.5" />Contact</Button>
+                          <Button variant="outline" size="sm" className="h-6 text-[10px] px-2" onClick={() => setSelectedService(service)}>View</Button>
                         </div>
-                        <p className="font-bold text-primary text-base flex-shrink-0">{service.price}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Avatar className="w-6 h-6"><AvatarImage src={service.providerAvatar} /><AvatarFallback>{service.provider[0]}</AvatarFallback></Avatar>
-                        <span className="text-sm text-muted-foreground">{service.provider}</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{service.description}</p>
-                      <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                        <MapPin className="w-3 h-3" /><span>{service.location}</span>
-                      </div>
-                      <div className="flex gap-2 pt-1">
-                        <Button size="sm" className="flex-1 h-8 text-xs px-3" onClick={() => handleContact(service.provider)}><MessageCircle className="w-3 h-3 mr-1" />Contact</Button>
-                        <Button variant="outline" size="sm" className="h-8 text-xs px-3" onClick={() => setSelectedService(service)}>View Profile</Button>
+                        <p className="font-bold text-primary text-sm flex-shrink-0">From {service.price}</p>
                       </div>
                     </div>
                   </CardContent>
