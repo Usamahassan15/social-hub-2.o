@@ -44,10 +44,13 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showImagePreview, setShowImagePreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showModerationWarning, setShowModerationWarning] = useState(false);
+  const [moderationData, setModerationData] = useState<any>(null);
   const playLike = useUISound("like");
   const playComment = useUISound("comment");
   const playShare = useUISound("share");
   const playSave = useUISound("save");
+  const { moderateText, isChecking } = useContentModeration();
 
   const handleLike = () => {
     if (!isLiked) playLike();
