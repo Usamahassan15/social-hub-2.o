@@ -404,8 +404,9 @@ const Messages = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <CreateOfferModal open={showOfferModal} onOpenChange={setShowOfferModal} />
     </div>
-  );
 };
 
 export default Messages;
