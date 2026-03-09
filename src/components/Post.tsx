@@ -17,8 +17,10 @@ import ShareSheet from "./ShareSheet";
 import ReportDialog from "./ReportDialog";
 import { EmojiPicker } from "./EmojiPicker";
 import ImagePreview from "./ImagePreview";
+import ModerationWarningDialog from "./ModerationWarningDialog";
 import { toast } from "@/hooks/use-toast";
 import { useUISound } from "@/hooks/use-ui-sound";
+import { useContentModeration } from "@/hooks/use-content-moderation";
 
 interface PostProps {
   author: string;
