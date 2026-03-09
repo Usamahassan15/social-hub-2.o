@@ -2,20 +2,22 @@ import { Home, MessageCircle, User, ShoppingBag, Briefcase, Handshake } from "lu
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useUnreadMessages, useSimulateIncomingMessages } from "@/contexts/UnreadMessagesContext";
 
 const MobileNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [startX, setStartX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const { unreadCount } = useUnreadMessages();
 
-  // Simulated unread message count - replace with real data later
-  const unreadMessages = 3;
+  // Simulate incoming messages for demo
+  useSimulateIncomingMessages();
 
   const navItems = [
     { icon: Home, label: "Home", path: "/", badge: 0 },
     { icon: ShoppingBag, label: "Marketplace", path: "/marketplace", badge: 0 },
-    { icon: MessageCircle, label: "Messages", path: "/messages", badge: unreadMessages },
+    { icon: MessageCircle, label: "Messages", path: "/messages", badge: unreadCount },
     { icon: Briefcase, label: "Jobs", path: "/jobs", badge: 0 },
     { icon: Handshake, label: "Services", path: "/services", badge: 0 },
     { icon: User, label: "Profile", path: "/profile", badge: 0 },

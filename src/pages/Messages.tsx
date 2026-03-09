@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Send, MoreVertical, Phone, Video, Image, Camera, Smile, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EmojiPicker } from "@/components/EmojiPicker";
 import { toast } from "@/hooks/use-toast";
+import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
 
 interface Conversation {
   id: number;
@@ -106,6 +107,12 @@ const Messages = () => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [showMediaOptions, setShowMediaOptions] = useState(false);
+  const { clearUnread } = useUnreadMessages();
+
+  // Clear unread count when user opens messages page
+  useEffect(() => {
+    clearUnread();
+  }, [clearUnread]);
 
   const handleSendMessage = () => {
     if (messageInput.trim()) {
@@ -252,7 +259,6 @@ const Messages = () => {
                 <Button variant="ghost" size="icon">
                   <Video className="w-5 h-5" />
                 </Button>
-                {/* 3-dot Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon">
@@ -332,7 +338,6 @@ const Messages = () => {
             {/* Message Input */}
             <div className="p-3 sm:p-4 border-t border-border bg-card">
               <div className="flex items-center gap-2 max-w-3xl mx-auto">
-                {/* Toggle button for media options */}
                 <motion.button
                   type="button"
                   onClick={() => setShowMediaOptions(!showMediaOptions)}
@@ -343,7 +348,6 @@ const Messages = () => {
                   <ChevronRight className="w-5 h-5 text-muted-foreground" />
                 </motion.button>
 
-                {/* Expandable media options */}
                 <AnimatePresence>
                   {showMediaOptions && (
                     <motion.div
