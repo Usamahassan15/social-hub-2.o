@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search, X, Users, CalendarDays, ShoppingBag, Layers } from "lucide-react";
+import { Search, X, Users, CalendarDays, ShoppingBag, Layers, TrendingUp, Flame, Sparkles } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -9,15 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
+import TrendingSection from "@/components/TrendingSection";
 import { useNavigate } from "react-router-dom";
 import { useState, useMemo } from "react";
-
-const trendingTopics = [
-  { id: 1, tag: "#Technology", posts: "45.2K posts" },
-  { id: 2, tag: "#Design", posts: "32.1K posts" },
-  { id: 3, tag: "#Startup", posts: "28.5K posts" },
-  { id: 4, tag: "#AI", posts: "56.8K posts" },
-];
+import { useFeed, useTrendingTopics } from "@/hooks/use-feed";
+import LivePost from "@/components/LivePost";
 
 const mockPeople = [
   { id: 1, name: "Sarah Connor", username: "@sarahconnor", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", bio: "Tech enthusiast & designer", mutualFriends: 12 },
@@ -37,18 +34,29 @@ const mockEvents = [
   { id: 3, title: "Startup Pitch Night", date: "Apr 2, 2026", location: "Austin, TX", attendees: 156 },
 ];
 
-const mockMarketplace = [
-  { id: 1, title: "MacBook Pro 2025", price: "$1,200", image: "https://api.dicebear.com/7.x/shapes/svg?seed=macbook", location: "Los Angeles, CA" },
-  { id: 2, title: "Standing Desk", price: "$350", image: "https://api.dicebear.com/7.x/shapes/svg?seed=desk", location: "Chicago, IL" },
-  { id: 3, title: "Mechanical Keyboard", price: "$85", image: "https://api.dicebear.com/7.x/shapes/svg?seed=keyboard", location: "Seattle, WA" },
+const CATEGORIES = [
+  { name: "Technology", emoji: "💻" },
+  { name: "Design", emoji: "🎨" },
+  { name: "AI", emoji: "🤖" },
+  { name: "Startup", emoji: "🚀" },
+  { name: "Business", emoji: "💼" },
+  { name: "Science", emoji: "🔬" },
+  { name: "Art", emoji: "🖼️" },
+  { name: "Sports", emoji: "⚽" },
+  { name: "Music", emoji: "🎵" },
+  { name: "Travel", emoji: "✈️" },
 ];
 
 const Explore = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const isSearching = searchQuery.trim().length > 0;
+
+  const { posts: trendingPosts, isLoading: loadingTrending } = useFeed({ feedType: "trending", limit: 6 });
+  const { data: topics } = useTrendingTopics();
 
   const filteredPeople = useMemo(() =>
     mockPeople.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.username.toLowerCase().includes(searchQuery.toLowerCase())),
@@ -62,12 +70,7 @@ const Explore = () => {
     mockEvents.filter(e => e.title.toLowerCase().includes(searchQuery.toLowerCase())),
     [searchQuery]
   );
-  const filteredMarketplace = useMemo(() =>
-    mockMarketplace.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase())),
-    [searchQuery]
-  );
-
-  const hasResults = filteredPeople.length > 0 || filteredGroups.length > 0 || filteredEvents.length > 0 || filteredMarketplace.length > 0;
+  const hasResults = filteredPeople.length > 0 || filteredGroups.length > 0 || filteredEvents.length > 0;
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -87,7 +90,7 @@ const Explore = () => {
             <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
-                placeholder="Search people, groups, events, marketplace..."
+                placeholder="Search people, groups, topics..."
                 className="pl-10 h-12"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -103,12 +106,11 @@ const Explore = () => {
           {isSearching ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="w-full grid grid-cols-5 h-10 mb-4">
+                <TabsList className="w-full grid grid-cols-4 h-10 mb-4">
                   <TabsTrigger value="all" className="text-xs sm:text-sm">All</TabsTrigger>
                   <TabsTrigger value="people" className="text-xs sm:text-sm">People</TabsTrigger>
                   <TabsTrigger value="groups" className="text-xs sm:text-sm">Groups</TabsTrigger>
                   <TabsTrigger value="events" className="text-xs sm:text-sm">Events</TabsTrigger>
-                  <TabsTrigger value="market" className="text-xs sm:text-sm">Market</TabsTrigger>
                 </TabsList>
 
                 {!hasResults && (
@@ -119,7 +121,6 @@ const Explore = () => {
                   </div>
                 )}
 
-                {/* All Tab */}
                 <TabsContent value="all" className="space-y-4">
                   {filteredPeople.length > 0 && (
                     <SearchSection title="People" icon={<Users className="w-4 h-4" />}>
@@ -136,46 +137,100 @@ const Explore = () => {
                       {filteredEvents.map(event => <EventCard key={event.id} event={event} />)}
                     </SearchSection>
                   )}
-                  {filteredMarketplace.length > 0 && (
-                    <SearchSection title="Marketplace" icon={<ShoppingBag className="w-4 h-4" />}>
-                      {filteredMarketplace.map(item => <MarketCard key={item.id} item={item} />)}
-                    </SearchSection>
-                  )}
                 </TabsContent>
-
-                {/* People Tab */}
                 <TabsContent value="people" className="space-y-2">
                   {filteredPeople.length > 0 ? filteredPeople.map(person => <PersonCard key={person.id} person={person} />) : <NoResults />}
                 </TabsContent>
-
-                {/* Groups Tab */}
                 <TabsContent value="groups" className="space-y-2">
                   {filteredGroups.length > 0 ? filteredGroups.map(group => <GroupCard key={group.id} group={group} />) : <NoResults />}
                 </TabsContent>
-
-                {/* Events Tab */}
                 <TabsContent value="events" className="space-y-2">
                   {filteredEvents.length > 0 ? filteredEvents.map(event => <EventCard key={event.id} event={event} />) : <NoResults />}
-                </TabsContent>
-
-                {/* Marketplace Tab */}
-                <TabsContent value="market" className="space-y-2">
-                  {filteredMarketplace.length > 0 ? filteredMarketplace.map(item => <MarketCard key={item.id} item={item} />) : <NoResults />}
                 </TabsContent>
               </Tabs>
             </motion.div>
           ) : (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <h2 className="text-xl font-bold text-foreground mb-4">Trending Topics</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {trendingTopics.map((topic, index) => (
-                  <motion.div key={topic.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.1 }} whileHover={{ scale: 1.02 }}>
-                    <Card className="p-5 hover-lift cursor-pointer">
-                      <h3 className="text-lg font-bold gradient-text mb-1">{topic.tag}</h3>
-                      <p className="text-sm text-muted-foreground">{topic.posts}</p>
-                    </Card>
-                  </motion.div>
-                ))}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-6">
+              {/* Category Chips */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                  <h2 className="text-lg font-bold text-foreground">Categories</h2>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {CATEGORIES.map(cat => (
+                    <motion.button
+                      key={cat.name}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedCategory(selectedCategory === cat.name ? null : cat.name)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                        selectedCategory === cat.name
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-muted/70 hover:bg-muted text-foreground border-border"
+                      }`}
+                    >
+                      <span>{cat.emoji}</span>
+                      <span>{cat.name}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Trending Topics */}
+              <TrendingSection variant="full" />
+
+              {/* Trending Posts */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Flame className="w-5 h-5 text-orange-500" />
+                  <h2 className="text-lg font-bold text-foreground">Trending Posts</h2>
+                </div>
+                {loadingTrending ? (
+                  <div className="space-y-3">
+                    {[1, 2].map(i => (
+                      <Card key={i} className="p-4 space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Skeleton className="w-9 h-9 rounded-full" />
+                          <div className="space-y-1">
+                            <Skeleton className="h-4 w-24" />
+                            <Skeleton className="h-3 w-16" />
+                          </div>
+                        </div>
+                        <Skeleton className="h-4 w-full" />
+                      </Card>
+                    ))}
+                  </div>
+                ) : trendingPosts.length === 0 ? (
+                  <Card className="p-6 text-center text-muted-foreground">
+                    <TrendingUp className="w-10 h-10 mx-auto mb-2 opacity-40" />
+                    <p className="text-sm">No trending posts yet. Be the first to create one!</p>
+                  </Card>
+                ) : (
+                  <div className="space-y-3">
+                    {trendingPosts.map((post, index) => (
+                      <motion.div
+                        key={post.id}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.08 }}
+                      >
+                        <LivePost {...post} is_trending />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* People suggestions */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-5 h-5 text-primary" />
+                  <h2 className="text-lg font-bold text-foreground">Suggested Creators</h2>
+                </div>
+                <div className="space-y-2">
+                  {mockPeople.map(person => <PersonCard key={person.id} person={person} />)}
+                </div>
               </div>
             </motion.div>
           )}
@@ -208,7 +263,7 @@ const PersonCard = ({ person }: { person: typeof mockPeople[0] }) => (
       <p className="text-xs text-muted-foreground">{person.username}</p>
       <p className="text-xs text-muted-foreground">{person.mutualFriends} mutual friends</p>
     </div>
-    <Button size="sm" variant="outline" className="shrink-0">Add</Button>
+    <Button size="sm" variant="outline" className="shrink-0">Follow</Button>
   </Card>
 );
 
@@ -238,20 +293,6 @@ const EventCard = ({ event }: { event: typeof mockEvents[0] }) => (
       <p className="text-xs text-muted-foreground">{event.attendees} attending</p>
     </div>
     <Button size="sm" variant="outline" className="shrink-0">Interested</Button>
-  </Card>
-);
-
-const MarketCard = ({ item }: { item: typeof mockMarketplace[0] }) => (
-  <Card className="p-3 flex items-center gap-3">
-    <Avatar className="w-12 h-12 rounded-lg">
-      <AvatarImage src={item.image} />
-      <AvatarFallback className="rounded-lg">{item.title[0]}</AvatarFallback>
-    </Avatar>
-    <div className="flex-1 min-w-0">
-      <p className="font-semibold text-sm text-foreground truncate">{item.title}</p>
-      <p className="text-sm font-bold text-primary">{item.price}</p>
-      <p className="text-xs text-muted-foreground">{item.location}</p>
-    </div>
   </Card>
 );
 
