@@ -21,17 +21,17 @@ const TopBar = () => {
           </h1>
           
           <div className="flex items-center gap-0.5">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-12 w-12">
-              <Search className="w-[32px] h-[32px]" />
+            <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-14 w-14">
+              <Search className="w-[36px] h-[36px]" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-12 w-12">
-              <Bell className="w-[32px] h-[32px]" />
+            <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-14 w-14">
+              <Bell className="w-[36px] h-[36px]" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setIsCreatePostOpen(true)} className="h-12 w-12">
-              <Plus className="w-[32px] h-[32px]" />
+            <Button variant="ghost" size="icon" onClick={() => setIsCreatePostOpen(true)} className="h-14 w-14">
+              <Plus className="w-[36px] h-[36px]" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(true)} className="h-12 w-12">
-              <Menu className="w-[32px] h-[32px]" />
+            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(true)} className="h-14 w-14">
+              <Menu className="w-[36px] h-[36px]" />
             </Button>
           </div>
         </div>
