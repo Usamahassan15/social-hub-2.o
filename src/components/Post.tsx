@@ -58,8 +58,14 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
     setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
   };
 
-  const handleComment = () => {
+  const handleComment = async () => {
     if (comment.trim()) {
+      const result = await moderateText(comment, "comment");
+      if (!result.allowed) {
+        setModerationData(result);
+        setShowModerationWarning(true);
+        return;
+      }
       playComment();
       toast({ title: "Comment posted!" });
       setComment("");
