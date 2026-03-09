@@ -74,7 +74,7 @@ const Explore = () => {
       <Sidebar />
       <TopBar />
 
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-8 md:pt-14 fixed md:relative inset-0 md:inset-auto z-50 md:z-auto bg-background">
+      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-1 md:pt-14 fixed md:relative inset-0 md:inset-auto z-50 md:z-auto bg-background">
         <div className="w-full max-w-3xl lg:max-w-full mx-auto lg:mx-0 px-2 sm:px-4 md:px-6 lg:px-10 pt-0 md:pt-6 h-full overflow-y-auto">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center justify-between mb-4">
