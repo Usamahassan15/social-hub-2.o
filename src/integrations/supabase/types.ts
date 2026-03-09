@@ -50,6 +50,30 @@ export type Database = {
         }
         Relationships: []
       }
+      spam_tracking: {
+        Row: {
+          action_type: string
+          content_hash: string | null
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          content_hash?: string | null
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          content_hash?: string | null
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_bans: {
         Row: {
           ban_duration_hours: number
@@ -127,11 +151,109 @@ export type Database = {
         }
         Relationships: []
       }
+      user_reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          description: string | null
+          evidence_url: string | null
+          id: string
+          report_reason: Database["public"]["Enums"]["report_reason"]
+          reported_content_id: string | null
+          reported_user_id: string | null
+          reporter_id: string
+          status: Database["public"]["Enums"]["report_status"]
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_url?: string | null
+          id?: string
+          report_reason: Database["public"]["Enums"]["report_reason"]
+          reported_content_id?: string | null
+          reported_user_id?: string | null
+          reporter_id: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_url?: string | null
+          id?: string
+          report_reason?: Database["public"]["Enums"]["report_reason"]
+          reported_content_id?: string | null
+          reported_user_id?: string | null
+          reporter_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_trust_scores: {
+        Row: {
+          account_age_days: number
+          created_at: string
+          id: string
+          is_restricted: boolean
+          negative_interactions: number
+          positive_interactions: number
+          restriction_reason: string | null
+          spam_score: number
+          trust_score: number
+          updated_at: string
+          user_id: string
+          verified_email: boolean
+          verified_phone: boolean
+        }
+        Insert: {
+          account_age_days?: number
+          created_at?: string
+          id?: string
+          is_restricted?: boolean
+          negative_interactions?: number
+          positive_interactions?: number
+          restriction_reason?: string | null
+          spam_score?: number
+          trust_score?: number
+          updated_at?: string
+          user_id: string
+          verified_email?: boolean
+          verified_phone?: boolean
+        }
+        Update: {
+          account_age_days?: number
+          created_at?: string
+          id?: string
+          is_restricted?: boolean
+          negative_interactions?: number
+          positive_interactions?: number
+          restriction_reason?: string | null
+          spam_score?: number
+          trust_score?: number
+          updated_at?: string
+          user_id?: string
+          verified_email?: boolean
+          verified_phone?: boolean
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      calculate_trust_score: {
+        Args: { check_user_id: string }
+        Returns: number
+      }
+      check_spam_rate: {
+        Args: { action: string; check_user_id: string; minutes?: number }
+        Returns: number
+      }
       get_user_violation_count: {
         Args: { check_user_id: string }
         Returns: number
@@ -140,6 +262,17 @@ export type Database = {
     }
     Enums: {
       ban_status: "active" | "expired" | "lifted"
+      report_reason:
+        | "spam"
+        | "harassment"
+        | "scam"
+        | "adult_content"
+        | "fake_account"
+        | "hate_speech"
+        | "violence"
+        | "copyright"
+        | "other"
+      report_status: "pending" | "reviewed" | "resolved" | "dismissed"
       violation_status: "pending" | "confirmed" | "dismissed"
       violation_type:
         | "nudity"
@@ -150,6 +283,14 @@ export type Database = {
         | "vulgar_content"
         | "violence"
         | "other"
+        | "scam"
+        | "phishing"
+        | "hate_speech"
+        | "harassment"
+        | "spam"
+        | "unsafe_link"
+        | "bot_activity"
+        | "copyright"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -278,6 +419,18 @@ export const Constants = {
   public: {
     Enums: {
       ban_status: ["active", "expired", "lifted"],
+      report_reason: [
+        "spam",
+        "harassment",
+        "scam",
+        "adult_content",
+        "fake_account",
+        "hate_speech",
+        "violence",
+        "copyright",
+        "other",
+      ],
+      report_status: ["pending", "reviewed", "resolved", "dismissed"],
       violation_status: ["pending", "confirmed", "dismissed"],
       violation_type: [
         "nudity",
@@ -288,6 +441,14 @@ export const Constants = {
         "vulgar_content",
         "violence",
         "other",
+        "scam",
+        "phishing",
+        "hate_speech",
+        "harassment",
+        "spam",
+        "unsafe_link",
+        "bot_activity",
+        "copyright",
       ],
     },
   },
