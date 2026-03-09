@@ -358,31 +358,18 @@ const Messages = () => {
                       className="flex items-center gap-1 overflow-hidden flex-shrink-0"
                     >
                       <label className="cursor-pointer flex-shrink-0">
-                        <input type="file" accept="image/*" className="hidden" />
+                        <input type="file" accept="*/*" className="hidden" />
                         <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-                          <Image className="w-5 h-5 text-muted-foreground" />
+                          <Paperclip className="w-5 h-5 text-muted-foreground" />
                         </div>
                       </label>
-                      <label className="cursor-pointer flex-shrink-0">
-                        <input type="file" accept="image/*" capture="environment" className="hidden" />
-                        <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
-                          <Camera className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                      </label>
-                      <div className="relative flex-shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                          className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
-                        >
-                          <Smile className="w-5 h-5 text-muted-foreground" />
-                        </button>
-                        <EmojiPicker
-                          isOpen={showEmojiPicker}
-                          onClose={() => setShowEmojiPicker(false)}
-                          onEmojiSelect={handleEmojiSelect}
-                        />
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowOfferModal(true)}
+                        className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors flex-shrink-0"
+                      >
+                        <FileText className="w-5 h-5 text-muted-foreground" />
+                      </button>
                     </motion.div>
                   )}
                 </AnimatePresence>
