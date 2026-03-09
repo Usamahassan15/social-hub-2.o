@@ -301,6 +301,15 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
           onClose={() => setShowImagePreview(false)}
         />
       )}
+      <ModerationWarningDialog
+        isOpen={showModerationWarning}
+        onClose={() => setShowModerationWarning(false)}
+        warningNumber={moderationData?.warning_number}
+        isBanned={moderationData?.is_banned}
+        banDurationHours={moderationData?.ban_duration_hours}
+        banEndsAt={moderationData?.ban_ends_at}
+        message={moderationData?.message}
+      />
     </motion.div>
   );
 };
