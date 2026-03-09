@@ -21,16 +21,16 @@ const TopBar = () => {
           </h1>
           
           <div className="flex items-center gap-0.5">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-14 w-14 [&_svg]:!size-9">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-11 w-11 [&_svg]:!size-6">
               <Search />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-14 w-14 [&_svg]:!size-9">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-11 w-11 [&_svg]:!size-6">
               <Bell />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setIsCreatePostOpen(true)} className="h-14 w-14 [&_svg]:!size-9">
+            <Button variant="ghost" size="icon" onClick={() => setIsCreatePostOpen(true)} className="h-11 w-11 [&_svg]:!size-6">
               <Plus />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(true)} className="h-14 w-14 [&_svg]:!size-9">
+            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(true)} className="h-11 w-11 [&_svg]:!size-6">
               <Menu />
             </Button>
           </div>
