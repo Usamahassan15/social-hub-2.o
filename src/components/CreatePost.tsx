@@ -1,4 +1,4 @@
-import { Image, Video, Smile, X, FileText, BarChart3, UserX, MessageSquare } from "lucide-react";
+import { Image, Video, Smile, X, FileText, BarChart3, UserX, MessageSquare, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,6 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useContentModeration } from "@/hooks/use-content-moderation";
+import ModerationWarningDialog from "./ModerationWarningDialog";
+import { toast } from "@/hooks/use-toast";
 
 interface CreatePostProps {
   isOpen: boolean;
