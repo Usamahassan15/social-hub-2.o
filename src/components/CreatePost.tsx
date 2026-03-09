@@ -61,6 +61,7 @@ const CreatePost = ({ isOpen, onClose }: CreatePostProps) => {
   };
 
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <DialogContent className="w-[calc(100%-2rem)] max-w-lg mx-auto max-h-[85vh] overflow-y-auto rounded-lg">
         <DialogHeader>
