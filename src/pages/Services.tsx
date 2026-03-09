@@ -144,6 +144,10 @@ export default function Services() {
                 <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Services</h1>
               </div>
+              <Button variant="outline" className="gap-2" onClick={() => navigate("/services/dashboard")}>
+                <LayoutDashboard className="w-4 h-4" />
+                <span className="hidden sm:inline">Dashboard</span>
+              </Button>
               <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("projects"); setShowProjectsBidding(true); }}>
                 <FolderKanban className="w-4 h-4" />
                 <span className="hidden sm:inline">Projects & Bidding</span>
