@@ -197,20 +197,20 @@ export default function Marketplace() {
             className="mb-4 md:mb-6 space-y-3 md:space-y-4 px-3 md:px-0"
           >
             {/* Search Bar and Post Button */}
-            <div className="flex gap-2 md:gap-3">
-              <div className="relative flex-1">
+            <div className="flex min-w-0 gap-2 md:gap-3">
+              <div className="relative min-w-0 flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input placeholder="Search for items..." className="pl-10 h-10 md:h-12 rounded-lg" />
+                <Input placeholder="Search for items..." className="h-10 w-full min-w-0 pl-10 md:h-12 rounded-lg" />
               </div>
               <Button
                 variant="outline"
                 size="icon"
-                className="h-10 w-10 md:h-12 md:w-12 flex-shrink-0 rounded-lg"
+                className="h-10 w-10 shrink-0 rounded-lg md:h-12 md:w-12"
               >
                 <Filter className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
               <Button
-                className="h-10 md:h-12 px-3 md:px-6 flex-shrink-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 rounded-lg font-semibold"
+                className="h-10 w-10 shrink-0 rounded-lg bg-gradient-to-r from-primary to-primary/80 font-semibold hover:from-primary/90 hover:to-primary/70 md:h-12 md:w-auto md:px-6"
                 onClick={() => setShowCreateListing(true)}
               >
                 <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 md:mr-2" />
@@ -219,7 +219,7 @@ export default function Marketplace() {
             </div>
 
             {/* Category Filters */}
-            <div ref={categoryTabsRef} className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <div ref={categoryTabsRef} className="flex max-w-full gap-2 overflow-x-auto pb-2 scrollbar-hide">
               <Button variant="default" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 All
               </Button>
@@ -242,21 +242,21 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-3 md:gap-4 px-3 sm:px-3 md:px-0">
+          <div className="grid max-w-full grid-cols-2 gap-1 px-1 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
-                className="w-full"
+                className="w-full min-w-0"
               >
                 <Card
-                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group w-full h-auto rounded-md md:rounded-xl border border-border/50"
+                  className="group h-auto w-full overflow-hidden rounded-md border border-border/50 transition-all hover:shadow-lg md:rounded-xl"
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image - Responsive aspect ratio */}
-                  <div className="relative aspect-[5/4] sm:aspect-[4/3] md:aspect-square overflow-hidden bg-muted">
+                  <div className="relative aspect-[4/3] max-h-[120px] overflow-hidden bg-muted md:max-h-none md:aspect-square">
                     <img
                       src={product.image}
                       alt={product.title}
