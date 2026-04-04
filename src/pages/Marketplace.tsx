@@ -242,21 +242,21 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
-          <div className="grid max-w-full grid-cols-2 gap-2 px-12 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3">
+          <div className="grid grid-cols-2 gap-3 px-6 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * index }}
-                className="w-full min-w-0"
+                className="w-full min-w-0 overflow-hidden"
               >
                 <Card
                   className="group h-auto w-full overflow-hidden rounded-md border border-border/50 transition-all hover:shadow-lg md:rounded-xl"
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image - Responsive aspect ratio */}
-                  <div className="relative aspect-[4/3] max-h-[120px] overflow-hidden bg-muted md:max-h-none md:aspect-square">
+                  <div className="relative aspect-square max-h-[100px] overflow-hidden bg-muted md:max-h-none md:aspect-square">
                     <img
                       src={product.image}
                       alt={product.title}
