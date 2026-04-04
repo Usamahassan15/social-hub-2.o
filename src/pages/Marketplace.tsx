@@ -300,7 +300,7 @@ export default function Marketplace() {
                     </div>
                   </div>
 
-                  <CardContent className="p-2 sm:p-3 md:p-4">
+                  <CardContent className="p-1.5 sm:p-3 md:p-4">
                     {/* Product Info - Responsive text sizing */}
                     <div className="space-y-0.5 sm:space-y-1 md:space-y-2">
                       <h3 className="font-semibold text-xs sm:text-sm md:text-base text-foreground line-clamp-2 leading-tight">
