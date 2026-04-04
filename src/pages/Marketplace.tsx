@@ -242,7 +242,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
-          <div className="grid max-w-full grid-cols-2 gap-2 px-4 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3">
+          <div className="grid max-w-full grid-cols-2 gap-2 px-8 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
