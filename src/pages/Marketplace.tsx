@@ -252,7 +252,7 @@ export default function Marketplace() {
                 className="w-full"
               >
                 <Card
-                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group w-full h-auto rounded-lg md:rounded-xl border border-border/50"
+                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group w-full h-auto rounded-md md:rounded-xl border border-border/50"
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image - Responsive aspect ratio */}
