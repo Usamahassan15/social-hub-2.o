@@ -256,7 +256,7 @@ export default function Marketplace() {
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image - Responsive aspect ratio */}
-                  <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-muted">
+                  <div className="relative aspect-[5/4] sm:aspect-[4/3] md:aspect-square overflow-hidden bg-muted">
                     <img
                       src={product.image}
                       alt={product.title}
