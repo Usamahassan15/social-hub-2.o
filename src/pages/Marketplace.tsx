@@ -242,7 +242,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-3 md:gap-4 px-1 sm:px-3 md:px-0">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-3 md:gap-4 px-0 sm:px-3 md:px-0">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -252,11 +252,11 @@ export default function Marketplace() {
                 className="w-full"
               >
                 <Card
-                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group w-full h-auto rounded-lg md:rounded-xl border border-border/50"
+                  className="overflow-hidden hover:shadow-lg transition-all cursor-pointer group w-full h-auto rounded-md md:rounded-xl border border-border/50"
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image - Responsive aspect ratio */}
-                  <div className="relative aspect-square overflow-hidden bg-muted">
+                  <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-muted">
                     <img
                       src={product.image}
                       alt={product.title}
@@ -300,7 +300,7 @@ export default function Marketplace() {
                     </div>
                   </div>
 
-                  <CardContent className="p-2 sm:p-3 md:p-4">
+                  <CardContent className="p-1.5 sm:p-3 md:p-4">
                     {/* Product Info - Responsive text sizing */}
                     <div className="space-y-0.5 sm:space-y-1 md:space-y-2">
                       <h3 className="font-semibold text-xs sm:text-sm md:text-base text-foreground line-clamp-2 leading-tight">
