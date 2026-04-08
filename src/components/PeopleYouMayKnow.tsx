@@ -162,6 +162,21 @@ const PeopleYouMayKnow = () => {
               </Button>
             </motion.div>
           ))}
+
+          {/* See All Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            onClick={() => navigate("/people-suggestions")}
+            className="flex-shrink-0 w-[130px] bg-card border border-border rounded-xl p-3 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-muted/50 transition-colors"
+          >
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <ChevronRight className="w-6 h-6 text-primary" />
+            </div>
+            <p className="text-xs font-semibold text-primary text-center">See All</p>
+            <p className="text-[10px] text-muted-foreground">{suggestedUsers.length}+ people</p>
+          </motion.div>
         </div>
       </div>
     </div>

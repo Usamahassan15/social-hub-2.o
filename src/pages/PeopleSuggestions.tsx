@@ -45,47 +45,45 @@ const PeopleSuggestions = () => {
         </div>
       </header>
 
-      {/* User List */}
-      <div className="max-w-lg mx-auto px-4 py-4 space-y-2">
-        {users.map((user, index) => (
-          <motion.div
-            key={user.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.03 }}
-            className="flex items-center gap-3 p-3 bg-card border border-border rounded-xl"
-          >
-            <div
-              className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
-              onClick={() => navigate(`/user/${user.id}`)}
+      {/* User Grid - 2 columns on mobile */}
+      <div className="max-w-lg mx-auto px-3 py-4">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+          {users.map((user, index) => (
+            <motion.div
+              key={user.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.03 }}
+              className="bg-card border border-border rounded-xl p-3 flex flex-col items-center gap-2 relative"
             >
-              <Avatar className="w-12 h-12">
-                <AvatarImage src={user.avatar} />
-                <AvatarFallback>{user.name[0]}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">{user.name}</p>
-                <p className="text-xs text-muted-foreground">{user.mutualFriends} mutual friends</p>
+              <button
+                onClick={() => handleRemove(user.id)}
+                className="absolute top-2 right-2 p-1 rounded-full hover:bg-muted transition-colors"
+              >
+                <X className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+              <div
+                className="flex flex-col items-center gap-1.5 cursor-pointer w-full"
+                onClick={() => navigate(`/user/${user.id}`)}
+              >
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src={user.avatar} />
+                  <AvatarFallback>{user.name[0]}</AvatarFallback>
+                </Avatar>
+                <p className="text-xs font-medium text-foreground text-center truncate w-full">{user.name}</p>
+                <p className="text-[10px] text-muted-foreground">{user.mutualFriends} mutual friends</p>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
               <Button
                 size="sm"
                 variant={following.has(user.id) ? "secondary" : "default"}
-                className="h-8 text-xs px-4 rounded-lg"
+                className="w-full h-8 text-xs rounded-lg"
                 onClick={() => handleFollow(user.id, user.name)}
               >
                 {following.has(user.id) ? "Following" : "Follow"}
               </Button>
-              <button
-                onClick={() => handleRemove(user.id)}
-                className="p-1.5 rounded-full hover:bg-muted transition-colors"
-              >
-                <X className="w-4 h-4 text-muted-foreground" />
-              </button>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
         {users.length === 0 && (
           <p className="text-center text-muted-foreground text-sm py-12">No more suggestions</p>
         )}

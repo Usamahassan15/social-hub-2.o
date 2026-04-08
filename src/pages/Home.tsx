@@ -20,6 +20,135 @@ const POST_CATEGORIES = [
   "science", "art", "sports", "music", "travel", "lifestyle", "news"
 ];
 
+const SUGGESTED_POSTS = [
+  {
+    id: "suggested-1",
+    user_id: "user-1",
+    content: "Just launched our new AI-powered design tool! 🚀 It can generate stunning UI mockups in seconds. What do you think about AI in the design workflow?",
+    media_url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
+    media_type: "image",
+    category: "technology",
+    is_anonymous: false,
+    likes_count: 234,
+    comments_count: 45,
+    shares_count: 18,
+    saves_count: 67,
+    views_count: 1200,
+    quality_score: 0.9,
+    engagement_rate: 0.15,
+    is_trending: true,
+    is_featured: false,
+    created_at: new Date(Date.now() - 2 * 3600000).toISOString(),
+    updated_at: new Date().toISOString(),
+    author: "Sarah Chen",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+  },
+  {
+    id: "suggested-2",
+    user_id: "user-2",
+    content: "5 lessons I learned from building my startup from scratch 💡\n\n1. Start small, think big\n2. Talk to your users daily\n3. Ship fast, iterate faster\n4. Build a great team\n5. Never stop learning",
+    category: "startup",
+    is_anonymous: false,
+    likes_count: 512,
+    comments_count: 89,
+    shares_count: 156,
+    saves_count: 203,
+    views_count: 5400,
+    quality_score: 0.95,
+    engagement_rate: 0.22,
+    is_trending: true,
+    is_featured: true,
+    created_at: new Date(Date.now() - 5 * 3600000).toISOString(),
+    updated_at: new Date().toISOString(),
+    author: "Alex Rivera",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+  },
+  {
+    id: "suggested-3",
+    user_id: "user-3",
+    content: "Beautiful sunset captured during my trip to Bali 🌅 Nature never fails to amaze me. Sometimes you need to disconnect to reconnect.",
+    media_url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop",
+    media_type: "image",
+    category: "travel",
+    is_anonymous: false,
+    likes_count: 789,
+    comments_count: 34,
+    shares_count: 56,
+    saves_count: 123,
+    views_count: 3200,
+    quality_score: 0.85,
+    engagement_rate: 0.18,
+    is_trending: false,
+    is_featured: false,
+    created_at: new Date(Date.now() - 8 * 3600000).toISOString(),
+    updated_at: new Date().toISOString(),
+    author: "Maya Johnson",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maya",
+  },
+  {
+    id: "suggested-4",
+    user_id: "user-4",
+    content: "The future of web development is here! 🔥 WebAssembly + AI = mind-blowing possibilities. Who else is excited about this tech stack?",
+    category: "ai",
+    is_anonymous: false,
+    likes_count: 345,
+    comments_count: 67,
+    shares_count: 45,
+    saves_count: 89,
+    views_count: 2100,
+    quality_score: 0.88,
+    engagement_rate: 0.2,
+    is_trending: false,
+    is_featured: false,
+    created_at: new Date(Date.now() - 12 * 3600000).toISOString(),
+    updated_at: new Date().toISOString(),
+    author: "Ryan Kim",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ryan",
+  },
+  {
+    id: "suggested-5",
+    user_id: "user-5",
+    content: "Just finished reading 'Atomic Habits' by James Clear. Game changer! 📚 Small changes really do compound into remarkable results. What's your favorite productivity book?",
+    media_url: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&h=400&fit=crop",
+    media_type: "image",
+    category: "lifestyle",
+    is_anonymous: false,
+    likes_count: 456,
+    comments_count: 123,
+    shares_count: 78,
+    saves_count: 234,
+    views_count: 4500,
+    quality_score: 0.92,
+    engagement_rate: 0.25,
+    is_trending: true,
+    is_featured: false,
+    created_at: new Date(Date.now() - 18 * 3600000).toISOString(),
+    updated_at: new Date().toISOString(),
+    author: "Emma Wilson",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
+  },
+  {
+    id: "suggested-6",
+    user_id: "user-6",
+    content: "New music drop! 🎵 Been working on this track for 3 months. Electronic meets jazz - a fusion that I think you'll love. Let me know what you think!",
+    category: "music",
+    is_anonymous: false,
+    likes_count: 189,
+    comments_count: 42,
+    shares_count: 23,
+    saves_count: 56,
+    views_count: 1800,
+    quality_score: 0.8,
+    engagement_rate: 0.14,
+    is_trending: false,
+    is_featured: false,
+    created_at: new Date(Date.now() - 24 * 3600000).toISOString(),
+    updated_at: new Date().toISOString(),
+    author: "DJ Marcus",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+  },
+];
+
 const FeedSkeleton = () => (
   <Card className="p-4 space-y-3">
     <div className="flex items-center gap-2">
@@ -98,35 +227,22 @@ const Home = () => {
                 <FeedSkeleton />
                 <FeedSkeleton />
               </>
-            ) : posts.length === 0 ? (
-              <Card className="p-8 text-center">
-                <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-                <h3 className="text-lg font-semibold text-foreground mb-1">
-                  {feedType === "following" ? "Follow more people" : "No posts yet"}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {feedType === "following"
-                    ? "Follow accounts to see their posts here"
-                    : "Be the first to create a post!"}
-                </p>
-                <Button onClick={() => setIsCreatePostOpen(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Post
-                </Button>
-              </Card>
             ) : (
-              posts.map((post, index) => (
-                <React.Fragment key={post.id}>
-                  {index === 3 && <PeopleYouMayKnow />}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <LivePost {...post} />
-                  </motion.div>
-                </React.Fragment>
-              ))
+              (() => {
+                const feedPosts = posts.length > 0 ? posts : SUGGESTED_POSTS;
+                return feedPosts.map((post, index) => (
+                  <React.Fragment key={post.id}>
+                    {index === 3 && <PeopleYouMayKnow />}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <LivePost {...post} />
+                    </motion.div>
+                  </React.Fragment>
+                ));
+              })()
             )}
 
             {/* Load More */}
