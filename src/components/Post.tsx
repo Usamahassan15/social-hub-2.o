@@ -1,6 +1,7 @@
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban, Camera, Smile } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef } from "react";
+import EngagementUsersDialog from "./EngagementUsersDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -46,6 +47,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showModerationWarning, setShowModerationWarning] = useState(false);
   const [moderationData, setModerationData] = useState<any>(null);
+  const [engagementDialog, setEngagementDialog] = useState<{ type: "likes" | "comments" | "shares" | "saves"; count: number } | null>(null);
   const playLike = useUISound("like");
   const playComment = useUISound("comment");
   const playShare = useUISound("share");
@@ -165,8 +167,14 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
 
         {/* Stats */}
         <div className="flex items-center justify-between text-[10px] sm:text-xs text-muted-foreground px-2 sm:px-3 py-1.5 border-b border-border">
-          <span>{likeCount} likes</span>
-          <span>{comments} comments</span>
+          <button onClick={() => setEngagementDialog({ type: "likes", count: likeCount })} className="hover:underline hover:text-foreground transition-colors">
+            {likeCount} likes
+          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setEngagementDialog({ type: "comments", count: comments })} className="hover:underline hover:text-foreground transition-colors">
+              {comments} comments
+            </button>
+          </div>
         </div>
 
         {/* Actions */}
@@ -310,6 +318,14 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
         banEndsAt={moderationData?.ban_ends_at}
         message={moderationData?.message}
       />
+      {engagementDialog && (
+        <EngagementUsersDialog
+          isOpen={!!engagementDialog}
+          onClose={() => setEngagementDialog(null)}
+          type={engagementDialog.type}
+          count={engagementDialog.count}
+        />
+      )}
     </motion.div>
   );
 };
