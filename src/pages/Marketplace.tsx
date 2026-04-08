@@ -242,7 +242,7 @@ export default function Marketplace() {
           </motion.div>
 
           {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
-          <div className="grid grid-cols-2 gap-3 px-6 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+          <div className="grid grid-cols-2 gap-2 px-3 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -256,7 +256,7 @@ export default function Marketplace() {
                   onClick={() => setSelectedProduct(product)}
                 >
                   {/* Product Image - Responsive aspect ratio */}
-                  <div className="relative aspect-square max-h-[100px] overflow-hidden bg-muted md:max-h-none md:aspect-square">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-muted md:aspect-square">
                     <img
                       src={product.image}
                       alt={product.title}
