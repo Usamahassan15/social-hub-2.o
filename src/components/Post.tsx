@@ -318,6 +318,14 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
         banEndsAt={moderationData?.ban_ends_at}
         message={moderationData?.message}
       />
+      {engagementDialog && (
+        <EngagementUsersDialog
+          isOpen={!!engagementDialog}
+          onClose={() => setEngagementDialog(null)}
+          type={engagementDialog.type}
+          count={engagementDialog.count}
+        />
+      )}
     </motion.div>
   );
 };
