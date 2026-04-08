@@ -47,6 +47,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showModerationWarning, setShowModerationWarning] = useState(false);
   const [moderationData, setModerationData] = useState<any>(null);
+  const [engagementDialog, setEngagementDialog] = useState<{ type: "likes" | "comments" | "shares" | "saves"; count: number } | null>(null);
   const playLike = useUISound("like");
   const playComment = useUISound("comment");
   const playShare = useUISound("share");
