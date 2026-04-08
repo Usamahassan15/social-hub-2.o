@@ -167,8 +167,14 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
 
         {/* Stats */}
         <div className="flex items-center justify-between text-[10px] sm:text-xs text-muted-foreground px-2 sm:px-3 py-1.5 border-b border-border">
-          <span>{likeCount} likes</span>
-          <span>{comments} comments</span>
+          <button onClick={() => setEngagementDialog({ type: "likes", count: likeCount })} className="hover:underline hover:text-foreground transition-colors">
+            {likeCount} likes
+          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={() => setEngagementDialog({ type: "comments", count: comments })} className="hover:underline hover:text-foreground transition-colors">
+              {comments} comments
+            </button>
+          </div>
         </div>
 
         {/* Actions */}
