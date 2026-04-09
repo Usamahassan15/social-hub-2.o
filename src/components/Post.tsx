@@ -208,7 +208,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
                 </motion.div>
               )}
             </AnimatePresence>
-            <span className="text-[10px] sm:text-xs font-medium text-foreground">Like</span>
+            <span className="text-[10px] sm:text-xs font-medium text-foreground cursor-pointer" onClick={(e) => { e.stopPropagation(); setEngagementDialog({ type: "likes", count: likeCount }); }}>Like</span>
           </motion.button>
           
           <motion.button
@@ -218,7 +218,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             className="flex flex-col sm:flex-row items-center justify-center gap-0.5 px-1 py-1.5 rounded-md hover:bg-muted transition-colors"
           >
             <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
-            <span className="text-[10px] sm:text-xs font-medium text-foreground">Comment</span>
+            <span className="text-[10px] sm:text-xs font-medium text-foreground cursor-pointer" onClick={(e) => { e.stopPropagation(); setEngagementDialog({ type: "comments", count: comments }); }}>Comment</span>
           </motion.button>
           
           <motion.button
@@ -228,7 +228,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             className="flex flex-col sm:flex-row items-center justify-center gap-0.5 px-1 py-1.5 rounded-md hover:bg-muted transition-colors"
           >
             <Share2 className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
-            <span className="text-[10px] sm:text-xs font-medium text-foreground">Share</span>
+            <span className="text-[10px] sm:text-xs font-medium text-foreground cursor-pointer" onClick={(e) => { e.stopPropagation(); setEngagementDialog({ type: "shares", count: 3 }); }}>Share</span>
           </motion.button>
           
           <motion.button
@@ -238,7 +238,7 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             className="flex flex-col sm:flex-row items-center justify-center gap-0.5 px-1 py-1.5 rounded-md hover:bg-muted transition-colors"
           >
             <Bookmark className={`w-4 h-4 sm:w-5 sm:h-5 ${isSaved ? 'fill-primary text-primary' : 'text-foreground'}`} />
-            <span className="text-[10px] sm:text-xs font-medium text-foreground">Save</span>
+            <span className="text-[10px] sm:text-xs font-medium text-foreground cursor-pointer" onClick={(e) => { e.stopPropagation(); setEngagementDialog({ type: "saves", count: 4 }); }}>Save</span>
           </motion.button>
         </div>
 
