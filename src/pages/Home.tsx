@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Plus, RefreshCw, Loader2, Sparkles } from "lucide-react";
+import { Plus, RefreshCw } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -14,11 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useFeed } from "@/hooks/use-feed";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const POST_CATEGORIES = [
-  "technology", "design", "startup", "ai", "business",
-  "science", "art", "sports", "music", "travel", "lifestyle", "news"
-];
 
 const SUGGESTED_POSTS = [
   {
@@ -176,6 +170,8 @@ const Home = () => {
     limit: 10,
   });
 
+  const feedPosts = posts.length > 0 ? posts : SUGGESTED_POSTS;
+
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
@@ -184,39 +180,23 @@ const Home = () => {
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
         <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-[680px] lg:mx-0 lg:ml-8 mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8 overflow-hidden">
           {/* Stories */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-3 sm:mb-4"
-          >
+          <div className="mb-3 sm:mb-4">
             <Stories />
-          </motion.div>
+          </div>
 
           {/* Feed Type Selector */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-3 sm:mb-4"
-          >
+          <div className="mb-3 sm:mb-4">
             <FeedTypeSelector
               value={feedType}
-              onChange={(val) => {
-                setFeedType(val as any);
-              }}
+              onChange={(val) => setFeedType(val as any)}
             />
-          </motion.div>
+          </div>
 
           {/* Trending topics (compact) */}
           {trending.length > 0 && feedType === "personalized" && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.15 }}
-              className="mb-3 sm:mb-4"
-            >
+            <div className="mb-3 sm:mb-4">
               <TrendingSection variant="compact" />
-            </motion.div>
+            </div>
           )}
 
           {/* Feed */}
@@ -225,24 +205,14 @@ const Home = () => {
               <>
                 <FeedSkeleton />
                 <FeedSkeleton />
-                <FeedSkeleton />
               </>
             ) : (
-              (() => {
-                const feedPosts = posts.length > 0 ? posts : SUGGESTED_POSTS;
-                return feedPosts.map((post, index) => (
-                  <React.Fragment key={post.id}>
-                    {index === 3 && <PeopleYouMayKnow />}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <LivePost {...post} />
-                    </motion.div>
-                  </React.Fragment>
-                ));
-              })()
+              feedPosts.map((post, index) => (
+                <React.Fragment key={post.id}>
+                  {index === 3 && <PeopleYouMayKnow />}
+                  <LivePost {...post} />
+                </React.Fragment>
+              ))
             )}
 
             {/* Load More */}
@@ -274,19 +244,15 @@ const Home = () => {
       <MobileNav />
 
       {/* FAB */}
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="hidden md:block fixed bottom-8 right-6 z-40"
-      >
+      <div className="hidden md:block fixed bottom-8 right-6 z-40">
         <Button
           size="icon"
           onClick={() => setIsCreatePostOpen(true)}
-          className="w-16 h-16 rounded-full bg-gradient-to-r from-[hsl(199,100%,50%)] to-[hsl(207,90%,54%)] shadow-lg hover:shadow-xl"
+          className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-primary/80 shadow-lg hover:shadow-xl"
         >
           <Plus className="w-7 h-7" />
         </Button>
-      </motion.div>
+      </div>
 
       <CreatePost isOpen={isCreatePostOpen} onClose={() => setIsCreatePostOpen(false)} />
     </div>
