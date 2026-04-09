@@ -174,6 +174,12 @@ const Post = ({ author, avatar, time, content, image, likes, comments }: PostPro
             <button onClick={() => setEngagementDialog({ type: "comments", count: comments })} className="hover:underline hover:text-foreground transition-colors">
               {comments} comments
             </button>
+            <button onClick={() => setEngagementDialog({ type: "shares", count: 3 })} className="hover:underline hover:text-foreground transition-colors">
+              3 shares
+            </button>
+            <button onClick={() => setEngagementDialog({ type: "saves", count: 4 })} className="hover:underline hover:text-foreground transition-colors">
+              4 saves
+            </button>
           </div>
         </div>
 
