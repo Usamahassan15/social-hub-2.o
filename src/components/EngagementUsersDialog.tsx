@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Heart, Share2, Bookmark, MessageCircle, UserPlus, UserCheck } from "lucide-react";
+import { Heart, Share2, Bookmark, MessageCircle, UserPlus, UserCheck, ThumbsUp, Reply } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -14,6 +14,7 @@ interface EngagementUser {
   avatar: string;
   time: string;
   comment?: string;
+  commentLikes?: number;
 }
 
 interface EngagementUsersDialogProps {
@@ -34,11 +35,11 @@ const MOCK_USERS: Record<EngagementType, EngagementUser[]> = {
     { id: 7, name: "Zara Imran", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zara", time: "3h ago" },
   ],
   comments: [
-    { id: 1, name: "Sarah Ahmed", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", time: "2m ago", comment: "This is amazing! Keep up the great work 🔥" },
-    { id: 2, name: "Ali Khan", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali", time: "10m ago", comment: "Love this post! Very inspiring ❤️" },
-    { id: 3, name: "Fatima Noor", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Fatima", time: "25m ago", comment: "Congratulations! Well deserved 🎉" },
-    { id: 4, name: "Usman Malik", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Usman", time: "1h ago", comment: "Beautiful capture! Where was this taken?" },
-    { id: 5, name: "Ayesha Siddiq", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayesha", time: "2h ago", comment: "So cool! Would love to know more about this." },
+    { id: 1, name: "Sarah Ahmed", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", time: "2m ago", comment: "This is amazing! Keep up the great work 🔥", commentLikes: 12 },
+    { id: 2, name: "Ali Khan", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali", time: "10m ago", comment: "Love this post! Very inspiring ❤️", commentLikes: 5 },
+    { id: 3, name: "Fatima Noor", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Fatima", time: "25m ago", comment: "Congratulations! Well deserved 🎉", commentLikes: 8 },
+    { id: 4, name: "Usman Malik", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Usman", time: "1h ago", comment: "Beautiful capture! Where was this taken?", commentLikes: 2 },
+    { id: 5, name: "Ayesha Siddiq", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayesha", time: "2h ago", comment: "So cool! Would love to know more about this.", commentLikes: 0 },
   ],
   shares: [
     { id: 1, name: "Ali Khan", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali", time: "5m ago" },
@@ -69,10 +70,20 @@ const TITLES: Record<EngagementType, string> = {
 
 const EngagementUsersDialog = ({ isOpen, onClose, type, count }: EngagementUsersDialogProps) => {
   const [followingIds, setFollowingIds] = useState<Set<number>>(new Set());
+  const [likedComments, setLikedComments] = useState<Set<number>>(new Set());
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const users = MOCK_USERS[type];
 
   const toggleFollow = (id: number) => {
     setFollowingIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const toggleCommentLike = (id: number) => {
+    setLikedComments(prev => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
@@ -128,9 +139,49 @@ const EngagementUsersDialog = ({ isOpen, onClose, type, count }: EngagementUsers
                     )}
                   </div>
                   {type === "comments" && user.comment && (
-                    <div className="mt-1 bg-muted/60 rounded-lg px-3 py-2">
-                      <p className="text-sm text-foreground leading-relaxed">{user.comment}</p>
-                      <p className="text-[10px] text-muted-foreground mt-1">{user.time}</p>
+                    <div className="mt-1">
+                      <div className="bg-muted/60 rounded-lg px-3 py-2">
+                        <p className="text-sm text-foreground leading-relaxed">{user.comment}</p>
+                      </div>
+                      <div className="flex items-center gap-4 mt-1 px-1">
+                        <span className="text-[10px] text-muted-foreground">{user.time}</span>
+                        <button
+                          onClick={() => toggleCommentLike(user.id)}
+                          className={`flex items-center gap-1 text-[11px] font-medium transition-colors ${likedComments.has(user.id) ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                        >
+                          <ThumbsUp className={`w-3 h-3 ${likedComments.has(user.id) ? 'fill-primary' : ''}`} />
+                          Like
+                          {(user.commentLikes || 0) + (likedComments.has(user.id) ? 1 : 0) > 0 && (
+                            <span className="text-[10px]">
+                              {(user.commentLikes || 0) + (likedComments.has(user.id) ? 1 : 0)}
+                            </span>
+                          )}
+                        </button>
+                        <button
+                          onClick={() => setReplyingTo(replyingTo === user.id ? null : user.id)}
+                          className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <Reply className="w-3 h-3" />
+                          Reply
+                        </button>
+                      </div>
+                      {replyingTo === user.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-1.5 ml-2 flex gap-2 items-center"
+                        >
+                          <input
+                            autoFocus
+                            placeholder={`Reply to ${user.name}...`}
+                            className="flex-1 h-7 text-xs bg-muted/60 rounded-full px-3 border-none outline-none focus:ring-1 focus:ring-primary/30"
+                          />
+                          <Button size="sm" className="h-7 px-2 text-[10px]">
+                            Send
+                          </Button>
+                        </motion.div>
+                      )}
                     </div>
                   )}
                 </div>
