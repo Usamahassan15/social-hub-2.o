@@ -8,9 +8,10 @@ interface ImagePreviewProps {
   initialIndex?: number;
   isOpen: boolean;
   onClose: () => void;
+  renderOverlay?: React.ReactNode;
 }
 
-export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose }: ImagePreviewProps) {
+export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose, renderOverlay }: ImagePreviewProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [direction, setDirection] = useState(0);
 
@@ -87,6 +88,9 @@ export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose
           >
             <X className="w-6 h-6" />
           </Button>
+
+          {/* Custom overlay (e.g. 3-dot menu) */}
+          {renderOverlay}
 
           {/* Image counter */}
           {images.length > 1 && (

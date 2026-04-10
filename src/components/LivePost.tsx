@@ -1,5 +1,5 @@
 import React, { useState, useCallback, memo } from "react";
-import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban, TrendingUp, Zap } from "lucide-react";
+import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban, TrendingUp, Zap, Download } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,7 +15,7 @@ import {
 import { useUISound } from "@/hooks/use-ui-sound";
 import { toast } from "@/hooks/use-toast";
 import EngagementUsersDialog from "./EngagementUsersDialog";
-
+import ImagePreview from "./ImagePreview";
 interface LivePostProps {
   id: string;
   user_id: string;
@@ -84,6 +84,8 @@ const LivePost = memo(({
   const [localLikes, setLocalLikes] = useState(initialLikes);
   const [localSaves, setLocalSaves] = useState(saves_count);
   const [engagementDialog, setEngagementDialog] = useState<{ type: "likes" | "comments" | "shares" | "saves"; count: number } | null>(null);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
+  const [showImageMenu, setShowImageMenu] = useState(false);
 
   const playLike = useUISound("like");
   const playComment = useUISound("comment");
@@ -121,6 +123,22 @@ const LivePost = memo(({
     toast({ title: "Comment posted!" });
     setComment("");
   }, [comment, playComment]);
+
+  const handleSaveImage = useCallback(() => {
+    if (!media_url) return;
+    const link = document.createElement("a");
+    link.href = media_url;
+    link.download = "image";
+    link.target = "_blank";
+    link.click();
+    toast({ title: "Image saved!" });
+    setShowImageMenu(false);
+  }, [media_url]);
+
+  const handleReportImage = useCallback(() => {
+    toast({ title: "Image reported. We'll review it shortly." });
+    setShowImageMenu(false);
+  }, []);
 
   return (
     <div>
@@ -183,9 +201,9 @@ const LivePost = memo(({
         {/* Content */}
         <p className="text-sm sm:text-base text-foreground px-2 sm:px-3 pb-2 leading-relaxed whitespace-pre-line">{content}</p>
 
-        {/* Media */}
+        {/* Media - clickable for fullscreen */}
         {media_url && (
-          <div className="overflow-hidden bg-muted">
+          <div className="overflow-hidden bg-muted cursor-pointer" onClick={() => setImagePreviewOpen(true)}>
             <AspectRatio ratio={4 / 3} className="w-full">
               <img src={media_url} alt="Post" className="w-full h-full object-cover" loading="lazy" />
             </AspectRatio>
@@ -273,6 +291,38 @@ const LivePost = memo(({
           onClose={() => setEngagementDialog(null)}
           type={engagementDialog.type}
           count={engagementDialog.count}
+        />
+      )}
+
+      {/* Fullscreen Image Preview with 3-dot menu */}
+      {media_url && imagePreviewOpen && (
+        <ImagePreview
+          images={[media_url]}
+          isOpen={imagePreviewOpen}
+          onClose={() => { setImagePreviewOpen(false); setShowImageMenu(false); }}
+          renderOverlay={
+            <DropdownMenu open={showImageMenu} onOpenChange={setShowImageMenu}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-4 left-4 z-[120] text-white hover:bg-white/20 h-10 w-10"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal className="w-6 h-6" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-44 z-[130]" onClick={(e) => e.stopPropagation()}>
+                <DropdownMenuItem onClick={handleSaveImage}>
+                  <Download className="w-4 h-4 mr-2" /> Save Image
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleReportImage} className="text-destructive">
+                  <Flag className="w-4 h-4 mr-2" /> Report Image
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          }
         />
       )}
     </div>
