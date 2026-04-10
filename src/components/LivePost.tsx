@@ -1,5 +1,5 @@
 import React, { useState, useCallback, memo } from "react";
-import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban, TrendingUp, Zap } from "lucide-react";
+import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, Send, UserPlus, Flag, Ban, TrendingUp, Zap, Download } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,7 +15,7 @@ import {
 import { useUISound } from "@/hooks/use-ui-sound";
 import { toast } from "@/hooks/use-toast";
 import EngagementUsersDialog from "./EngagementUsersDialog";
-
+import ImagePreview from "./ImagePreview";
 interface LivePostProps {
   id: string;
   user_id: string;
