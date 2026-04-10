@@ -8,6 +8,7 @@ interface ImagePreviewProps {
   initialIndex?: number;
   isOpen: boolean;
   onClose: () => void;
+  renderOverlay?: React.ReactNode;
 }
 
 export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose }: ImagePreviewProps) {
