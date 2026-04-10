@@ -329,3 +329,12 @@ export default function Marketplace() {
         isOpen={showCreateListing}
         onClose={() => setShowCreateListing(false)}
       />
+
+      <ImagePreview
+        images={imagePreviewSrc ? [imagePreviewSrc] : []}
+        isOpen={imagePreviewOpen}
+        onClose={() => setImagePreviewOpen(false)}
+      />
+    </div>
+  );
+}
