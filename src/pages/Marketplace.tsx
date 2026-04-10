@@ -1,7 +1,6 @@
 import { ShoppingBag, Search, Filter, MapPin, Heart } from "lucide-react";
 import ImagePreview from "@/components/ImagePreview";
-import { motion } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -128,6 +127,74 @@ const products = [
   },
 ];
 
+const ProductCard = memo(({ product, isLiked, onToggleLike, onSelect, onImagePreview }: {
+  product: typeof products[0];
+  isLiked: boolean;
+  onToggleLike: () => void;
+  onSelect: () => void;
+  onImagePreview: (src: string) => void;
+}) => (
+  <Card
+    className="group h-auto w-full overflow-hidden rounded-md border border-border/50 transition-shadow duration-200 hover:shadow-lg md:rounded-xl"
+    onClick={onSelect}
+  >
+    <div className="relative aspect-[4/3] overflow-hidden bg-muted md:aspect-square">
+      <img
+        src={product.image}
+        alt={product.title}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          onImagePreview(product.image);
+        }}
+      />
+      <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 md:top-3 md:right-3">
+        <Button
+          variant="secondary"
+          size="icon"
+          className="h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleLike();
+          }}
+        >
+          <Heart
+            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors ${
+              isLiked ? "fill-red-500 text-red-500" : "text-muted-foreground"
+            }`}
+          />
+        </Button>
+      </div>
+      <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 md:bottom-3 md:left-3">
+        <Badge
+          variant="secondary"
+          className="bg-background/90 backdrop-blur-sm shadow-sm text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1"
+        >
+          {product.condition}
+        </Badge>
+      </div>
+    </div>
+    <CardContent className="p-1.5 sm:p-3 md:p-4">
+      <div className="space-y-0.5 sm:space-y-1 md:space-y-2">
+        <h3 className="font-semibold text-xs sm:text-sm md:text-base text-foreground line-clamp-2 leading-tight">
+          {product.title}
+        </h3>
+        <p className="text-sm sm:text-base md:text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+          {product.price}
+        </p>
+        <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
+          <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
+          <span className="line-clamp-1 break-all">{product.location}</span>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+));
+
+ProductCard.displayName = "ProductCard";
+
 export default function Marketplace() {
   const navigate = useNavigate();
   const [likedProducts, setLikedProducts] = useState<number[]>(
@@ -176,27 +243,17 @@ export default function Marketplace() {
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
         <div className="w-full px-0 sm:px-4 md:px-2 lg:px-2 pt-0 md:pt-6 overflow-x-hidden max-w-[100vw]">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-4 md:mb-6 px-3 md:px-0"
-          >
+          <div className="mb-4 md:mb-6 px-3 md:px-0">
             <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 md:mb-2">
               Marketplace
             </h1>
             <p className="text-sm md:text-base text-muted-foreground">
               Buy and sell items in your community
             </p>
-          </motion.div>
+          </div>
 
           {/* Search and Filter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-4 md:mb-6 space-y-3 md:space-y-4 px-3 md:px-0"
-          >
-            {/* Search Bar and Post Button */}
+          <div className="mb-4 md:mb-6 space-y-3 md:space-y-4 px-3 md:px-0">
             <div className="flex min-w-0 gap-2 md:gap-3">
               <div className="relative min-w-0 flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -218,128 +275,47 @@ export default function Marketplace() {
               </Button>
             </div>
 
-            {/* Category Filters */}
             <div ref={categoryTabsRef} className="flex max-w-full gap-2 overflow-x-auto pb-2 scrollbar-hide">
               <Button variant="default" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
                 All
               </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
-                Electronics
-              </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
-                Fashion
-              </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
-                Gaming
-              </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
-                Sports
-              </Button>
-              <Button variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
-                Photography
-              </Button>
+              {["Electronics", "Fashion", "Gaming", "Sports", "Photography"].map((cat) => (
+                <Button key={cat} variant="outline" size="sm" className="flex-shrink-0 rounded-full text-xs md:text-sm">
+                  {cat}
+                </Button>
+              ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Products Grid - 2 columns on mobile, 3 on tablet, 4 on desktop */}
+          {/* Products Grid */}
           <div className="grid grid-cols-2 gap-2 px-2 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100vw', overflow: 'hidden', boxSizing: 'border-box' }}>
-            {products.map((product, index) => (
-              <motion.div
+            {products.map((product) => (
+              <ProductCard
                 key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * index }}
-                className="w-full min-w-0 overflow-hidden"
-              >
-                <Card
-                  className="group h-auto w-full overflow-hidden rounded-md border border-border/50 transition-all hover:shadow-lg md:rounded-xl"
-                  onClick={() => setSelectedProduct(product)}
-                >
-                  {/* Product Image - Responsive aspect ratio */}
-                  <div className="relative aspect-[4/3] overflow-hidden bg-muted md:aspect-square">
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setImagePreviewSrc(product.image);
-                        setImagePreviewOpen(true);
-                      }}
-                    />
-
-                    {/* Heart Icon */}
-                    <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 md:top-3 md:right-3">
-                      <Button
-                        variant="secondary"
-                        size="icon"
-                        className="h-7 w-7 sm:h-8 sm:w-8 md:h-9 md:w-9 rounded-full bg-background/90 backdrop-blur-sm shadow-md hover:bg-background"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleLike(product.id);
-                        }}
-                      >
-                        <Heart
-                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors ${
-                            likedProducts.includes(product.id)
-                              ? "fill-red-500 text-red-500"
-                              : "text-muted-foreground"
-                          }`}
-                        />
-                      </Button>
-                    </div>
-
-                    {/* Condition Badge */}
-                    <div className="absolute bottom-1.5 left-1.5 sm:bottom-2 sm:left-2 md:bottom-3 md:left-3">
-                      <Badge
-                        variant="secondary"
-                        className="bg-background/90 backdrop-blur-sm shadow-sm text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1"
-                      >
-                        {product.condition}
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <CardContent className="p-1.5 sm:p-3 md:p-4">
-                    {/* Product Info - Responsive text sizing */}
-                    <div className="space-y-0.5 sm:space-y-1 md:space-y-2">
-                      <h3 className="font-semibold text-xs sm:text-sm md:text-base text-foreground line-clamp-2 leading-tight">
-                        {product.title}
-                      </h3>
-
-                      <p className="text-sm sm:text-base md:text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                        {product.price}
-                      </p>
-
-                      <div className="flex items-center gap-1 text-[10px] sm:text-xs text-muted-foreground">
-                        <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
-                        <span className="line-clamp-1 break-all">{product.location}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                product={product}
+                isLiked={likedProducts.includes(product.id)}
+                onToggleLike={() => toggleLike(product.id)}
+                onSelect={() => setSelectedProduct(product)}
+                onImagePreview={(src) => {
+                  setImagePreviewSrc(src);
+                  setImagePreviewOpen(true);
+                }}
+              />
             ))}
           </div>
 
           {/* Load More */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-6 sm:mt-8 text-center pb-6"
-          >
+          <div className="mt-6 sm:mt-8 text-center pb-6">
             <Button variant="outline" className="w-full sm:w-auto">
               <ShoppingBag className="w-4 h-4 mr-2" />
               Load More Products
             </Button>
-          </motion.div>
+          </div>
         </div>
       </main>
 
       <MobileNav />
 
-      {/* Listing Detail Modal */}
       <MarketplaceListingDetail
         product={selectedProduct}
         isOpen={!!selectedProduct}
@@ -349,7 +325,6 @@ export default function Marketplace() {
         onToggleLike={() => selectedProduct && toggleLike(selectedProduct.id)}
       />
 
-      {/* Create Listing Modal */}
       <CreateListingModal
         isOpen={showCreateListing}
         onClose={() => setShowCreateListing(false)}
