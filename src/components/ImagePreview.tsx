@@ -89,6 +89,9 @@ export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose
             <X className="w-6 h-6" />
           </Button>
 
+          {/* Custom overlay (e.g. 3-dot menu) */}
+          {renderOverlay}
+
           {/* Image counter */}
           {images.length > 1 && (
             <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[110] text-white/80 text-sm font-medium">
