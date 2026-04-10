@@ -1,5 +1,6 @@
 import { ShoppingBag, Search, Filter, MapPin, Heart } from "lucide-react";
 import ImagePreview from "@/components/ImagePreview";
+import { motion } from "framer-motion";
 import { useState, useRef, useEffect, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
@@ -243,17 +244,27 @@ export default function Marketplace() {
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
         <div className="w-full px-0 sm:px-4 md:px-2 lg:px-2 pt-0 md:pt-6 overflow-x-hidden max-w-[100vw]">
           {/* Header */}
-          <div className="mb-4 md:mb-6 px-3 md:px-0">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="mb-4 md:mb-6 px-3 md:px-0"
+          >
             <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 md:mb-2">
               Marketplace
             </h1>
             <p className="text-sm md:text-base text-muted-foreground">
               Buy and sell items in your community
             </p>
-          </div>
+          </motion.div>
 
           {/* Search and Filter */}
-          <div className="mb-4 md:mb-6 space-y-3 md:space-y-4 px-3 md:px-0">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, delay: 0.05 }}
+            className="mb-4 md:mb-6 space-y-3 md:space-y-4 px-3 md:px-0"
+          >
             <div className="flex min-w-0 gap-2 md:gap-3">
               <div className="relative min-w-0 flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -285,22 +296,29 @@ export default function Marketplace() {
                 </Button>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Products Grid */}
           <div className="grid grid-cols-2 gap-2 px-2 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100vw', overflow: 'hidden', boxSizing: 'border-box' }}>
-            {products.map((product) => (
-              <ProductCard
+            {products.map((product, index) => (
+              <motion.div
                 key={product.id}
-                product={product}
-                isLiked={likedProducts.includes(product.id)}
-                onToggleLike={() => toggleLike(product.id)}
-                onSelect={() => setSelectedProduct(product)}
-                onImagePreview={(src) => {
-                  setImagePreviewSrc(src);
-                  setImagePreviewOpen(true);
-                }}
-              />
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.15) }}
+              >
+                <ProductCard
+                  product={product}
+                  isLiked={likedProducts.includes(product.id)}
+                  onToggleLike={() => toggleLike(product.id)}
+                  onSelect={() => setSelectedProduct(product)}
+                  onImagePreview={(src) => {
+                    setImagePreviewSrc(src);
+                    setImagePreviewOpen(true);
+                  }}
+                />
+              </motion.div>
             ))}
           </div>
 

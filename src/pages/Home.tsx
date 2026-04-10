@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Plus, RefreshCw } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -210,7 +211,14 @@ const Home = () => {
               feedPosts.map((post, index) => (
                 <React.Fragment key={post.id}>
                   {index === 3 && <PeopleYouMayKnow />}
-                  <LivePost {...post} />
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.12) }}
+                  >
+                    <LivePost {...post} />
+                  </motion.div>
                 </React.Fragment>
               ))
             )}
