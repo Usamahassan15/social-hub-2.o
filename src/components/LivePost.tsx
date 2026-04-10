@@ -201,9 +201,9 @@ const LivePost = memo(({
         {/* Content */}
         <p className="text-sm sm:text-base text-foreground px-2 sm:px-3 pb-2 leading-relaxed whitespace-pre-line">{content}</p>
 
-        {/* Media */}
+        {/* Media - clickable for fullscreen */}
         {media_url && (
-          <div className="overflow-hidden bg-muted">
+          <div className="overflow-hidden bg-muted cursor-pointer" onClick={() => setImagePreviewOpen(true)}>
             <AspectRatio ratio={4 / 3} className="w-full">
               <img src={media_url} alt="Post" className="w-full h-full object-cover" loading="lazy" />
             </AspectRatio>
