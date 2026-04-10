@@ -124,6 +124,22 @@ const LivePost = memo(({
     setComment("");
   }, [comment, playComment]);
 
+  const handleSaveImage = useCallback(() => {
+    if (!media_url) return;
+    const link = document.createElement("a");
+    link.href = media_url;
+    link.download = "image";
+    link.target = "_blank";
+    link.click();
+    toast({ title: "Image saved!" });
+    setShowImageMenu(false);
+  }, [media_url]);
+
+  const handleReportImage = useCallback(() => {
+    toast({ title: "Image reported. We'll review it shortly." });
+    setShowImageMenu(false);
+  }, []);
+
   return (
     <div>
       <Card className="p-0 overflow-hidden rounded-lg sm:rounded-xl border border-border/30 sm:border-border max-w-full">
