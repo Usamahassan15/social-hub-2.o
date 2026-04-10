@@ -11,7 +11,7 @@ interface ImagePreviewProps {
   renderOverlay?: React.ReactNode;
 }
 
-export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose }: ImagePreviewProps) {
+export default function ImagePreview({ images, initialIndex = 0, isOpen, onClose, renderOverlay }: ImagePreviewProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [direction, setDirection] = useState(0);
 
