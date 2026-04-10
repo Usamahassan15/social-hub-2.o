@@ -84,6 +84,8 @@ const LivePost = memo(({
   const [localLikes, setLocalLikes] = useState(initialLikes);
   const [localSaves, setLocalSaves] = useState(saves_count);
   const [engagementDialog, setEngagementDialog] = useState<{ type: "likes" | "comments" | "shares" | "saves"; count: number } | null>(null);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
+  const [showImageMenu, setShowImageMenu] = useState(false);
 
   const playLike = useUISound("like");
   const playComment = useUISound("comment");
