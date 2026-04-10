@@ -293,6 +293,38 @@ const LivePost = memo(({
           count={engagementDialog.count}
         />
       )}
+
+      {/* Fullscreen Image Preview with 3-dot menu */}
+      {media_url && imagePreviewOpen && (
+        <ImagePreview
+          images={[media_url]}
+          isOpen={imagePreviewOpen}
+          onClose={() => { setImagePreviewOpen(false); setShowImageMenu(false); }}
+          renderOverlay={
+            <DropdownMenu open={showImageMenu} onOpenChange={setShowImageMenu}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-4 left-4 z-[120] text-white hover:bg-white/20 h-10 w-10"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <MoreHorizontal className="w-6 h-6" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-44 z-[130]" onClick={(e) => e.stopPropagation()}>
+                <DropdownMenuItem onClick={handleSaveImage}>
+                  <Download className="w-4 h-4 mr-2" /> Save Image
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleReportImage} className="text-destructive">
+                  <Flag className="w-4 h-4 mr-2" /> Report Image
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          }
+        />
+      )}
     </div>
   );
 });
