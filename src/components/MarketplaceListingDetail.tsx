@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { X, MapPin, Star, Heart, Share2, MessageCircle, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import SellerProfileModal from "@/components/marketplace/SellerProfileModal";
 
 interface Product {
   id: number;
