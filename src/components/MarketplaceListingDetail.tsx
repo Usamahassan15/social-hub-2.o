@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { X, MapPin, Star, Heart, Share2, MessageCircle, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import SellerProfileModal from "@/components/marketplace/SellerProfileModal";
 
 interface Product {
   id: number;
@@ -40,7 +42,16 @@ export default function MarketplaceListingDetail({
   isLiked,
   onToggleLike,
 }: MarketplaceListingDetailProps) {
+  const [showSellerProfile, setShowSellerProfile] = useState(false);
+
   if (!product) return null;
+
+  const otherSellerProducts = [
+    { id: 101, title: "Wireless Earbuds", price: "$65", image: "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=400&fit=crop", condition: "New" },
+    { id: 102, title: "Phone Case Premium", price: "$25", image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&h=400&fit=crop", condition: "New" },
+    { id: 103, title: "Laptop Stand", price: "$45", image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=400&fit=crop", condition: "Like New" },
+    { id: 104, title: "USB-C Hub", price: "$35", image: "https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=400&h=400&fit=crop", condition: "Excellent" },
+  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -150,7 +161,7 @@ export default function MarketplaceListingDetail({
                     <span>• Member since 2023</span>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => setShowSellerProfile(true)}>
                   View Profile
                 </Button>
               </div>
@@ -177,6 +188,14 @@ export default function MarketplaceListingDetail({
           </div>
         </div>
       </DialogContent>
+
+      <SellerProfileModal
+        isOpen={showSellerProfile}
+        onClose={() => setShowSellerProfile(false)}
+        sellerName={product.seller}
+        sellerAvatar={product.sellerAvatar}
+        otherProducts={otherSellerProducts}
+      />
     </Dialog>
   );
 }
