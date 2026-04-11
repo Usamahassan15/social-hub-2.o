@@ -161,7 +161,7 @@ export default function MarketplaceListingDetail({
                     <span>• Member since 2023</span>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={() => setShowSellerProfile(true)}>
                   View Profile
                 </Button>
               </div>
@@ -188,6 +188,14 @@ export default function MarketplaceListingDetail({
           </div>
         </div>
       </DialogContent>
+
+      <SellerProfileModal
+        isOpen={showSellerProfile}
+        onClose={() => setShowSellerProfile(false)}
+        sellerName={product.seller}
+        sellerAvatar={product.sellerAvatar}
+        otherProducts={otherSellerProducts}
+      />
     </Dialog>
   );
 }
