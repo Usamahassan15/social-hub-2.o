@@ -115,6 +115,22 @@ export default function Marketplace() {
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [imagePreviewSrc, setImagePreviewSrc] = useState("");
   const categoryTabsRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = loadMoreRef.current;
+    if (!el || !hasMore) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((c) => c + PRODUCTS_PER_PAGE);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, visibleCount]);
 
   useEffect(() => {
     const el = categoryTabsRef.current;
@@ -231,13 +247,12 @@ export default function Marketplace() {
             ))}
           </div>
 
-          {/* Load More */}
           {hasMore && (
-            <div className="mt-6 sm:mt-8 text-center pb-6">
-              <Button variant="outline" className="w-full sm:w-auto" onClick={() => setVisibleCount((c) => c + PRODUCTS_PER_PAGE)}>
-                <ShoppingBag className="w-4 h-4 mr-2" />
-                Load More Products ({allProducts.length - visibleCount} remaining)
-              </Button>
+            <div ref={loadMoreRef} className="mt-6 sm:mt-8 text-center pb-6">
+              <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm py-4">
+                <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                Loading more...
+              </div>
             </div>
           )}
         </div>
