@@ -35,7 +35,7 @@ const allProducts = [
 const PRODUCTS_PER_PAGE = 8;
 
 const ProductCard = memo(({ product, isLiked, onToggleLike, onSelect, onImagePreview }: {
-  product: typeof products[0];
+  product: typeof allProducts[0];
   isLiked: boolean;
   onToggleLike: () => void;
   onSelect: () => void;
@@ -104,10 +104,13 @@ ProductCard.displayName = "ProductCard";
 
 export default function Marketplace() {
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   const [likedProducts, setLikedProducts] = useState<number[]>(
-    products.filter((p) => p.liked).map((p) => p.id)
+    allProducts.filter((p) => p.liked).map((p) => p.id)
   );
-  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<typeof allProducts[0] | null>(null);
+  const visibleProducts = allProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < allProducts.length;
   const [showCreateListing, setShowCreateListing] = useState(false);
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [imagePreviewSrc, setImagePreviewSrc] = useState("");
@@ -206,7 +209,7 @@ export default function Marketplace() {
 
           {/* Products Grid */}
           <div className="grid grid-cols-2 gap-2 px-2 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100vw', overflow: 'hidden', boxSizing: 'border-box' }}>
-            {products.map((product, index) => (
+            {visibleProducts.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 15 }}
@@ -229,12 +232,14 @@ export default function Marketplace() {
           </div>
 
           {/* Load More */}
-          <div className="mt-6 sm:mt-8 text-center pb-6">
-            <Button variant="outline" className="w-full sm:w-auto">
-              <ShoppingBag className="w-4 h-4 mr-2" />
-              Load More Products
-            </Button>
-          </div>
+          {hasMore && (
+            <div className="mt-6 sm:mt-8 text-center pb-6">
+              <Button variant="outline" className="w-full sm:w-auto" onClick={() => setVisibleCount((c) => c + PRODUCTS_PER_PAGE)}>
+                <ShoppingBag className="w-4 h-4 mr-2" />
+                Load More Products ({allProducts.length - visibleCount} remaining)
+              </Button>
+            </div>
+          )}
         </div>
       </main>
 
