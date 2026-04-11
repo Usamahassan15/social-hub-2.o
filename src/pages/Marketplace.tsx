@@ -13,123 +13,29 @@ import { Badge } from "@/components/ui/badge";
 import MarketplaceListingDetail from "@/components/MarketplaceListingDetail";
 import CreateListingModal from "@/components/CreateListingModal";
 
-const products = [
-  {
-    id: 1,
-    title: "Vintage Leather Jacket",
-    price: "$120",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop",
-    seller: "John Doe",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
-    location: "New York, NY",
-    category: "Fashion",
-    condition: "Like New",
-    liked: false,
-    rating: 4.5,
-    reviews: 23,
-  },
-  {
-    id: 2,
-    title: "MacBook Pro 16-inch",
-    price: "$1,800",
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
-    seller: "Sarah Johnson",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    location: "San Francisco, CA",
-    category: "Electronics",
-    condition: "Used",
-    liked: true,
-    rating: 4.8,
-    reviews: 45,
-  },
-  {
-    id: 3,
-    title: "Vintage Camera",
-    price: "$350",
-    image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=400&fit=crop",
-    seller: "Mike Chen",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
-    location: "Los Angeles, CA",
-    category: "Photography",
-    condition: "Excellent",
-    liked: false,
-    rating: 4.7,
-    reviews: 18,
-  },
-  {
-    id: 4,
-    title: "Designer Handbag",
-    price: "$450",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop",
-    seller: "Emma Wilson",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
-    location: "Miami, FL",
-    category: "Fashion",
-    condition: "New",
-    liked: false,
-    rating: 4.9,
-    reviews: 67,
-  },
-  {
-    id: 5,
-    title: "Gaming Console",
-    price: "$400",
-    image: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=400&fit=crop",
-    seller: "Jake Thompson",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jake",
-    location: "Austin, TX",
-    category: "Gaming",
-    condition: "Like New",
-    liked: false,
-    rating: 4.6,
-    reviews: 32,
-  },
-  {
-    id: 6,
-    title: "Wireless Headphones",
-    price: "$180",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
-    seller: "Olivia Brown",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Olivia",
-    location: "Seattle, WA",
-    category: "Electronics",
-    condition: "New",
-    liked: true,
-    rating: 4.8,
-    reviews: 89,
-  },
-  {
-    id: 7,
-    title: "Mountain Bike",
-    price: "$600",
-    image: "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=400&h=400&fit=crop",
-    seller: "Alex Martinez",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-    location: "Denver, CO",
-    category: "Sports",
-    condition: "Used",
-    liked: false,
-    rating: 4.4,
-    reviews: 15,
-  },
-  {
-    id: 8,
-    title: "Smart Watch",
-    price: "$250",
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
-    seller: "Lisa Anderson",
-    sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa",
-    location: "Boston, MA",
-    category: "Electronics",
-    condition: "Excellent",
-    liked: false,
-    rating: 4.7,
-    reviews: 56,
-  },
+const allProducts = [
+  { id: 1, title: "Vintage Leather Jacket", price: "$120", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop", seller: "John Doe", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John", location: "New York, NY", category: "Fashion", condition: "Like New", liked: false, rating: 4.5, reviews: 23 },
+  { id: 2, title: "MacBook Pro 16-inch", price: "$1,800", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop", seller: "Sarah Johnson", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", location: "San Francisco, CA", category: "Electronics", condition: "Used", liked: true, rating: 4.8, reviews: 45 },
+  { id: 3, title: "Vintage Camera", price: "$350", image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=400&fit=crop", seller: "Mike Chen", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike", location: "Los Angeles, CA", category: "Photography", condition: "Excellent", liked: false, rating: 4.7, reviews: 18 },
+  { id: 4, title: "Designer Handbag", price: "$450", image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=400&fit=crop", seller: "Emma Wilson", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma", location: "Miami, FL", category: "Fashion", condition: "New", liked: false, rating: 4.9, reviews: 67 },
+  { id: 5, title: "Gaming Console", price: "$400", image: "https://images.unsplash.com/photo-1486401899868-0e435ed85128?w=400&h=400&fit=crop", seller: "Jake Thompson", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jake", location: "Austin, TX", category: "Gaming", condition: "Like New", liked: false, rating: 4.6, reviews: 32 },
+  { id: 6, title: "Wireless Headphones", price: "$180", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop", seller: "Olivia Brown", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Olivia", location: "Seattle, WA", category: "Electronics", condition: "New", liked: true, rating: 4.8, reviews: 89 },
+  { id: 7, title: "Mountain Bike", price: "$600", image: "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=400&h=400&fit=crop", seller: "Alex Martinez", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex", location: "Denver, CO", category: "Sports", condition: "Used", liked: false, rating: 4.4, reviews: 15 },
+  { id: 8, title: "Smart Watch", price: "$250", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop", seller: "Lisa Anderson", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa", location: "Boston, MA", category: "Electronics", condition: "Excellent", liked: false, rating: 4.7, reviews: 56 },
+  { id: 9, title: "Running Shoes", price: "$95", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop", seller: "David Kim", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David", location: "Chicago, IL", category: "Sports", condition: "New", liked: false, rating: 4.6, reviews: 41 },
+  { id: 10, title: "Acoustic Guitar", price: "$320", image: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=400&fit=crop", seller: "Rachel Green", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rachel", location: "Nashville, TN", category: "Music", condition: "Like New", liked: false, rating: 4.8, reviews: 27 },
+  { id: 11, title: "Drone with Camera", price: "$550", image: "https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?w=400&h=400&fit=crop", seller: "Tom Harris", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tom", location: "Portland, OR", category: "Electronics", condition: "Used", liked: false, rating: 4.3, reviews: 12 },
+  { id: 12, title: "Yoga Mat Premium", price: "$45", image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&h=400&fit=crop", seller: "Nina Patel", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Nina", location: "San Diego, CA", category: "Sports", condition: "New", liked: false, rating: 4.9, reviews: 73 },
+  { id: 13, title: "Mechanical Keyboard", price: "$160", image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=400&h=400&fit=crop", seller: "Chris Lee", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chris", location: "Atlanta, GA", category: "Electronics", condition: "New", liked: false, rating: 4.7, reviews: 38 },
+  { id: 14, title: "Camping Tent 4-Person", price: "$230", image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&h=400&fit=crop", seller: "Mark Taylor", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mark", location: "Salt Lake City, UT", category: "Sports", condition: "Like New", liked: false, rating: 4.5, reviews: 19 },
+  { id: 15, title: "Polaroid Camera", price: "$89", image: "https://images.unsplash.com/photo-1526549892920-3b47e7c43131?w=400&h=400&fit=crop", seller: "Amy Foster", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Amy", location: "Philadelphia, PA", category: "Photography", condition: "Excellent", liked: false, rating: 4.6, reviews: 34 },
+  { id: 16, title: "Bluetooth Speaker", price: "$75", image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=400&fit=crop", seller: "James White", sellerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=James", location: "Houston, TX", category: "Electronics", condition: "New", liked: false, rating: 4.4, reviews: 52 },
 ];
 
+const PRODUCTS_PER_PAGE = 8;
+
 const ProductCard = memo(({ product, isLiked, onToggleLike, onSelect, onImagePreview }: {
-  product: typeof products[0];
+  product: typeof allProducts[0];
   isLiked: boolean;
   onToggleLike: () => void;
   onSelect: () => void;
@@ -198,10 +104,13 @@ ProductCard.displayName = "ProductCard";
 
 export default function Marketplace() {
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   const [likedProducts, setLikedProducts] = useState<number[]>(
-    products.filter((p) => p.liked).map((p) => p.id)
+    allProducts.filter((p) => p.liked).map((p) => p.id)
   );
-  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<typeof allProducts[0] | null>(null);
+  const visibleProducts = allProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < allProducts.length;
   const [showCreateListing, setShowCreateListing] = useState(false);
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [imagePreviewSrc, setImagePreviewSrc] = useState("");
@@ -300,7 +209,7 @@ export default function Marketplace() {
 
           {/* Products Grid */}
           <div className="grid grid-cols-2 gap-2 px-2 sm:px-3 md:grid-cols-3 md:px-0 lg:grid-cols-4 md:gap-4 sm:gap-3" style={{ maxWidth: '100vw', overflow: 'hidden', boxSizing: 'border-box' }}>
-            {products.map((product, index) => (
+            {visibleProducts.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 15 }}
@@ -323,12 +232,14 @@ export default function Marketplace() {
           </div>
 
           {/* Load More */}
-          <div className="mt-6 sm:mt-8 text-center pb-6">
-            <Button variant="outline" className="w-full sm:w-auto">
-              <ShoppingBag className="w-4 h-4 mr-2" />
-              Load More Products
-            </Button>
-          </div>
+          {hasMore && (
+            <div className="mt-6 sm:mt-8 text-center pb-6">
+              <Button variant="outline" className="w-full sm:w-auto" onClick={() => setVisibleCount((c) => c + PRODUCTS_PER_PAGE)}>
+                <ShoppingBag className="w-4 h-4 mr-2" />
+                Load More Products ({allProducts.length - visibleCount} remaining)
+              </Button>
+            </div>
+          )}
         </div>
       </main>
 
