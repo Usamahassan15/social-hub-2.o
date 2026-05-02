@@ -69,7 +69,7 @@ export default function UserProfile() {
       <Sidebar />
       <TopBar />
 
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
+      <main className="flex-1 md:ml-64 lg:ml-72 xl:ml-80 pb-16 md:pb-8 pt-14 md:pt-14">
         <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-[780px] xl:max-w-[850px] mx-auto px-0 sm:px-4 md:px-6 lg:px-8">
           {/* Cover Photo */}
           <motion.div

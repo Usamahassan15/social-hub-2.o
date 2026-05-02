@@ -175,7 +175,7 @@ export default function Jobs() {
       <Sidebar />
       <TopBar />
 
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
+      <main className="flex-1 md:ml-64 lg:ml-72 xl:ml-80 pb-16 md:pb-8 pt-14 md:pt-14">
         <div className="w-full max-w-[100vw] sm:max-w-md md:max-w-4xl lg:max-w-[680px] lg:mx-0 lg:ml-0 mx-auto px-1.5 sm:px-4 md:px-6 lg:px-0 pt-2 sm:pt-4 md:pt-6 overflow-hidden">
           {/* Header */}
           <motion.div

@@ -95,7 +95,7 @@ export default function Settings() {
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8 pt-14 md:pt-14">
+      <main className="flex-1 md:ml-64 lg:ml-72 xl:ml-80 pb-20 sm:pb-24 md:pb-8 pt-14 md:pt-14">
         <div className="max-w-2xl lg:max-w-3xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-5 md:pt-6">
           {/* Header */}
           <motion.div 
