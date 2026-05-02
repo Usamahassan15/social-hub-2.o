@@ -156,7 +156,7 @@ const Messages = () => {
       <Sidebar />
       <TopBar />
       
-      <main className={`flex-1 md:ml-64 lg:ml-72 xl:ml-80 pt-14 md:pt-14 ${showConversationList ? 'pb-16' : 'pb-0'} md:pb-8 flex lg:justify-start`}>
+      <main className={`flex-1 md:ml-64 lg:ml-80 xl:ml-96 pt-14 md:pt-14 ${showConversationList ? 'pb-16' : 'pb-0'} md:pb-8 flex lg:justify-start`}>
         <div className={`${showConversationList ? 'h-[calc(100vh-8rem)]' : 'h-[calc(100vh-3.5rem)]'} md:h-[calc(100vh-4rem)] flex w-full lg:max-w-5xl lg:mx-0 lg:ml-0 mx-auto`}>
           {/* Conversations List */}
           <div
