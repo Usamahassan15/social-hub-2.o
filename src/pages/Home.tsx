@@ -179,7 +179,7 @@ const Home = () => {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-[680px] mx-auto px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8 overflow-hidden">
+        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-[680px] mx-auto lg:-translate-x-32 px-0 sm:px-4 md:px-6 pt-2 sm:pt-4 md:pt-8 overflow-hidden">
           {/* Stories */}
           <div className="mb-3 sm:mb-4">
             <Stories />
