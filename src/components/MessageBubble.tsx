@@ -122,7 +122,7 @@ const MessageBubble = ({ message, onReply, onDelete }: MessageBubbleProps) => {
         whileTap={{ cursor: "grabbing" }}
         className={`max-w-[70%] cursor-grab active:cursor-grabbing ${
           isUser
-            ? "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground"
+            ? "bg-primary text-primary-foreground"
             : "bg-muted text-foreground"
         } rounded-2xl px-4 py-3`}
       >
