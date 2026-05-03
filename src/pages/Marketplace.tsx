@@ -167,7 +167,7 @@ export default function Marketplace() {
       <TopBar />
 
       <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full mx-auto lg:-translate-x-32 lg:max-w-[1100px] px-0 sm:px-4 md:px-2 lg:px-2 pt-0 md:pt-6 overflow-x-hidden max-w-[100vw]">
+        <div className="w-full mx-auto lg:max-w-[1100px] px-0 sm:px-4 md:px-2 lg:px-2 pt-0 md:pt-6 overflow-x-hidden max-w-[100vw]">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
