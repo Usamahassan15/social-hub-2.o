@@ -155,10 +155,10 @@ export default function MarketplaceListingDetail({
                 </Avatar>
                 <div className="flex-1">
                   <p className="font-medium text-foreground">{product.seller}</p>
+                  <p className="text-sm text-muted-foreground">Member since 2023</p>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground">
                     <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
                     <span>4.8</span>
-                    <span>• Member since 2023</span>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" onClick={() => setShowSellerProfile(true)}>
