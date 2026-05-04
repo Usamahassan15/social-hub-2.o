@@ -228,7 +228,7 @@ const Explore = () => {
                   <Users className="w-5 h-5 text-primary" />
                   <h2 className="text-lg font-bold text-foreground">Suggested Creators</h2>
                 </div>
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                   {mockPeople.map(person => <PersonCard key={person.id} person={person} />)}
                 </div>
               </div>
