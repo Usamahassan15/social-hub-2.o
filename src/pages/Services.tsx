@@ -244,9 +244,20 @@ export default function Services() {
                 </Card>
 
                 {/* Desktop/Tablet: horizontal fiverr-style card */}
-                <Card className="hidden sm:block overflow-hidden hover:shadow-lg transition-all rounded-xl border border-border/50">
-                  <div className="aspect-[4/2.5] overflow-hidden bg-muted w-full">
+                <Card
+                  className="hidden sm:block overflow-hidden hover:shadow-lg transition-all rounded-xl border border-border/50 cursor-pointer"
+                  onClick={() => setSelectedService(service)}
+                >
+                  <div className="relative aspect-[4/2.5] overflow-hidden bg-muted w-full">
                     <img src={service.image} alt={service.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                    <button
+                      onClick={(e) => toggleLike(e, service.id)}
+                      className="absolute top-2 right-2 z-10 p-1.5 rounded-full bg-background/70 backdrop-blur-sm hover:bg-background/90 transition-colors"
+                    >
+                      <Heart
+                        className={`w-4 h-4 transition-colors ${likedServices.has(service.id) ? "fill-destructive text-destructive" : "text-muted-foreground"}`}
+                      />
+                    </button>
                   </div>
                   <CardContent className="p-2.5 md:p-3">
                     <div className="space-y-1.5">
@@ -262,11 +273,7 @@ export default function Services() {
                         <span className="text-xs text-muted-foreground">({service.reviews})</span>
                       </div>
                       <div className="flex items-center justify-between pt-1">
-                        <div className="flex gap-1">
-                          <Button size="sm" className="h-6 text-[10px] px-2" onClick={() => handleContact(service.provider)}><MessageCircle className="w-2.5 h-2.5 mr-0.5" />Contact</Button>
-                          <Button variant="outline" size="sm" className="h-6 text-[10px] px-2" onClick={() => setSelectedService(service)}>View</Button>
-                        </div>
-                        <p className="font-bold text-primary text-sm flex-shrink-0">From {service.price}</p>
+                        <p className="font-bold text-primary text-sm">From {service.price}</p>
                       </div>
                     </div>
                   </CardContent>
