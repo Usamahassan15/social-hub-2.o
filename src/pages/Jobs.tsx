@@ -175,8 +175,8 @@ export default function Jobs() {
       <Sidebar />
       <TopBar />
 
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-[100vw] sm:max-w-md md:max-w-4xl lg:max-w-[680px] mx-auto px-1.5 sm:px-4 md:px-6 lg:px-0 pt-2 sm:pt-4 md:pt-6 overflow-hidden">
+      <main className="flex-1 pb-16 md:pb-8 pt-14 md:pt-14">
+        <div className="w-full max-w-[100vw] sm:max-w-md md:max-w-4xl lg:max-w-[900px] xl:max-w-[980px] mx-auto px-1.5 sm:px-4 md:px-6 lg:px-8 pt-2 sm:pt-4 md:pt-6 overflow-hidden">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -228,28 +228,28 @@ export default function Jobs() {
                 experienceFilter={experienceFilter} onExperienceChange={setExperienceFilter}
                 sortBy={sortBy} onSortChange={setSortBy}
               />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 justify-center">
                 {renderJobGrid(filteredJobs, "No jobs found matching your criteria")}
               </div>
             </TabsContent>
 
             {/* My Posted Jobs */}
             <TabsContent value="posted" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 justify-center">
                 {renderJobGrid(myPostedJobs, "You haven't posted any jobs yet. Click \"Post a Job\" to get started!")}
               </div>
             </TabsContent>
 
             {/* Applied Jobs */}
             <TabsContent value="applied" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 justify-center">
                 {renderJobGrid(appliedJobs, "You haven't applied to any jobs yet. Browse the job board to find opportunities!")}
               </div>
             </TabsContent>
 
             {/* Saved Jobs */}
             <TabsContent value="saved" className="mt-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 justify-center">
                 {renderJobGrid(savedJobs, "No saved jobs. Bookmark jobs you're interested in!")}
               </div>
             </TabsContent>
