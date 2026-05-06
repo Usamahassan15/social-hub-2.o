@@ -72,8 +72,8 @@ export default function Profile() {
       <Sidebar />
       <TopBar />
       
-      <main className="flex-1 md:ml-64 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-[680px] mx-auto lg:-translate-x-32 px-0 sm:px-4 md:px-6 lg:px-0">
+      <main className="flex-1 pb-16 md:pb-8 pt-14 md:pt-14">
+        <div className="w-full max-w-[100vw] sm:max-w-xl lg:max-w-[560px] mx-auto px-0 sm:px-4 md:px-6 lg:px-0">
           {/* Cover Photo */}
           <motion.div 
             initial={{ opacity: 0 }}
