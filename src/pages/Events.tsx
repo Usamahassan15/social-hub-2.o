@@ -106,7 +106,7 @@ export default function Events() {
       <TopBar />
 
       <main className="flex-1 pb-16 md:pb-8 pt-14 md:pt-14">
-        <div className="w-full max-w-[100vw] sm:max-w-md md:max-w-3xl lg:max-w-[900px] mx-auto px-1 sm:px-4 md:px-6 lg:px-2 pt-2 sm:pt-4 md:pt-6">
+        <div className="w-full max-w-[100vw] mx-auto px-0 sm:px-4 md:px-3 lg:px-6 pt-2 sm:pt-4 md:pt-6 overflow-x-hidden lg:max-w-[980px] xl:max-w-[1040px]">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
