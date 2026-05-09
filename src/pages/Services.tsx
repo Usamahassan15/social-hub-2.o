@@ -18,7 +18,66 @@ import { toast } from "@/hooks/use-toast";
 import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
 
-const services = [
+const digitalServices = [
+  {
+    id: 101,
+    title: "Web Development",
+    description: "Full-stack web development services. React, Node.js, and modern web technologies. Portfolio available.",
+    provider: "Alex Chen",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+    location: "Remote",
+    category: "Technology",
+    price: "$75/hr",
+    rating: 4.8,
+    reviews: 89,
+    responseTime: "Usually responds within 2 hours",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
+  },
+  {
+    id: 102,
+    title: "Logo & Brand Design",
+    description: "Creative logo and brand identity design. Modern, minimal, and memorable designs delivered fast.",
+    provider: "Emma Davis",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
+    location: "Remote",
+    category: "Creative",
+    price: "$45/hr",
+    rating: 4.9,
+    reviews: 215,
+    responseTime: "Usually responds within 1 hour",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&h=300&fit=crop",
+  },
+  {
+    id: 103,
+    title: "SEO & Digital Marketing",
+    description: "Boost your online presence with expert SEO, content marketing, and social media strategy.",
+    provider: "James Wilson",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
+    location: "Remote",
+    category: "Marketing",
+    price: "$60/hr",
+    rating: 4.7,
+    reviews: 142,
+    responseTime: "Usually responds within 3 hours",
+    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=400&h=300&fit=crop",
+  },
+  {
+    id: 104,
+    title: "Video Editing",
+    description: "Professional video editing for YouTube, social media, and commercials. Quick turnaround.",
+    provider: "Sophie Martin",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
+    location: "Remote",
+    category: "Creative",
+    price: "$55/hr",
+    rating: 4.8,
+    reviews: 178,
+    responseTime: "Usually responds within 2 hours",
+    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&h=300&fit=crop",
+  },
+];
+
+const physicalServices = [
   {
     id: 1,
     title: "Home Cleaning",
@@ -35,22 +94,22 @@ const services = [
   },
   {
     id: 2,
-    title: "Web Development",
-    description: "Full-stack web development services. React, Node.js, and modern web technologies. Portfolio available.",
-    provider: "Alex Chen",
-    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-    location: "Remote",
-    category: "Technology",
-    price: "$75/hr",
+    title: "Plumbing Services",
+    description: "Expert plumbing repair and installation. Available 24/7 for emergencies. Licensed and insured.",
+    provider: "Robert Brown",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert",
+    location: "Chicago, IL",
+    category: "Home Services",
+    price: "$80/hr",
     rating: 4.8,
-    reviews: 89,
-    responseTime: "Usually responds within 2 hours",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
+    reviews: 94,
+    responseTime: "Usually responds within 30 mins",
+    image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop",
   },
   {
     id: 3,
     title: "Personal Training",
-    description: "Certified personal trainer offering customized workout plans and nutrition guidance. Online and in-person.",
+    description: "Certified personal trainer offering customized workout plans and nutrition guidance. In-person sessions.",
     provider: "Mike Johnson",
     providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
     location: "Los Angeles, CA",
@@ -86,8 +145,10 @@ export default function Services() {
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [showProjectsBidding, setShowProjectsBidding] = useState(false);
   const [projectsBiddingTab, setProjectsBiddingTab] = useState<"projects" | "bidding">("projects");
+  const [serviceType, setServiceType] = useState<"digital" | "physical">("digital");
+  const services = serviceType === "digital" ? digitalServices : physicalServices;
   const [serviceImages, setServiceImages] = useState<string[]>([]);
-  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<typeof digitalServices[0] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newService, setNewService] = useState({ title: "", description: "", category: "", price: "", location: "" });
   const [likedServices, setLikedServices] = useState<Set<number>>(new Set());
@@ -139,18 +200,39 @@ export default function Services() {
         <div className="w-full max-w-[100vw] mx-auto px-0 sm:px-4 md:px-3 lg:px-6 pt-0 md:pt-6 overflow-x-hidden lg:max-w-[980px] xl:max-w-[1040px]">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-3 sm:px-0">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-3 mb-1 sm:mb-2">
                 <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Services</h1>
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => navigate("/services/dashboard")}>
-                <LayoutDashboard className="w-4 h-4" />
-                <span className="hidden sm:inline">Dashboard</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button variant="outline" className="gap-2" onClick={() => navigate("/services/dashboard")}>
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </Button>
+                <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("projects"); setShowProjectsBidding(true); }}>
+                  <FolderKanban className="w-4 h-4" />
+                  <span className="hidden sm:inline">Projects & Bidding</span>
+                </Button>
+              </div>
+            </div>
+            {/* Digital / Physical Toggle */}
+            <div className="flex items-center gap-2 mt-3 mb-2">
+              <Button
+                size="sm"
+                variant={serviceType === "digital" ? "default" : "outline"}
+                className={`rounded-full text-xs sm:text-sm ${serviceType === "digital" ? "bg-gradient-to-r from-primary to-primary/80" : ""}`}
+                onClick={() => setServiceType("digital")}
+              >
+                Digital Services
               </Button>
-              <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("projects"); setShowProjectsBidding(true); }}>
-                <FolderKanban className="w-4 h-4" />
-                <span className="hidden sm:inline">Projects & Bidding</span>
+              <Button
+                size="sm"
+                variant={serviceType === "physical" ? "default" : "outline"}
+                className={`rounded-full text-xs sm:text-sm ${serviceType === "physical" ? "bg-gradient-to-r from-primary to-primary/80" : ""}`}
+                onClick={() => setServiceType("physical")}
+              >
+                Physical Services
               </Button>
             </div>
             <p className="text-sm sm:text-base text-muted-foreground">Find and offer services in your community</p>
