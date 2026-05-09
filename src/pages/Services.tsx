@@ -200,18 +200,39 @@ export default function Services() {
         <div className="w-full max-w-[100vw] mx-auto px-0 sm:px-4 md:px-3 lg:px-6 pt-0 md:pt-6 overflow-x-hidden lg:max-w-[980px] xl:max-w-[1040px]">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-5 md:mb-6 px-3 sm:px-0">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-3 mb-1 sm:mb-2">
                 <Handshake className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Services</h1>
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => navigate("/services/dashboard")}>
-                <LayoutDashboard className="w-4 h-4" />
-                <span className="hidden sm:inline">Dashboard</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button variant="outline" className="gap-2" onClick={() => navigate("/services/dashboard")}>
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </Button>
+                <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("projects"); setShowProjectsBidding(true); }}>
+                  <FolderKanban className="w-4 h-4" />
+                  <span className="hidden sm:inline">Projects & Bidding</span>
+                </Button>
+              </div>
+            </div>
+            {/* Digital / Physical Toggle */}
+            <div className="flex items-center gap-2 mt-3 mb-2">
+              <Button
+                size="sm"
+                variant={serviceType === "digital" ? "default" : "outline"}
+                className={`rounded-full text-xs sm:text-sm ${serviceType === "digital" ? "bg-gradient-to-r from-primary to-primary/80" : ""}`}
+                onClick={() => setServiceType("digital")}
+              >
+                Digital Services
               </Button>
-              <Button variant="outline" className="gap-2" onClick={() => { setProjectsBiddingTab("projects"); setShowProjectsBidding(true); }}>
-                <FolderKanban className="w-4 h-4" />
-                <span className="hidden sm:inline">Projects & Bidding</span>
+              <Button
+                size="sm"
+                variant={serviceType === "physical" ? "default" : "outline"}
+                className={`rounded-full text-xs sm:text-sm ${serviceType === "physical" ? "bg-gradient-to-r from-primary to-primary/80" : ""}`}
+                onClick={() => setServiceType("physical")}
+              >
+                Physical Services
               </Button>
             </div>
             <p className="text-sm sm:text-base text-muted-foreground">Find and offer services in your community</p>
