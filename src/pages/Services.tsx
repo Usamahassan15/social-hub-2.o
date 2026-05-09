@@ -145,8 +145,10 @@ export default function Services() {
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [showProjectsBidding, setShowProjectsBidding] = useState(false);
   const [projectsBiddingTab, setProjectsBiddingTab] = useState<"projects" | "bidding">("projects");
+  const [serviceType, setServiceType] = useState<"digital" | "physical">("digital");
+  const services = serviceType === "digital" ? digitalServices : physicalServices;
   const [serviceImages, setServiceImages] = useState<string[]>([]);
-  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
+  const [selectedService, setSelectedService] = useState<typeof digitalServices[0] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newService, setNewService] = useState({ title: "", description: "", category: "", price: "", location: "" });
   const [likedServices, setLikedServices] = useState<Set<number>>(new Set());
