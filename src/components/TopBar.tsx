@@ -41,6 +41,22 @@ const TopBar = () => {
       <header className="hidden md:flex fixed top-0 left-64 right-0 z-40 bg-card h-14 items-center justify-end px-6">
         <div className="flex items-center gap-2">
           <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/services-dashboard?role=seller")}
+            className="text-xs font-semibold"
+          >
+            Switch to Selling
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/services-dashboard?role=buyer")}
+            className="text-xs font-semibold"
+          >
+            Switch to Buying
+          </Button>
+          <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate("/explore")}
