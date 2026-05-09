@@ -18,7 +18,66 @@ import { toast } from "@/hooks/use-toast";
 import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
 
-const services = [
+const digitalServices = [
+  {
+    id: 101,
+    title: "Web Development",
+    description: "Full-stack web development services. React, Node.js, and modern web technologies. Portfolio available.",
+    provider: "Alex Chen",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+    location: "Remote",
+    category: "Technology",
+    price: "$75/hr",
+    rating: 4.8,
+    reviews: 89,
+    responseTime: "Usually responds within 2 hours",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
+  },
+  {
+    id: 102,
+    title: "Logo & Brand Design",
+    description: "Creative logo and brand identity design. Modern, minimal, and memorable designs delivered fast.",
+    provider: "Emma Davis",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
+    location: "Remote",
+    category: "Creative",
+    price: "$45/hr",
+    rating: 4.9,
+    reviews: 215,
+    responseTime: "Usually responds within 1 hour",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&h=300&fit=crop",
+  },
+  {
+    id: 103,
+    title: "SEO & Digital Marketing",
+    description: "Boost your online presence with expert SEO, content marketing, and social media strategy.",
+    provider: "James Wilson",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
+    location: "Remote",
+    category: "Marketing",
+    price: "$60/hr",
+    rating: 4.7,
+    reviews: 142,
+    responseTime: "Usually responds within 3 hours",
+    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=400&h=300&fit=crop",
+  },
+  {
+    id: 104,
+    title: "Video Editing",
+    description: "Professional video editing for YouTube, social media, and commercials. Quick turnaround.",
+    provider: "Sophie Martin",
+    providerAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
+    location: "Remote",
+    category: "Creative",
+    price: "$55/hr",
+    rating: 4.8,
+    reviews: 178,
+    responseTime: "Usually responds within 2 hours",
+    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&h=300&fit=crop",
+  },
+];
+
+const physicalServices = [
   {
     id: 1,
     title: "Home Cleaning",
