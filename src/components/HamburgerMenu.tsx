@@ -93,8 +93,32 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
           <SheetHeader>
             <SheetTitle>Menu</SheetTitle>
           </SheetHeader>
-          
-          <div className="flex-1 mt-6 space-y-2">
+
+          <div className="mt-4 space-y-2">
+            <Button
+              className="w-full justify-center h-11 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold"
+              onClick={() => {
+                navigate("/services-dashboard?role=seller");
+                onClose();
+              }}
+            >
+              Switch to Selling
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-center h-11 font-semibold"
+              onClick={() => {
+                navigate("/services-dashboard?role=buyer");
+                onClose();
+              }}
+            >
+              Switch to Buying
+            </Button>
+          </div>
+
+          <Separator className="mt-4" />
+
+          <div className="flex-1 mt-4 space-y-2 overflow-y-auto">
             {menuItems.map((item) => (
               <Button
                 key={item.label}
