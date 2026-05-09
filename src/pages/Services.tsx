@@ -286,6 +286,29 @@ export default function Services() {
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
               {categories.map((cat) => (<Button key={cat} variant={selectedCategory === cat ? "default" : "outline"} size="sm" className="flex-shrink-0 rounded-full text-xs sm:text-sm" onClick={() => setSelectedCategory(cat)}>{cat === "All Categories" ? "All" : cat}</Button>))}
             </div>
+
+            {/* Google Map - Physical Services only */}
+            {serviceType === "physical" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl overflow-hidden border border-border/50 shadow-sm bg-muted"
+              >
+                <div className="flex items-center gap-2 px-3 py-2 bg-card border-b border-border/50">
+                  <MapPin className="w-4 h-4 text-primary" />
+                  <span className="text-xs sm:text-sm font-medium">
+                    {searchQuery ? `Showing "${searchQuery}" near you` : "Service providers near you"}
+                  </span>
+                </div>
+                <iframe
+                  title="Nearby service providers"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent((searchQuery ? searchQuery + " " : "") + "service providers near me")}&output=embed`}
+                  className="w-full h-48 sm:h-64 border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Services Grid */}
