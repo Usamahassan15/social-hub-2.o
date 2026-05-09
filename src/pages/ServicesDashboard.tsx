@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -19,9 +19,19 @@ import BuyerCustomOrders from "@/components/services-dashboard/BuyerCustomOrders
 
 export default function ServicesDashboard() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"seller" | "buyer">("seller");
+  const [searchParams] = useSearchParams();
+  const initialRole = searchParams.get("role") === "buyer" ? "buyer" : "seller";
+  const [role, setRole] = useState<"seller" | "buyer">(initialRole);
   const [activeSection, setActiveSection] = useState<DashboardSection>("overview");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const r = searchParams.get("role");
+    if (r === "buyer" || r === "seller") {
+      setRole(r);
+      setActiveSection("overview");
+    }
+  }, [searchParams]);
 
   const handleRoleSwitch = () => {
     setRole(prev => prev === "seller" ? "buyer" : "seller");
