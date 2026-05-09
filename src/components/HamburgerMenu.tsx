@@ -32,14 +32,6 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       },
     },
     {
-      icon: Users,
-      label: "Groups",
-      onClick: () => {
-        navigate("/groups");
-        onClose();
-      },
-    },
-    {
       icon: Heart,
       label: "My Interests",
       onClick: () => {
