@@ -9,6 +9,7 @@ import CreatePost from "./CreatePost";
 const TopBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const [mode, setMode] = useState<"seller" | "buyer">("seller");
   const navigate = useNavigate();
 
   return (
