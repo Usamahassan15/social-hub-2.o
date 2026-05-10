@@ -43,18 +43,14 @@ const TopBar = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate("/services-dashboard?role=seller")}
+            onClick={() => {
+              const nextRole = mode === "seller" ? "buyer" : "seller";
+              setMode(nextRole);
+              navigate(`/services-dashboard?role=${nextRole}`);
+            }}
             className="text-xs font-semibold"
           >
-            Switch to Selling
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate("/services-dashboard?role=buyer")}
-            className="text-xs font-semibold"
-          >
-            Switch to Buying
+            {mode === "seller" ? "Switch to Buying" : "Switch to Selling"}
           </Button>
           <Button
             variant="ghost"
