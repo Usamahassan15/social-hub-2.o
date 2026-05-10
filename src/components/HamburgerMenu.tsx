@@ -20,6 +20,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [mode, setMode] = useState<"seller" | "buyer">("seller");
   const navigate = useNavigate();
 
   const menuItems = [
@@ -98,21 +99,13 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
             <Button
               className="w-full justify-center h-11 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground font-semibold"
               onClick={() => {
-                navigate("/services-dashboard?role=seller");
+                const nextRole = mode === "seller" ? "buyer" : "seller";
+                setMode(nextRole);
+                navigate(`/services-dashboard?role=${nextRole}`);
                 onClose();
               }}
             >
-              Switch to Selling
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-center h-11 font-semibold"
-              onClick={() => {
-                navigate("/services-dashboard?role=buyer");
-                onClose();
-              }}
-            >
-              Switch to Buying
+              {mode === "seller" ? "Switch to Buying" : "Switch to Selling"}
             </Button>
           </div>
 
