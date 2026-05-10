@@ -20,6 +20,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [mode, setMode] = useState<"seller" | "buyer">("seller");
   const navigate = useNavigate();
 
   const menuItems = [
