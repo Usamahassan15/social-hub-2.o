@@ -1,4 +1,4 @@
-import { Home, MessageCircle, User, ShoppingBag, Briefcase, Handshake } from "lucide-react";
+import { Home, MessageCircle, User, FolderKanban, Briefcase, Handshake } from "lucide-react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -16,10 +16,10 @@ const MobileNav = () => {
 
   const navItems = [
     { icon: Home, label: "Home", path: "/", badge: 0 },
-    { icon: ShoppingBag, label: "Marketplace", path: "/marketplace", badge: 0 },
     { icon: MessageCircle, label: "Messages", path: "/messages", badge: unreadCount },
     { icon: Briefcase, label: "Jobs", path: "/jobs", badge: 0 },
     { icon: Handshake, label: "Services", path: "/services", badge: 0 },
+    { icon: FolderKanban, label: "Projects", path: "/services?openProjects=1", badge: 0 },
     { icon: User, label: "Profile", path: "/profile", badge: 0 },
   ];
 
