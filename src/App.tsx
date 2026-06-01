@@ -12,7 +12,7 @@ import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
 import Jobs from "./pages/Jobs";
 import Marketplace from "./pages/Marketplace";
-import Events from "./pages/Events";
+
 import Services from "./pages/Services";
 import ServicesDashboard from "./pages/ServicesDashboard";
 import Settings from "./pages/Settings";
@@ -41,7 +41,7 @@ const App = () => (
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/events" element={<Events />} />
+            
             <Route path="/services" element={<Services />} />
             <Route path="/services/dashboard" element={<ServicesDashboard />} />
             <Route path="/settings" element={<Settings />} />

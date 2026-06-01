@@ -206,7 +206,7 @@ export default function Services() {
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Services</h1>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <Button variant="outline" className="gap-2" onClick={() => navigate("/services/dashboard")}>
+                <Button variant="outline" className="gap-2 hidden md:inline-flex" onClick={() => navigate("/services/dashboard")}>
                   <LayoutDashboard className="w-4 h-4" />
                   <span className="hidden sm:inline">Dashboard</span>
                 </Button>

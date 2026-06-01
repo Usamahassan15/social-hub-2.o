@@ -1,4 +1,4 @@
-import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, Calendar, Users, LogOut, Settings } from "lucide-react";
+import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
@@ -24,14 +24,6 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    {
-      icon: Calendar,
-      label: "Events",
-      onClick: () => {
-        navigate("/events");
-        onClose();
-      },
-    },
     {
       icon: Heart,
       label: "My Interests",
@@ -101,11 +93,22 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
               onClick={() => {
                 const nextRole = mode === "seller" ? "buyer" : "seller";
                 setMode(nextRole);
-                navigate(`/services-dashboard?role=${nextRole}`);
+                navigate(`/services/dashboard?role=${nextRole}`);
                 onClose();
               }}
             >
               {mode === "seller" ? "Switch to Buying" : "Switch to Selling"}
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-3 h-11"
+              onClick={() => {
+                navigate("/services/dashboard");
+                onClose();
+              }}
+            >
+              <LayoutDashboard className="w-5 h-5" />
+              <span className="text-sm font-medium">Dashboard</span>
             </Button>
           </div>
 
