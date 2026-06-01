@@ -33,6 +33,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       },
     },
     {
+      icon: ShoppingBag,
+      label: "Marketplace",
+      onClick: () => {
+        navigate("/marketplace");
+        onClose();
+      },
+    },
+    {
       icon: UserPlus,
       label: "Invite Friends",
       onClick: () => {
