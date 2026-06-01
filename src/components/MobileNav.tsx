@@ -1,4 +1,4 @@
-import { Home, MessageCircle, User, ShoppingBag, Briefcase, Handshake } from "lucide-react";
+import { Home, MessageCircle, User, FolderKanban, Briefcase, Handshake } from "lucide-react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
