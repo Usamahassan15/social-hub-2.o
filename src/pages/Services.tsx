@@ -140,11 +140,21 @@ const categories = ["All Categories", "Home Services", "Technology", "Fitness", 
 
 export default function Services() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [showProjectsBidding, setShowProjectsBidding] = useState(false);
   const [projectsBiddingTab, setProjectsBiddingTab] = useState<"projects" | "bidding">("projects");
+
+  useEffect(() => {
+    if (searchParams.get("openProjects") === "1") {
+      setProjectsBiddingTab("projects");
+      setShowProjectsBidding(true);
+      searchParams.delete("openProjects");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   const [serviceType, setServiceType] = useState<"digital" | "physical">("digital");
   const services = serviceType === "digital" ? digitalServices : physicalServices;
   const [serviceImages, setServiceImages] = useState<string[]>([]);
