@@ -47,7 +47,7 @@ const TopBar = () => {
             onClick={() => {
               const nextRole = mode === "seller" ? "buyer" : "seller";
               setMode(nextRole);
-              navigate(`/services-dashboard?role=${nextRole}`);
+              navigate(`/services/dashboard?role=${nextRole}`);
             }}
             className="text-xs font-semibold"
           >
