@@ -395,7 +395,7 @@ export default function Services() {
       </main>
 
       <MobileNav />
-      <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => setShowProjectsBidding(false)} initialTab={projectsBiddingTab} />
+      <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => { setShowProjectsBidding(false); if (searchParams.get("openProjects")) { searchParams.delete("openProjects"); setSearchParams(searchParams, { replace: true }); } }} initialTab={projectsBiddingTab} />
       <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} />
     </div>
   );
