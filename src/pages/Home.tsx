@@ -200,28 +200,14 @@ const Home = () => {
             </div>
           )}
 
-          {/* Feed */}
+          {/* Feed - render suggested posts immediately, replace when live data arrives */}
           <div className="space-y-3 sm:space-y-4">
-            {isLoading ? (
-              <>
-                <FeedSkeleton />
-                <FeedSkeleton />
-              </>
-            ) : (
-              feedPosts.map((post, index) => (
-                <React.Fragment key={post.id}>
-                  {index === 3 && <PeopleYouMayKnow />}
-                  <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.1 }}
-                    transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.12) }}
-                  >
-                    <LivePost {...post} />
-                  </motion.div>
-                </React.Fragment>
-              ))
-            )}
+            {feedPosts.map((post, index) => (
+              <React.Fragment key={post.id}>
+                {index === 3 && <PeopleYouMayKnow />}
+                <LivePost {...post} />
+              </React.Fragment>
+            ))}
 
             {/* Load More */}
             {!isLoading && posts.length > 0 && (
