@@ -144,17 +144,16 @@ export default function Services() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [showPostDialog, setShowPostDialog] = useState(false);
-  const [showProjectsBidding, setShowProjectsBidding] = useState(false);
+  const initialOpenProjects = searchParams.get("openProjects") === "1";
+  const [showProjectsBidding, setShowProjectsBidding] = useState(initialOpenProjects);
   const [projectsBiddingTab, setProjectsBiddingTab] = useState<"projects" | "bidding">("projects");
 
   useEffect(() => {
     if (searchParams.get("openProjects") === "1") {
       setProjectsBiddingTab("projects");
       setShowProjectsBidding(true);
-      searchParams.delete("openProjects");
-      setSearchParams(searchParams, { replace: true });
     }
-  }, [searchParams, setSearchParams]);
+  }, [searchParams]);
   const [serviceType, setServiceType] = useState<"digital" | "physical">("digital");
   const services = serviceType === "digital" ? digitalServices : physicalServices;
   const [serviceImages, setServiceImages] = useState<string[]>([]);
@@ -396,7 +395,7 @@ export default function Services() {
       </main>
 
       <MobileNav />
-      <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => setShowProjectsBidding(false)} initialTab={projectsBiddingTab} />
+      <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => { setShowProjectsBidding(false); if (searchParams.get("openProjects")) { searchParams.delete("openProjects"); setSearchParams(searchParams, { replace: true }); } }} initialTab={projectsBiddingTab} />
       <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} />
     </div>
   );
