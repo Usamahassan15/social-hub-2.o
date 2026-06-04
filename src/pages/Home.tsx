@@ -171,7 +171,22 @@ const Home = () => {
     limit: 10,
   });
 
-  const feedPosts = posts.length > 0 ? posts : SUGGESTED_POSTS;
+  const filteredSuggested = React.useMemo(() => {
+    const arr = [...SUGGESTED_POSTS];
+    switch (feedType) {
+      case "trending":
+        return arr.filter(p => p.is_trending).sort((a, b) => b.likes_count - a.likes_count);
+      case "latest":
+        return arr.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      case "following":
+        return arr.filter((_, i) => i % 2 === 0);
+      case "personalized":
+      default:
+        return arr.sort((a, b) => b.engagement_rate - a.engagement_rate);
+    }
+  }, [feedType]);
+
+  const feedPosts = posts.length > 0 ? posts : filteredSuggested;
 
   return (
     <div className="flex min-h-screen bg-background">
