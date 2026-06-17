@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
+import ServiceAuthDialog from "@/components/ServiceAuthDialog";
 
 const digitalServices = [
   {
