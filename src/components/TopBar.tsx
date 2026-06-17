@@ -22,9 +22,6 @@ const TopBar = () => {
           </h1>
           
           <div className="flex items-center gap-0.5">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/explore")} className="h-11 w-11 [&_svg]:!size-[22px]">
-              <Search />
-            </Button>
             <Button variant="ghost" size="icon" onClick={() => navigate("/notifications")} className="h-11 w-11 [&_svg]:!size-[22px]">
               <Bell />
             </Button>
