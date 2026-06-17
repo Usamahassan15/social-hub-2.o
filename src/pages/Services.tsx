@@ -408,6 +408,7 @@ export default function Services() {
       <MobileNav />
       <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => { setShowProjectsBidding(false); if (searchParams.get("openProjects")) { searchParams.delete("openProjects"); setSearchParams(searchParams, { replace: true }); } }} initialTab={projectsBiddingTab} />
       <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} />
+      <ServiceAuthDialog open={showAuthDialog} onOpenChange={setShowAuthDialog} onAuthComplete={() => { if (pendingProvider) { navigate("/messages"); setPendingProvider(null); } }} />
     </div>
   );
 }
