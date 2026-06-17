@@ -10,8 +10,8 @@ import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
-import Jobs from "./pages/Jobs";
-import Marketplace from "./pages/Marketplace";
+
+
 
 import Services from "./pages/Services";
 import ServicesDashboard from "./pages/ServicesDashboard";
