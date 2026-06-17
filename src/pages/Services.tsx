@@ -196,7 +196,17 @@ export default function Services() {
     }
   };
 
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [pendingProvider, setPendingProvider] = useState<string | null>(null);
+
   const handleContact = (providerName: string) => {
+    const auth = localStorage.getItem("service_auth");
+    if (!auth) {
+      setPendingProvider(providerName);
+      setSelectedService(null);
+      setShowAuthDialog(true);
+      return;
+    }
     setSelectedService(null);
     navigate("/messages");
   };
