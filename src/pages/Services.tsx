@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
+import ServiceAuthDialog from "@/components/ServiceAuthDialog";
 
 const digitalServices = [
   {
@@ -195,7 +196,17 @@ export default function Services() {
     }
   };
 
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [pendingProvider, setPendingProvider] = useState<string | null>(null);
+
   const handleContact = (providerName: string) => {
+    const auth = localStorage.getItem("service_auth");
+    if (!auth) {
+      setPendingProvider(providerName);
+      setSelectedService(null);
+      setShowAuthDialog(true);
+      return;
+    }
     setSelectedService(null);
     navigate("/messages");
   };
@@ -397,6 +408,7 @@ export default function Services() {
       <MobileNav />
       <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => { setShowProjectsBidding(false); if (searchParams.get("openProjects")) { searchParams.delete("openProjects"); setSearchParams(searchParams, { replace: true }); } }} initialTab={projectsBiddingTab} />
       <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} />
+      <ServiceAuthDialog open={showAuthDialog} onOpenChange={setShowAuthDialog} onAuthComplete={() => { if (pendingProvider) { navigate("/messages"); setPendingProvider(null); } }} />
     </div>
   );
 }
