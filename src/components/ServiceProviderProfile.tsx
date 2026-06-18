@@ -266,7 +266,7 @@ export default function ServiceProviderProfile({
               </div>
 
               {/* Mobile swipe indicators */}
-              <div className="flex items-center justify-between p-2 border-t border-border md:hidden">
+              <div className="flex items-center justify-between p-2 border-t border-border md:hidden flex-shrink-0 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
                 <Button
                   variant="ghost"
                   size="sm"
