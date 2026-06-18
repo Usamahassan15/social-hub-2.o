@@ -27,6 +27,7 @@ export default function Profile() {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [isCoverPreviewOpen, setIsCoverPreviewOpen] = useState(false);
+  const [connectionsTab, setConnectionsTab] = useState<"followers" | "following" | null>(null);
   
   const [profileData, setProfileData] = useState({
     name: "Alex Johnson",
