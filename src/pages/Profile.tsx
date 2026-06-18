@@ -182,6 +182,12 @@ export default function Profile() {
 
       <MobileNav />
 
+      <FollowersFollowingDialog
+        isOpen={connectionsTab !== null}
+        onClose={() => setConnectionsTab(null)}
+        initialTab={connectionsTab ?? "followers"}
+      />
+
       {/* Cover Photo Preview Dialog */}
       <Dialog open={isCoverPreviewOpen} onOpenChange={(open) => !open && cancelCoverPreview()}>
         <DialogContent className="max-w-lg">
