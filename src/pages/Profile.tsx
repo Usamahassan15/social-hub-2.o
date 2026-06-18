@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import WorkProfile from "@/components/profile/WorkProfile";
 import SocialProfile from "@/components/profile/SocialProfile";
+import FollowersFollowingDialog from "@/components/FollowersFollowingDialog";
 
 export default function Profile() {
   const navigate = useNavigate();
