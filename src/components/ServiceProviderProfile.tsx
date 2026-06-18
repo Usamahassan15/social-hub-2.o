@@ -142,7 +142,7 @@ export default function ServiceProviderProfile({
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="flex-1 flex flex-col overflow-hidden min-h-0">
-              <div className="border-b border-border px-2 sm:px-4">
+              <div className="border-b border-border px-2 sm:px-4 flex-shrink-0">
                 <TabsList className="w-full grid grid-cols-4 h-12">
                   <TabsTrigger value="about" className="text-xs sm:text-sm">About Me</TabsTrigger>
                   <TabsTrigger value="services" className="text-xs sm:text-sm">Services</TabsTrigger>
@@ -152,7 +152,7 @@ export default function ServiceProviderProfile({
               </div>
 
               <div
-                className="flex-1 overflow-hidden"
+                className="flex-1 overflow-hidden min-h-0"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
