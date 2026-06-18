@@ -100,10 +100,10 @@ export default function ServiceProviderProfile({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl w-full h-[90vh] md:h-auto md:max-h-[90vh] p-0 overflow-hidden">
-          <div className="flex flex-col h-full">
+        <DialogContent className="max-w-4xl w-full h-[100dvh] sm:h-[95dvh] md:h-auto md:max-h-[90vh] p-0 overflow-hidden rounded-none sm:rounded-lg">
+          <div className="flex flex-col h-full max-h-full">
             {/* Header */}
-            <div className="relative p-4 sm:p-6 border-b border-border bg-gradient-to-b from-primary/10 to-background">
+            <div className="relative p-4 sm:p-6 border-b border-border bg-gradient-to-b from-primary/10 to-background flex-shrink-0">
               {/* Close button handled by DialogContent */}
               
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
@@ -141,8 +141,8 @@ export default function ServiceProviderProfile({
             </div>
 
             {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="flex-1 flex flex-col overflow-hidden">
-              <div className="border-b border-border px-2 sm:px-4">
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabType)} className="flex-1 flex flex-col overflow-hidden min-h-0">
+              <div className="border-b border-border px-2 sm:px-4 flex-shrink-0">
                 <TabsList className="w-full grid grid-cols-4 h-12">
                   <TabsTrigger value="about" className="text-xs sm:text-sm">About Me</TabsTrigger>
                   <TabsTrigger value="services" className="text-xs sm:text-sm">Services</TabsTrigger>
@@ -152,7 +152,7 @@ export default function ServiceProviderProfile({
               </div>
 
               <div
-                className="flex-1 overflow-hidden"
+                className="flex-1 overflow-hidden min-h-0"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
@@ -266,7 +266,7 @@ export default function ServiceProviderProfile({
               </div>
 
               {/* Mobile swipe indicators */}
-              <div className="flex items-center justify-between p-2 border-t border-border md:hidden">
+              <div className="flex items-center justify-between p-2 border-t border-border md:hidden flex-shrink-0 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
                 <Button
                   variant="ghost"
                   size="sm"

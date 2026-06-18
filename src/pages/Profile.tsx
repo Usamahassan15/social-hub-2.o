@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import WorkProfile from "@/components/profile/WorkProfile";
 import SocialProfile from "@/components/profile/SocialProfile";
+import FollowersFollowingDialog from "@/components/FollowersFollowingDialog";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function Profile() {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [isCoverPreviewOpen, setIsCoverPreviewOpen] = useState(false);
+  const [connectionsTab, setConnectionsTab] = useState<"followers" | "following" | null>(null);
   
   const [profileData, setProfileData] = useState({
     name: "Alex Johnson",
@@ -144,8 +146,8 @@ export default function Profile() {
                 <div className="flex items-center gap-1.5 sm:gap-2"><LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /><a href="#" className="text-primary hover:underline">{profileData.website}</a></div>
               </div>
               <div className="flex gap-4 sm:gap-6 text-sm sm:text-base">
-                <div><span className="font-bold text-foreground">1.2K</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Followers</span></div>
-                <div><span className="font-bold text-foreground">842</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Following</span></div>
+                <button onClick={() => setConnectionsTab("followers")} className="hover:opacity-80 transition-opacity"><span className="font-bold text-foreground">1.2K</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Followers</span></button>
+                <button onClick={() => setConnectionsTab("following")} className="hover:opacity-80 transition-opacity"><span className="font-bold text-foreground">842</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Following</span></button>
                 <div><span className="font-bold text-foreground">145</span><span className="text-muted-foreground ml-1 text-xs sm:text-sm">Posts</span></div>
               </div>
             </div>
@@ -179,6 +181,12 @@ export default function Profile() {
       </main>
 
       <MobileNav />
+
+      <FollowersFollowingDialog
+        isOpen={connectionsTab !== null}
+        onClose={() => setConnectionsTab(null)}
+        initialTab={connectionsTab ?? "followers"}
+      />
 
       {/* Cover Photo Preview Dialog */}
       <Dialog open={isCoverPreviewOpen} onOpenChange={(open) => !open && cancelCoverPreview()}>
