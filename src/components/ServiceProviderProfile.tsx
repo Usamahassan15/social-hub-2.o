@@ -100,10 +100,10 @@ export default function ServiceProviderProfile({
   return (
     <>
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl w-full h-[90vh] md:h-auto md:max-h-[90vh] p-0 overflow-hidden">
-          <div className="flex flex-col h-full">
+        <DialogContent className="max-w-4xl w-full h-[100dvh] sm:h-[95dvh] md:h-auto md:max-h-[90vh] p-0 overflow-hidden rounded-none sm:rounded-lg">
+          <div className="flex flex-col h-full max-h-full">
             {/* Header */}
-            <div className="relative p-4 sm:p-6 border-b border-border bg-gradient-to-b from-primary/10 to-background">
+            <div className="relative p-4 sm:p-6 border-b border-border bg-gradient-to-b from-primary/10 to-background flex-shrink-0">
               {/* Close button handled by DialogContent */}
               
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
