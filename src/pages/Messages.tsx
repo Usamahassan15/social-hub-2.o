@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, Copy, Forward, X, Reply, ChevronRight } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, X, Reply, ChevronRight, Filter, Pin, CheckSquare, User, Archive, Ban, Star, Inbox, MailOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -101,6 +102,7 @@ const initialMessages: Message[] = [
 ];
 
 const Messages = () => {
+  const navigate = useNavigate();
   const [selectedConversation, setSelectedConversation] = useState<number>(1);
   const [messageInput, setMessageInput] = useState("");
   const [showConversationList, setShowConversationList] = useState(true);
@@ -108,7 +110,17 @@ const Messages = () => {
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [showMediaOptions, setShowMediaOptions] = useState(false);
   const [showOfferModal, setShowOfferModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<"all" | "archived" | "unread" | "favorites">("all");
+  const [pinned, setPinned] = useState<number[]>([]);
+  const [archived, setArchived] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const [blocked, setBlocked] = useState<number[]>([]);
+  const [selectMode, setSelectMode] = useState(false);
   const { clearUnread } = useUnreadMessages();
+
+  const toggleIn = (list: number[], setList: (v: number[]) => void, id: number) => {
+    setList(list.includes(id) ? list.filter(x => x !== id) : [...list, id]);
+  };
 
   // Clear unread count when user opens messages page
   useEffect(() => {
@@ -165,7 +177,30 @@ const Messages = () => {
             } md:flex w-full md:w-80 flex-col border-r border-border bg-card`}
           >
             <div className="p-4 border-b border-border">
-              <h2 className="text-2xl font-bold gradient-text mb-4">Messages</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold gradient-text">Messages</h2>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Filter conversations">
+                      <Filter className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuItem onClick={() => setActiveFilter("all")}>
+                      <Inbox className="w-4 h-4 mr-2" /> All
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFilter("archived")}>
+                      <Archive className="w-4 h-4 mr-2" /> Archived
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFilter("unread")}>
+                      <MailOpen className="w-4 h-4 mr-2" /> Unread
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFilter("favorites")}>
+                      <Star className="w-4 h-4 mr-2" /> Favorites
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -173,11 +208,25 @@ const Messages = () => {
                   className="pl-10"
                 />
               </div>
+              {activeFilter !== "all" && (
+                <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                  <span className="capitalize">Filter: {activeFilter}</span>
+                  <button onClick={() => setActiveFilter("all")} className="text-primary">Clear</button>
+                </div>
+              )}
             </div>
 
             <ScrollArea className="flex-1">
               <div className="p-2">
-                {conversations.map((conversation) => (
+                {conversations
+                  .filter(c => {
+                    if (activeFilter === "archived") return archived.includes(c.id);
+                    if (activeFilter === "unread") return !!c.unread;
+                    if (activeFilter === "favorites") return favorites.includes(c.id);
+                    return !archived.includes(c.id);
+                  })
+                  .sort((a, b) => (pinned.includes(b.id) ? 1 : 0) - (pinned.includes(a.id) ? 1 : 0))
+                  .map((conversation) => (
                   <motion.div
                     key={conversation.id}
                     whileHover={{ x: 4 }}
@@ -263,23 +312,50 @@ const Messages = () => {
                       <MoreVertical className="w-5 h-5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={handleClearChat}>
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Clear Chat
+                  <DropdownMenuContent align="end" className="w-52">
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(pinned, setPinned, selectedConversation);
+                      toast({ title: pinned.includes(selectedConversation) ? "Chat unpinned" : "Chat pinned" });
+                    }}>
+                      <Pin className="w-4 h-4 mr-2" />
+                      {pinned.includes(selectedConversation) ? "Unpin" : "Pin"}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copy Conversation
+                    <DropdownMenuItem onClick={() => {
+                      setSelectMode(s => !s);
+                      toast({ title: selectMode ? "Selection cleared" : "All messages selected" });
+                    }}>
+                      <CheckSquare className="w-4 h-4 mr-2" />
+                      Select All
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Forward className="w-4 h-4 mr-2" />
-                      Forward Messages
+                    <DropdownMenuItem onClick={() => navigate(`/profile/${selectedConversation}`)}>
+                      <User className="w-4 h-4 mr-2" />
+                      View Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(archived, setArchived, selectedConversation);
+                      toast({ title: archived.includes(selectedConversation) ? "Unarchived" : "Chat archived" });
+                    }}>
+                      <Archive className="w-4 h-4 mr-2" />
+                      {archived.includes(selectedConversation) ? "Unarchive" : "Archive"}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(favorites, setFavorites, selectedConversation);
+                      toast({ title: favorites.includes(selectedConversation) ? "Removed from favorites" : "Added to favorites" });
+                    }}>
+                      <Star className="w-4 h-4 mr-2" />
+                      {favorites.includes(selectedConversation) ? "Remove from Favorites" : "Add to Favorites"}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(blocked, setBlocked, selectedConversation);
+                      toast({ title: blocked.includes(selectedConversation) ? "User unblocked" : "User blocked" });
+                    }} className="text-destructive">
+                      <Ban className="w-4 h-4 mr-2" />
+                      {blocked.includes(selectedConversation) ? "Unblock" : "Block"}
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDeleteConversation} className="text-destructive">
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Delete Conversation
+                      Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
