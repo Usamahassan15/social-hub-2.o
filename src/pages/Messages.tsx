@@ -102,6 +102,7 @@ const initialMessages: Message[] = [
 ];
 
 const Messages = () => {
+  const navigate = useNavigate();
   const [selectedConversation, setSelectedConversation] = useState<number>(1);
   const [messageInput, setMessageInput] = useState("");
   const [showConversationList, setShowConversationList] = useState(true);
@@ -109,7 +110,17 @@ const Messages = () => {
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [showMediaOptions, setShowMediaOptions] = useState(false);
   const [showOfferModal, setShowOfferModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<"all" | "archived" | "unread" | "favorites">("all");
+  const [pinned, setPinned] = useState<number[]>([]);
+  const [archived, setArchived] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const [blocked, setBlocked] = useState<number[]>([]);
+  const [selectMode, setSelectMode] = useState(false);
   const { clearUnread } = useUnreadMessages();
+
+  const toggleIn = (list: number[], setList: (v: number[]) => void, id: number) => {
+    setList(list.includes(id) ? list.filter(x => x !== id) : [...list, id]);
+  };
 
   // Clear unread count when user opens messages page
   useEffect(() => {
