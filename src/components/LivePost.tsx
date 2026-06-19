@@ -243,7 +243,7 @@ const LivePost = memo(({
             className="flex flex-col sm:flex-row items-center justify-center gap-0.5 px-1 py-1.5 rounded-md hover:bg-muted transition-colors active:scale-95"
           >
             <MessageCircle className={`w-4 h-4 sm:w-5 sm:h-5 ${showComments ? "text-primary" : "text-foreground"}`} />
-            <span className="text-[10px] sm:text-xs font-medium text-foreground cursor-pointer" onClick={(e) => { e.stopPropagation(); setEngagementDialog({ type: "comments", count: comments_count }); }}>Comment</span>
+            <span className="text-[10px] sm:text-xs font-medium text-foreground">Comment</span>
           </button>
 
           <button
