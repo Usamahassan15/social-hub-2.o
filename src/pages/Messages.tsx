@@ -177,7 +177,30 @@ const Messages = () => {
             } md:flex w-full md:w-80 flex-col border-r border-border bg-card`}
           >
             <div className="p-4 border-b border-border">
-              <h2 className="text-2xl font-bold gradient-text mb-4">Messages</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold gradient-text">Messages</h2>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Filter conversations">
+                      <Filter className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuItem onClick={() => setActiveFilter("all")}>
+                      <Inbox className="w-4 h-4 mr-2" /> All
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFilter("archived")}>
+                      <Archive className="w-4 h-4 mr-2" /> Archived
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFilter("unread")}>
+                      <MailOpen className="w-4 h-4 mr-2" /> Unread
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setActiveFilter("favorites")}>
+                      <Star className="w-4 h-4 mr-2" /> Favorites
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -185,11 +208,25 @@ const Messages = () => {
                   className="pl-10"
                 />
               </div>
+              {activeFilter !== "all" && (
+                <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                  <span className="capitalize">Filter: {activeFilter}</span>
+                  <button onClick={() => setActiveFilter("all")} className="text-primary">Clear</button>
+                </div>
+              )}
             </div>
 
             <ScrollArea className="flex-1">
               <div className="p-2">
-                {conversations.map((conversation) => (
+                {conversations
+                  .filter(c => {
+                    if (activeFilter === "archived") return archived.includes(c.id);
+                    if (activeFilter === "unread") return !!c.unread;
+                    if (activeFilter === "favorites") return favorites.includes(c.id);
+                    return !archived.includes(c.id);
+                  })
+                  .sort((a, b) => (pinned.includes(b.id) ? 1 : 0) - (pinned.includes(a.id) ? 1 : 0))
+                  .map((conversation) => (
                   <motion.div
                     key={conversation.id}
                     whileHover={{ x: 4 }}
