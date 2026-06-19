@@ -312,23 +312,50 @@ const Messages = () => {
                       <MoreVertical className="w-5 h-5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={handleClearChat}>
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Clear Chat
+                  <DropdownMenuContent align="end" className="w-52">
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(pinned, setPinned, selectedConversation);
+                      toast({ title: pinned.includes(selectedConversation) ? "Chat unpinned" : "Chat pinned" });
+                    }}>
+                      <Pin className="w-4 h-4 mr-2" />
+                      {pinned.includes(selectedConversation) ? "Unpin" : "Pin"}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copy Conversation
+                    <DropdownMenuItem onClick={() => {
+                      setSelectMode(s => !s);
+                      toast({ title: selectMode ? "Selection cleared" : "All messages selected" });
+                    }}>
+                      <CheckSquare className="w-4 h-4 mr-2" />
+                      Select All
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Forward className="w-4 h-4 mr-2" />
-                      Forward Messages
+                    <DropdownMenuItem onClick={() => navigate(`/profile/${selectedConversation}`)}>
+                      <User className="w-4 h-4 mr-2" />
+                      View Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(archived, setArchived, selectedConversation);
+                      toast({ title: archived.includes(selectedConversation) ? "Unarchived" : "Chat archived" });
+                    }}>
+                      <Archive className="w-4 h-4 mr-2" />
+                      {archived.includes(selectedConversation) ? "Unarchive" : "Archive"}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(favorites, setFavorites, selectedConversation);
+                      toast({ title: favorites.includes(selectedConversation) ? "Removed from favorites" : "Added to favorites" });
+                    }}>
+                      <Star className="w-4 h-4 mr-2" />
+                      {favorites.includes(selectedConversation) ? "Remove from Favorites" : "Add to Favorites"}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => {
+                      toggleIn(blocked, setBlocked, selectedConversation);
+                      toast({ title: blocked.includes(selectedConversation) ? "User unblocked" : "User blocked" });
+                    }} className="text-destructive">
+                      <Ban className="w-4 h-4 mr-2" />
+                      {blocked.includes(selectedConversation) ? "Unblock" : "Block"}
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDeleteConversation} className="text-destructive">
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Delete Conversation
+                      Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
