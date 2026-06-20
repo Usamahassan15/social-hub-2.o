@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, X, Reply, ChevronRight, Filter, Pin, CheckSquare, User, Archive, Ban, Star, Inbox, MailOpen } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, X, Reply, ChevronRight, Filter, Pin, CheckSquare, User, Archive, Ban, Star, Inbox, MailOpen, Flag, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
