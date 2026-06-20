@@ -187,28 +187,80 @@ const Messages = () => {
           >
             <div className="p-4 border-b border-border">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold gradient-text">Messages</h2>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label="Filter conversations">
-                      <Filter className="w-5 h-5" />
+                <h2 className="text-2xl font-bold gradient-text">
+                  {selectMode ? `${selectedIds.length} selected` : "Messages"}
+                </h2>
+                <div className="flex items-center gap-1">
+                  {selectMode && (
+                    <Button variant="ghost" size="icon" aria-label="Cancel selection" onClick={exitSelect}>
+                      <X className="w-5 h-5" />
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-44">
-                    <DropdownMenuItem onClick={() => setActiveFilter("all")}>
-                      <Inbox className="w-4 h-4 mr-2" /> All
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setActiveFilter("archived")}>
-                      <Archive className="w-4 h-4 mr-2" /> Archived
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setActiveFilter("unread")}>
-                      <MailOpen className="w-4 h-4 mr-2" /> Unread
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setActiveFilter("favorites")}>
-                      <Star className="w-4 h-4 mr-2" /> Favorites
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  )}
+                  {!selectMode && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" aria-label="Filter conversations">
+                          <Filter className="w-5 h-5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-44">
+                        <DropdownMenuItem onClick={() => setActiveFilter("all")}>
+                          <Inbox className="w-4 h-4 mr-2" /> All
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setActiveFilter("archived")}>
+                          <Archive className="w-4 h-4 mr-2" /> Archived
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setActiveFilter("unread")}>
+                          <MailOpen className="w-4 h-4 mr-2" /> Unread
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setActiveFilter("favorites")}>
+                          <Star className="w-4 h-4 mr-2" /> Favorites
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                  {selectMode && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" aria-label="Selection actions" disabled={selectedIds.length === 0}>
+                          <MoreVertical className="w-5 h-5" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuItem onClick={() => applyToSelected(id => toggleIn(pinned, setPinned, id))}>
+                          <Pin className="w-4 h-4 mr-2" /> Pin / Unpin
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSelectedIds(conversations.map(c => c.id))}>
+                          <CheckSquare className="w-4 h-4 mr-2" /> Select All
+                        </DropdownMenuItem>
+                        {selectedIds.length === 1 && (
+                          <DropdownMenuItem onClick={() => { navigate(`/profile/${selectedIds[0]}`); exitSelect(); }}>
+                            <User className="w-4 h-4 mr-2" /> View Profile
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem onClick={() => applyToSelected(id => toggleIn(archived, setArchived, id))}>
+                          <Archive className="w-4 h-4 mr-2" /> Archive / Unarchive
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => applyToSelected(id => toggleIn(favorites, setFavorites, id))}>
+                          <Star className="w-4 h-4 mr-2" /> Add to Favorites
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => { applyToSelected(id => toggleIn(blocked, setBlocked, id)); toast({ title: "Blocked" }); }}
+                        >
+                          <Ban className="w-4 h-4 mr-2" /> Block
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive"
+                          onClick={() => { handleDeleteConversation(); exitSelect(); }}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" /> Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </div>
               </div>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
