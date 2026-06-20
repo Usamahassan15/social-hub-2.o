@@ -116,11 +116,20 @@ const Messages = () => {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [blocked, setBlocked] = useState<number[]>([]);
   const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const { clearUnread } = useUnreadMessages();
 
   const toggleIn = (list: number[], setList: (v: number[]) => void, id: number) => {
     setList(list.includes(id) ? list.filter(x => x !== id) : [...list, id]);
   };
+
+  const applyToSelected = (fn: (id: number) => void) => {
+    selectedIds.forEach(fn);
+    setSelectedIds([]);
+    setSelectMode(false);
+  };
+
+  const exitSelect = () => { setSelectMode(false); setSelectedIds([]); };
 
   // Clear unread count when user opens messages page
   useEffect(() => {
