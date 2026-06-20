@@ -145,6 +145,9 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [savedProjects, setSavedProjects] = useState<Set<number>>(new Set());
   const [bids, setBids] = useState<Bid[]>(projectBids);
+  const [gatedProject, setGatedProject] = useState<Project | null>(null);
+  const [accessStep, setAccessStep] = useState<"preview" | "pass">("preview");
+  const [walletBalance, setWalletBalance] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const proposalFileRef = useRef<HTMLInputElement>(null);
 
