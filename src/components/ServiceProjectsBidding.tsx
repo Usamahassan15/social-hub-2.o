@@ -4,7 +4,7 @@ import {
   ArrowLeft, ChevronUp, ChevronDown, Clock, DollarSign, User, Send, Star,
   Calendar, Briefcase, Award, Search, SlidersHorizontal, Layers, TrendingUp, FileText,
   MapPin, Globe, Timer, Wrench, Languages, X, Plus, Paperclip, Bookmark,
-  BookmarkCheck, Eye, SortAsc,
+  BookmarkCheck, Eye, SortAsc, Lock, Check, Wallet, HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -145,6 +145,9 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [savedProjects, setSavedProjects] = useState<Set<number>>(new Set());
   const [bids, setBids] = useState<Bid[]>(projectBids);
+  const [gatedProject, setGatedProject] = useState<Project | null>(null);
+  const [accessStep, setAccessStep] = useState<"preview" | "pass">("preview");
+  const [walletBalance, setWalletBalance] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const proposalFileRef = useRef<HTMLInputElement>(null);
 
@@ -270,6 +273,11 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
     </div>
   );
 
+  const openProject = (p: Project) => {
+    if (p.isOwn) setSelectedProject(p);
+    else { setGatedProject(p); setAccessStep("preview"); }
+  };
+
   // Project card component
   const ProjectCard = ({ project, showProposal = false }: { project: Project; showProposal?: boolean }) => (
     <Card className="cursor-pointer hover:shadow-lg transition-all border-border/50">
@@ -286,7 +294,7 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
                   <Badge variant="secondary" className="text-xs">{project.category}</Badge>
                   <Badge variant="outline" className="text-xs">{project.experienceLevel}</Badge>
                 </div>
-                <h3 className="font-semibold text-foreground line-clamp-1 text-sm sm:text-base" onClick={() => setSelectedProject(project)}>{project.title}</h3>
+                <h3 className="font-semibold text-foreground line-clamp-1 text-sm sm:text-base" onClick={() => openProject(project)}>{project.title}</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">{project.client} · {project.postedDate}</p>
               </div>
               <div className="flex items-center gap-1 flex-shrink-0">
@@ -309,11 +317,11 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
                 <span className="flex items-center gap-1"><User className="w-3 h-3" />{project.proposals} bids</span>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => setSelectedProject(project)}>
+                <Button variant="outline" size="sm" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); openProject(project); }}>
                   <Eye className="w-3 h-3 mr-1" />Details
                 </Button>
                 {showProposal && (
-                  <Button size="sm" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); setSelectedProject(project); setShowProposalModal(true); }}>
+                  <Button size="sm" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); openProject(project); }}>
                     <Send className="w-3 h-3 mr-1" />Propose
                   </Button>
                 )}
@@ -781,6 +789,122 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Gated Project Access Dialog */}
+      <Dialog open={!!gatedProject} onOpenChange={(o) => { if (!o) setGatedProject(null); }}>
+        <DialogContent className="max-w-md p-0 overflow-hidden gap-0 [&>button]:hidden">
+          {gatedProject && accessStep === "preview" && (
+            <div className="flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-border">
+                <h2 className="font-semibold text-base">Project Details</h2>
+                <button onClick={() => setGatedProject(null)} className="p-1.5 rounded-md hover:bg-muted">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <ScrollArea className="max-h-[70vh]">
+                <div className="p-4 space-y-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <Badge variant="secondary" className="text-xs">{gatedProject.category}</Badge>
+                      <Badge variant="outline" className="text-xs">{gatedProject.experienceLevel}</Badge>
+                    </div>
+                    <h3 className="font-bold text-lg">{gatedProject.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-2">{gatedProject.description}</p>
+                  </div>
+
+                  <div className="flex flex-col items-center text-center pt-2 pb-1 border-t border-border">
+                    <Avatar className="w-16 h-16 mt-4">
+                      <AvatarImage src={gatedProject.clientAvatar} />
+                      <AvatarFallback>{gatedProject.client[0]}</AvatarFallback>
+                    </Avatar>
+                    <p className="font-semibold mt-2">{gatedProject.client}</p>
+                    <div className="flex items-center gap-1 text-yellow-500 mt-1">
+                      <Star className="w-4 h-4 fill-current" />
+                      <span className="text-sm font-medium text-foreground">{gatedProject.clientRating}</span>
+                      <span className="text-xs text-muted-foreground">rating</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      <span className="font-medium text-foreground">{gatedProject.clientJobs}</span> total orders
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                      <Clock className="w-3 h-3" /> Posted {gatedProject.postedDate}
+                    </p>
+                  </div>
+                </div>
+              </ScrollArea>
+              <div className="p-4 border-t border-border">
+                <Button
+                  className="w-full gap-2 bg-gradient-to-r from-primary to-primary/80 h-11"
+                  onClick={() => setAccessStep("pass")}
+                >
+                  <Lock className="w-4 h-4" />
+                  Get Access for 1 Month
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {gatedProject && accessStep === "pass" && (
+            <div className="flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-border">
+                <button onClick={() => setAccessStep("preview")} className="p-1.5 rounded-md hover:bg-muted">
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+                <h2 className="font-semibold text-base">Access Pass</h2>
+                <button onClick={() => setGatedProject(null)} className="p-1.5 rounded-md hover:bg-muted">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-5 space-y-5">
+                <div className="text-center space-y-2">
+                  <div className="inline-flex w-14 h-14 rounded-full bg-primary/10 items-center justify-center mb-1">
+                    <Lock className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold">1 Month Pass</h3>
+                  <p className="text-sm text-foreground">Send Unlimited offers</p>
+                </div>
+
+                <div className="rounded-lg border border-border bg-muted/40 p-3">
+                  <div className="flex items-start gap-2">
+                    <div className="w-5 h-5 rounded-full bg-green-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3.5 h-3.5 text-green-600" />
+                    </div>
+                    <p className="text-sm">0 service fee, only one-time charge from your balance</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3 rounded-lg border border-border">
+                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Wallet className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground">Your balance</p>
+                    <p className="font-semibold">RS {walletBalance}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Button
+                    className="w-full h-11 bg-gradient-to-r from-primary to-primary/80"
+                    onClick={() => { setWalletBalance(b => b + 1000); toast({ title: "Balance topped up by RS 1000" }); }}
+                  >
+                    Top Up RS 1000
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full h-11 gap-2"
+                    onClick={() => toast({ title: "How it works", description: "Buy a 1 Month Pass to send unlimited offers on this project with 0 service fee." })}
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                    How it works
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+
