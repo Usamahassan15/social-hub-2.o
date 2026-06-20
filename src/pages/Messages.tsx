@@ -287,28 +287,55 @@ const Messages = () => {
                     return !archived.includes(c.id);
                   })
                   .sort((a, b) => (pinned.includes(b.id) ? 1 : 0) - (pinned.includes(a.id) ? 1 : 0))
-                  .map((conversation) => (
+                  .map((conversation) => {
+                  const isSelected = selectedIds.includes(conversation.id);
+                  let pressTimer: ReturnType<typeof setTimeout> | null = null;
+                  const startPress = () => {
+                    pressTimer = setTimeout(() => {
+                      setSelectMode(true);
+                      setSelectedIds(prev => prev.includes(conversation.id) ? prev : [...prev, conversation.id]);
+                    }, 450);
+                  };
+                  const cancelPress = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+                  return (
                   <motion.div
                     key={conversation.id}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.98 }}
+                    onPointerDown={startPress}
+                    onPointerUp={cancelPress}
+                    onPointerLeave={cancelPress}
+                    onPointerCancel={cancelPress}
+                    onContextMenu={(e) => { e.preventDefault(); setSelectMode(true); setSelectedIds(prev => prev.includes(conversation.id) ? prev : [...prev, conversation.id]); }}
                     onClick={() => {
-                      setSelectedConversation(conversation.id);
-                      setShowConversationList(false);
+                      if (selectMode) {
+                        toggleIn(selectedIds, setSelectedIds, conversation.id);
+                      } else {
+                        setSelectedConversation(conversation.id);
+                        setShowConversationList(false);
+                      }
                     }}
                     className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors mb-1 ${
-                      selectedConversation === conversation.id
-                        ? "bg-muted"
-                        : "hover:bg-muted/50"
+                      isSelected
+                        ? "bg-primary/15 ring-1 ring-primary/40"
+                        : selectedConversation === conversation.id && !selectMode
+                          ? "bg-muted"
+                          : "hover:bg-muted/50"
                     }`}
                   >
+                    {selectMode && (
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${isSelected ? "bg-primary border-primary" : "border-muted-foreground"}`}>
+                        {isSelected && <CheckSquare className="w-3 h-3 text-primary-foreground" />}
+                      </div>
+                    )}
                     <Avatar className="w-12 h-12">
                       <AvatarImage src={conversation.avatar} />
                       <AvatarFallback>{conversation.user[0]}</AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-semibold text-foreground truncate">
+                        <h3 className="font-semibold text-foreground truncate flex items-center gap-1">
+                          {pinned.includes(conversation.id) && <Pin className="w-3 h-3 text-primary" />}
                           {conversation.user}
                         </h3>
                         <span className="text-xs text-muted-foreground">
@@ -327,7 +354,8 @@ const Messages = () => {
                       </div>
                     </div>
                   </motion.div>
-                ))}
+                  );
+                })}
               </div>
             </ScrollArea>
           </div>
