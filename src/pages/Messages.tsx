@@ -395,6 +395,28 @@ const Messages = () => {
                 <Button variant="ghost" size="icon">
                   <Video className="w-5 h-5" />
                 </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" aria-label="Chat options">
+                      <MoreVertical className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-52">
+                    <DropdownMenuItem onClick={() => toast({ title: "Chat reported", description: "Thanks, our team will review it." })}>
+                      <Flag className="w-4 h-4 mr-2" /> Report Chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => { toggleIn(blocked, setBlocked, selectedConversation); toast({ title: "User blocked" }); }}
+                    >
+                      <Ban className="w-4 h-4 mr-2" /> Block
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => toast({ title: "Technical problem reported", description: "We'll look into it shortly." })}>
+                      <AlertTriangle className="w-4 h-4 mr-2" /> Report Technical Problem
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
