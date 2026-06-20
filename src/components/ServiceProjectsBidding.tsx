@@ -273,6 +273,11 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
     </div>
   );
 
+  const openProject = (p: Project) => {
+    if (p.isOwn) setSelectedProject(p);
+    else { setGatedProject(p); setAccessStep("preview"); }
+  };
+
   // Project card component
   const ProjectCard = ({ project, showProposal = false }: { project: Project; showProposal?: boolean }) => (
     <Card className="cursor-pointer hover:shadow-lg transition-all border-border/50">
@@ -289,7 +294,7 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
                   <Badge variant="secondary" className="text-xs">{project.category}</Badge>
                   <Badge variant="outline" className="text-xs">{project.experienceLevel}</Badge>
                 </div>
-                <h3 className="font-semibold text-foreground line-clamp-1 text-sm sm:text-base" onClick={() => setSelectedProject(project)}>{project.title}</h3>
+                <h3 className="font-semibold text-foreground line-clamp-1 text-sm sm:text-base" onClick={() => openProject(project)}>{project.title}</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">{project.client} · {project.postedDate}</p>
               </div>
               <div className="flex items-center gap-1 flex-shrink-0">
@@ -312,11 +317,11 @@ export default function ServiceProjectsBidding({ isOpen, onClose, initialTab = "
                 <span className="flex items-center gap-1"><User className="w-3 h-3" />{project.proposals} bids</span>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => setSelectedProject(project)}>
+                <Button variant="outline" size="sm" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); openProject(project); }}>
                   <Eye className="w-3 h-3 mr-1" />Details
                 </Button>
                 {showProposal && (
-                  <Button size="sm" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); setSelectedProject(project); setShowProposalModal(true); }}>
+                  <Button size="sm" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); openProject(project); }}>
                     <Send className="w-3 h-3 mr-1" />Propose
                   </Button>
                 )}
