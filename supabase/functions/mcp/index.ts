@@ -20,8 +20,8 @@ var search_posts_default = defineTool({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ query, limit }) => {
     const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_PUBLISHABLE_KEY,
+      globalThis.process.env.SUPABASE_URL,
+      globalThis.process.env.SUPABASE_PUBLISHABLE_KEY,
       { auth: { persistSession: false, autoRefreshToken: false } }
     );
     const { data, error } = await supabase.from("posts").select("id, content, category, likes_count, comments_count, shares_count, created_at").ilike("content", `%${query}%`).order("created_at", { ascending: false }).limit(limit);
@@ -50,8 +50,8 @@ var get_trending_posts_default = defineTool2({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ category, limit }) => {
     const supabase = createClient2(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_PUBLISHABLE_KEY,
+      globalThis.process.env.SUPABASE_URL,
+      globalThis.process.env.SUPABASE_PUBLISHABLE_KEY,
       { auth: { persistSession: false, autoRefreshToken: false } }
     );
     let q = supabase.from("posts").select("id, content, category, likes_count, comments_count, shares_count, engagement_rate, created_at").order("engagement_rate", { ascending: false, nullsFirst: false }).limit(limit);
