@@ -55,6 +55,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       },
     },
     {
+      icon: Car,
+      label: "Transport",
+      onClick: () => {
+        navigate("/transport");
+        onClose();
+      },
+    },
+    {
       icon: HeadphonesIcon,
       label: "Support",
       onClick: () => {
