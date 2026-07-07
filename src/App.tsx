@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 import PeopleSuggestions from "./pages/PeopleSuggestions";
 import UserProfile from "./pages/UserProfile";
 import AdminModeration from "./pages/AdminModeration";
+import Transport from "./pages/Transport";
 
 const queryClient = new QueryClient();
 
