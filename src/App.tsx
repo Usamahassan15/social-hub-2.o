@@ -51,6 +51,7 @@ const App = () => (
             <Route path="/people-suggestions" element={<PeopleSuggestions />} />
             <Route path="/user/:id" element={<UserProfile />} />
             <Route path="/admin/moderation" element={<AdminModeration />} />
+            <Route path="/transport" element={<Transport />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
