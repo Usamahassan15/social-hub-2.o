@@ -1,4 +1,4 @@
-import { Home, Compass, MessageCircle, User, Handshake, Settings, FolderKanban } from "lucide-react";
+import { Home, Compass, MessageCircle, User, Handshake, Settings, FolderKanban, Car } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
