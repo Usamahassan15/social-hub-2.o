@@ -35,8 +35,8 @@ const PER_SEAT_SHARED = 500;
 const MIN_FARE = 200;
 
 // ---------- Google Maps loader (singleton) ----------
-let mapsPromise: Promise<typeof google> | null = null;
-async function loadGoogleMaps(): Promise<typeof google> {
+let mapsPromise: Promise<any> | null = null;
+async function loadGoogleMaps(): Promise<any> {
   if (typeof window === "undefined") throw new Error("no window");
   if ((window as any).google?.maps?.places) return (window as any).google;
   if (mapsPromise) return mapsPromise;
