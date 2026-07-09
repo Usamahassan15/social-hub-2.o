@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import MobileNav from "@/components/MobileNav";
+import FreightFlow from "@/components/transport/FreightFlow";
 
 type Screen =
   | "home" | "services" | "route" | "rideType" | "when"
