@@ -16,7 +16,7 @@ import MobileNav from "@/components/MobileNav";
 import FreightFlow from "@/components/transport/FreightFlow";
 
 type Screen =
-  | "home" | "services" | "route" | "rideType" | "when"
+  | "home" | "services" | "freight" | "route" | "rideType" | "when"
   | "passengersFare" | "comments" | "summary";
 type RideType = "private" | "shared" | "parcel";
 type LatLng = { lat: number; lng: number };
