@@ -13,9 +13,10 @@ import { supabase } from "@/integrations/supabase/client";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import MobileNav from "@/components/MobileNav";
+import FreightFlow from "@/components/transport/FreightFlow";
 
 type Screen =
-  | "home" | "services" | "route" | "rideType" | "when"
+  | "home" | "services" | "freight" | "route" | "rideType" | "when"
   | "passengersFare" | "comments" | "summary";
 type RideType = "private" | "shared" | "parcel";
 type LatLng = { lat: number; lng: number };
@@ -430,7 +431,7 @@ export default function Transport() {
                   {services.map((s) => (
                     <button
                       key={s.key}
-                      onClick={() => setScreen("route")}
+                      onClick={() => setScreen(s.key === "freight" ? "freight" : "route")}
                       className="flex flex-col items-center gap-2 p-5 rounded-2xl border border-border bg-card hover:bg-muted transition"
                     >
                       <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -442,6 +443,11 @@ export default function Transport() {
                 </div>
               </>
             )}
+
+            {screen === "freight" && (
+              <FreightFlow onExit={() => setScreen("services")} />
+            )}
+
 
             {screen === "route" && (
               <>
