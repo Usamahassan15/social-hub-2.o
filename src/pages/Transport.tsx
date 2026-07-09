@@ -431,7 +431,7 @@ export default function Transport() {
                   {services.map((s) => (
                     <button
                       key={s.key}
-                      onClick={() => setScreen("route")}
+                      onClick={() => setScreen(s.key === "freight" ? "freight" : "route")}
                       className="flex flex-col items-center gap-2 p-5 rounded-2xl border border-border bg-card hover:bg-muted transition"
                     >
                       <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
