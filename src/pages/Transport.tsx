@@ -444,6 +444,11 @@ export default function Transport() {
               </>
             )}
 
+            {screen === "freight" && (
+              <FreightFlow onExit={() => setScreen("services")} />
+            )}
+
+
             {screen === "route" && (
               <>
                 <Header title="Enter your route" />
