@@ -766,6 +766,12 @@ export default function Transport() {
       )}
 
       {fareLocked ? null : null}
+
+      <BecomeDriverDialog
+        open={driverDialogOpen}
+        onOpenChange={setDriverDialogOpen}
+        onDone={() => { setIsDriver(true); navigate("/driver"); }}
+      />
     </div>
   );
 }
