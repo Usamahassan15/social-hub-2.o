@@ -23,6 +23,7 @@ import PeopleSuggestions from "./pages/PeopleSuggestions";
 import UserProfile from "./pages/UserProfile";
 import AdminModeration from "./pages/AdminModeration";
 import Transport from "./pages/Transport";
+import DriverMode from "./pages/DriverMode";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/user/:id" element={<UserProfile />} />
             <Route path="/admin/moderation" element={<AdminModeration />} />
             <Route path="/transport" element={<Transport />} />
+            <Route path="/driver" element={<DriverMode />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

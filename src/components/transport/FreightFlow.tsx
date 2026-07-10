@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { getUserId, getUserName } from "@/lib/rideUser";
+import PassengerOffers from "./PassengerOffers";
 
 type Place = { address: string; location: { lat: number; lng: number } };
 
@@ -256,12 +258,31 @@ export default function FreightFlow({ onExit }: { onExit: () => void }) {
     setScreen("recipient");
   };
 
-  const saveRecipient = () => {
+  const [requestId, setRequestId] = useState<string | null>(null);
+
+  const saveRecipient = async () => {
     if (!recPhone.trim() || !recName.trim()) {
       setRecError("Please fill in these fields");
       return;
     }
     setRecError("");
+    // Insert ride request → drivers will see it in Request List
+    const { data, error } = await supabase.from("ride_requests").insert({
+      passenger_id: getUserId(),
+      passenger_name: getUserName() || recName,
+      service_type: "freight",
+      from_address: fromPlace?.address, to_address: toPlace?.address,
+      from_lat: fromPlace?.location.lat, from_lng: fromPlace?.location.lng,
+      to_lat: toPlace?.location.lat, to_lng: toPlace?.location.lng,
+      description: cargoDesc, vehicle_size: vehicle.label,
+      options: selectedOptions, fare: fare ? Number(fare) : null,
+      schedule_at: scheduleDate ? scheduleDate.toISOString() : null,
+      loading_city: loadCity, loading_address: loadHouse,
+      recipient_name: recName, recipient_phone: recPhone,
+    }).select("id").single();
+    if (error) { toast({ title: "Failed to send request", description: error.message }); return; }
+    setRequestId(data.id);
+    toast({ title: "Request sent to drivers" });
     setScreen("allDetails");
   };
 
@@ -619,6 +640,11 @@ export default function FreightFlow({ onExit }: { onExit: () => void }) {
                     <img key={i} src={src} alt="" className="w-16 h-16 rounded-lg object-cover border border-border" />
                   ))}
                 </div>
+              </div>
+            )}
+            {requestId && (
+              <div className="p-4 rounded-xl border border-border bg-card">
+                <PassengerOffers requestId={requestId} />
               </div>
             )}
             <Button variant="destructive" className="w-full h-12" onClick={() => setCancelOpen(true)}>
