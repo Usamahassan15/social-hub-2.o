@@ -50,6 +50,119 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_earnings: {
+        Row: {
+          amount: number
+          created_at: string
+          driver_id: string
+          id: string
+          request_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          driver_id: string
+          id?: string
+          request_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          driver_id?: string
+          id?: string
+          request_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_earnings_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ride_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drivers: {
+        Row: {
+          categories: string[]
+          created_at: string
+          dob: string | null
+          first_name: string
+          id: string
+          id_back_url: string | null
+          id_expiry: string | null
+          id_front_url: string | null
+          last_name: string
+          license_back_url: string | null
+          license_expiry: string | null
+          license_front_url: string | null
+          photo_url: string | null
+          referral_code: string | null
+          registration_plate: string | null
+          selfie_url: string | null
+          status: string
+          user_id: string
+          vehicle_back_url: string | null
+          vehicle_doc_expiry: string | null
+          vehicle_doc_url: string | null
+          vehicle_front_url: string | null
+          vehicle_no: string | null
+          wallet_balance: number
+        }
+        Insert: {
+          categories?: string[]
+          created_at?: string
+          dob?: string | null
+          first_name: string
+          id?: string
+          id_back_url?: string | null
+          id_expiry?: string | null
+          id_front_url?: string | null
+          last_name: string
+          license_back_url?: string | null
+          license_expiry?: string | null
+          license_front_url?: string | null
+          photo_url?: string | null
+          referral_code?: string | null
+          registration_plate?: string | null
+          selfie_url?: string | null
+          status?: string
+          user_id: string
+          vehicle_back_url?: string | null
+          vehicle_doc_expiry?: string | null
+          vehicle_doc_url?: string | null
+          vehicle_front_url?: string | null
+          vehicle_no?: string | null
+          wallet_balance?: number
+        }
+        Update: {
+          categories?: string[]
+          created_at?: string
+          dob?: string | null
+          first_name?: string
+          id?: string
+          id_back_url?: string | null
+          id_expiry?: string | null
+          id_front_url?: string | null
+          last_name?: string
+          license_back_url?: string | null
+          license_expiry?: string | null
+          license_front_url?: string | null
+          photo_url?: string | null
+          referral_code?: string | null
+          registration_plate?: string | null
+          selfie_url?: string | null
+          status?: string
+          user_id?: string
+          vehicle_back_url?: string | null
+          vehicle_doc_expiry?: string | null
+          vehicle_doc_url?: string | null
+          vehicle_front_url?: string | null
+          vehicle_no?: string | null
+          wallet_balance?: number
+        }
+        Relationships: []
+      }
       post_engagements: {
         Row: {
           created_at: string
@@ -145,6 +258,172 @@ export type Database = {
           updated_at?: string
           user_id?: string
           views_count?: number
+        }
+        Relationships: []
+      }
+      ride_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          request_id: string
+          sender_id: string
+          sender_role: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          request_id: string
+          sender_id: string
+          sender_role: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          request_id?: string
+          sender_id?: string
+          sender_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ride_messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ride_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ride_offers: {
+        Row: {
+          created_at: string
+          driver_id: string
+          driver_name: string | null
+          fare: number
+          id: string
+          message: string | null
+          request_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          driver_name?: string | null
+          fare: number
+          id?: string
+          message?: string | null
+          request_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          driver_name?: string | null
+          fare?: number
+          id?: string
+          message?: string | null
+          request_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ride_offers_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ride_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ride_requests: {
+        Row: {
+          accepted_offer_id: string | null
+          category: string | null
+          chat_enabled: boolean
+          created_at: string
+          description: string | null
+          distance_km: number | null
+          driver_id: string | null
+          fare: number | null
+          from_address: string | null
+          from_lat: number | null
+          from_lng: number | null
+          id: string
+          loading_address: string | null
+          loading_city: string | null
+          options: string[] | null
+          passenger_id: string
+          passenger_name: string | null
+          photos: string[] | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          schedule_at: string | null
+          service_type: string
+          status: string
+          to_address: string | null
+          to_lat: number | null
+          to_lng: number | null
+          vehicle_size: string | null
+        }
+        Insert: {
+          accepted_offer_id?: string | null
+          category?: string | null
+          chat_enabled?: boolean
+          created_at?: string
+          description?: string | null
+          distance_km?: number | null
+          driver_id?: string | null
+          fare?: number | null
+          from_address?: string | null
+          from_lat?: number | null
+          from_lng?: number | null
+          id?: string
+          loading_address?: string | null
+          loading_city?: string | null
+          options?: string[] | null
+          passenger_id: string
+          passenger_name?: string | null
+          photos?: string[] | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          schedule_at?: string | null
+          service_type: string
+          status?: string
+          to_address?: string | null
+          to_lat?: number | null
+          to_lng?: number | null
+          vehicle_size?: string | null
+        }
+        Update: {
+          accepted_offer_id?: string | null
+          category?: string | null
+          chat_enabled?: boolean
+          created_at?: string
+          description?: string | null
+          distance_km?: number | null
+          driver_id?: string | null
+          fare?: number | null
+          from_address?: string | null
+          from_lat?: number | null
+          from_lng?: number | null
+          id?: string
+          loading_address?: string | null
+          loading_city?: string | null
+          options?: string[] | null
+          passenger_id?: string
+          passenger_name?: string | null
+          photos?: string[] | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          schedule_at?: string | null
+          service_type?: string
+          status?: string
+          to_address?: string | null
+          to_lat?: number | null
+          to_lng?: number | null
+          vehicle_size?: string | null
         }
         Relationships: []
       }
