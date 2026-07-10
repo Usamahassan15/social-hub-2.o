@@ -14,6 +14,9 @@ import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import MobileNav from "@/components/MobileNav";
 import FreightFlow from "@/components/transport/FreightFlow";
+import BecomeDriverDialog from "@/components/transport/BecomeDriverDialog";
+import { getUserId, getMode, setMode } from "@/lib/rideUser";
+import { UserCog, IdCard } from "lucide-react";
 
 type Screen =
   | "home" | "services" | "freight" | "route" | "rideType" | "when"
@@ -367,6 +370,19 @@ export default function Transport() {
   const [comments, setComments] = useState("");
   const [commentsSaved, setCommentsSaved] = useState("");
 
+  // Driver mode gating
+  const [isDriver, setIsDriver] = useState(false);
+  const [driverDialogOpen, setDriverDialogOpen] = useState(false);
+  useEffect(() => {
+    const uid = getUserId();
+    supabase.from("drivers").select("id").eq("user_id", uid).maybeSingle()
+      .then(({ data }) => setIsDriver(!!data));
+  }, []);
+  const onDriverBtn = () => {
+    if (isDriver) { setMode("driver"); navigate("/driver"); }
+    else setDriverDialogOpen(true);
+  };
+
   const privateFare = Math.max(MIN_FARE, Math.round(distanceKm * PER_KM_PRIVATE));
   const sharedFare = PER_SEAT_SHARED;
 
@@ -402,7 +418,13 @@ export default function Transport() {
       <div className="flex-1 flex flex-col min-w-0">
         <TopBar />
         <main className="flex-1 md:pt-14 pt-14 pb-20 md:pb-6">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto relative">
+            {/* Driver toggle button — top right */}
+            <div className="absolute top-2 right-3 z-20">
+              <Button size="sm" variant={isDriver ? "default" : "outline"} onClick={onDriverBtn}>
+                {isDriver ? <><UserCog className="w-4 h-4 mr-1" /> Driver Mode</> : <><IdCard className="w-4 h-4 mr-1" /> Become a Driver</>}
+              </Button>
+            </div>
             {screen === "home" && (
               <>
                 <Header title="Transport" />
@@ -744,6 +766,12 @@ export default function Transport() {
       )}
 
       {fareLocked ? null : null}
+
+      <BecomeDriverDialog
+        open={driverDialogOpen}
+        onOpenChange={setDriverDialogOpen}
+        onDone={() => { setIsDriver(true); navigate("/driver"); }}
+      />
     </div>
   );
 }
