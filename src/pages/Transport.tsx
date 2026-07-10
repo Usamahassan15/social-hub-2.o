@@ -14,6 +14,9 @@ import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import MobileNav from "@/components/MobileNav";
 import FreightFlow from "@/components/transport/FreightFlow";
+import BecomeDriverDialog from "@/components/transport/BecomeDriverDialog";
+import { getUserId, getMode, setMode } from "@/lib/rideUser";
+import { UserCog, IdCard } from "lucide-react";
 
 type Screen =
   | "home" | "services" | "freight" | "route" | "rideType" | "when"
