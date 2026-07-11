@@ -635,8 +635,11 @@ export default function FreightFlow({ onExit }: { onExit: () => void }) {
       {/* ============= ALL DETAILS ============= */}
       {screen === "allDetails" && (
         <>
-          <Header title="Order details" />
+          <Header title="Order" />
           <div className="p-4 space-y-3 text-sm">
+            <div className="p-3 rounded-xl bg-primary/10 border border-primary/30 text-primary text-sm text-center font-medium">
+              Your request has been sent. You'll receive offers shortly.
+            </div>
             <div className="p-4 rounded-xl border border-border bg-card space-y-2">
               <div><span className="text-muted-foreground">From:</span> {fromPlace?.address}</div>
               <div><span className="text-muted-foreground">To:</span> {toPlace?.address}</div>
@@ -678,24 +681,58 @@ export default function FreightFlow({ onExit }: { onExit: () => void }) {
 
           {/* Cancel dialog */}
           <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
-            <DialogContent>
-              <DialogHeader><DialogTitle>Cancel Order</DialogTitle></DialogHeader>
-              <RadioGroup value={cancelReason} onValueChange={setCancelReason} className="space-y-2">
-                {CANCEL_REASONS.map((r) => (
-                  <div key={r} className="flex items-center gap-3 p-3 rounded-lg border border-border">
-                    <RadioGroupItem value={r} id={`r-${r}`} />
-                    <Label htmlFor={`r-${r}`} className="flex-1 cursor-pointer text-sm">{r}</Label>
+            <DialogContent className="max-w-md p-0 gap-0">
+              <div className="flex items-center gap-3 h-14 px-4 border-b border-border">
+                <h2 className="text-base font-semibold flex-1">Why do you want to cancel?</h2>
+                <Button variant="ghost" size="icon" onClick={() => setCancelOpen(false)}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
+                <RadioGroup value={cancelReason} onValueChange={setCancelReason} className="space-y-2">
+                  {CANCEL_REASONS.filter((r) => r !== "Other").map((r) => (
+                    <div key={r} className="flex items-center gap-3 p-3 rounded-lg border border-border">
+                      <RadioGroupItem value={r} id={`r-${r}`} />
+                      <Label htmlFor={`r-${r}`} className="flex-1 cursor-pointer text-sm">{r}</Label>
+                    </div>
+                  ))}
+                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border">
+                    <RadioGroupItem value="Other" id="r-Other" />
+                    <Label htmlFor="r-Other" className="flex-1 cursor-pointer text-sm">Another reason</Label>
                   </div>
-                ))}
-              </RadioGroup>
-              {cancelReason === "Other" && (
-                <Textarea placeholder="Please tell us why..." value={cancelOther} onChange={(e) => setCancelOther(e.target.value)} rows={3} />
-              )}
-              <Button className="w-full h-11" onClick={doCancel} variant="destructive">Submit</Button>
+                </RadioGroup>
+                {cancelReason === "Other" && (
+                  <Textarea
+                    placeholder="Add your comment..."
+                    value={cancelOther}
+                    onChange={(e) => setCancelOther(e.target.value)}
+                    rows={3}
+                  />
+                )}
+                <Button className="w-full h-11" onClick={doCancel}>Submit</Button>
+              </div>
             </DialogContent>
           </Dialog>
+        </>
+      )}
+
+      {/* ============= CANCELLED ============= */}
+      {screen === "cancelled" && (
+        <>
+          <Header title="Order" />
+          <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 space-y-6">
+            <div className="text-center space-y-2">
+              <div className="text-xl font-bold">Canceled Order</div>
+              <div className="text-sm text-muted-foreground">You can renew it.</div>
+            </div>
+            <div className="w-full max-w-sm space-y-3">
+              <Button className="w-full h-12" onClick={renewOrder}>Renew</Button>
+              <Button variant="destructive" className="w-full h-12" onClick={deleteOrder}>Delete Order</Button>
+            </div>
+          </div>
         </>
       )}
     </>
   );
 }
+
