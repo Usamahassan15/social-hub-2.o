@@ -29,7 +29,9 @@ type Screen =
   | "fare"
   | "loadingPoint"
   | "recipient"
-  | "allDetails";
+  | "allDetails"
+  | "cancelled";
+
 
 const VEHICLES = [
   { key: "rickshaw", label: "Loader Rickshaw", size: "R", cap: "Up to 300KG", min: 1000, Icon: Package },
