@@ -189,6 +189,11 @@ export default function BecomeDriverDialog({ open, onOpenChange, onDone }: Props
           </div>
         )}
       </DialogContent>
+      <SelfieVerificationDialog
+        open={selfieOpen}
+        onOpenChange={setSelfieOpen}
+        onVerified={(path, pct) => { setSelfie(path); setSelfiePercent(pct); }}
+      />
     </Dialog>
   );
 }
