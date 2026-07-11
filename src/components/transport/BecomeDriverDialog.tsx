@@ -7,7 +7,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { getUserId, setUserName, setMode } from "@/lib/rideUser";
-import { Camera, CheckCircle2, Loader2 } from "lucide-react";
+import { Camera, CheckCircle2, Loader2, ScanFace } from "lucide-react";
+import SelfieVerificationDialog from "./SelfieVerificationDialog";
 
 type Props = { open: boolean; onOpenChange: (o: boolean) => void; onDone: () => void };
 
