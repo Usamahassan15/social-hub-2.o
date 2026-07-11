@@ -446,8 +446,14 @@ export default function FreightFlow({ onExit }: { onExit: () => void }) {
 
             <Button
               className="w-full h-12"
-              disabled={!fromPlace || !toPlace}
-              onClick={() => setScreen("loadingPoint")}
+              disabled={!fromText.trim() || !toText.trim()}
+              onClick={() => {
+                if (!fromText.trim() || !toText.trim()) {
+                  toast({ title: "Please enter From and To addresses" });
+                  return;
+                }
+                setScreen("loadingPoint");
+              }}
             >
               Create request
             </Button>
