@@ -69,6 +69,8 @@ export default function BecomeDriverDialog({ open, onOpenChange, onDone }: Props
   const [idExp, setIdExp] = useState("");
   const [referral, setReferral] = useState("");
   const [cats, setCats] = useState<string[]>([]);
+  const [selfieOpen, setSelfieOpen] = useState(false);
+  const [selfiePercent, setSelfiePercent] = useState(0);
 
   const toggle = (k: string) => setCats((p) => p.includes(k) ? p.filter(x => x !== k) : [...p, k]);
 
@@ -111,7 +113,17 @@ export default function BecomeDriverDialog({ open, onOpenChange, onDone }: Props
               <div><Label>Date of birth</Label><Input type="date" value={dob} onChange={(e)=>setDob(e.target.value)} /></div>
               <div className="grid grid-cols-2 gap-3">
                 <PhotoField label="Add a photo" name="photo" value={photo} onChange={setPhoto} />
-                <PhotoField label="360° Selfie verification" name="selfie" value={selfie} onChange={setSelfie} />
+                <div>
+                  <Label className="text-xs">360° Selfie verification</Label>
+                  <button type="button" onClick={() => setSelfieOpen(true)}
+                    className="mt-1 w-full h-20 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground hover:border-primary hover:text-primary">
+                    {selfie ? (
+                      <><CheckCircle2 className="w-4 h-4 text-primary" /> Verified {selfiePercent}%</>
+                    ) : (
+                      <><ScanFace className="w-4 h-4" /> Start verification</>
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className="border-t border-border pt-3">
