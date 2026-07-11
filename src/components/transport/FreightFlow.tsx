@@ -302,13 +302,35 @@ export default function FreightFlow({ onExit }: { onExit: () => void }) {
     }
   };
 
-  const doCancel = () => {
+  const doCancel = async () => {
     const reason = cancelReason === "Other" ? cancelOther.trim() : cancelReason;
     if (!reason) { toast({ title: "Please select a reason" }); return; }
+    if (requestId) {
+      await supabase.from("ride_requests").update({ status: "cancelled", chat_enabled: false }).eq("id", requestId);
+    }
     toast({ title: "Order cancelled", description: reason });
-    setCancelOpen(false); setCancelReason(""); setCancelOther("");
+    setCancelOpen(false);
+    setScreen("cancelled");
+  };
+
+  const renewOrder = async () => {
+    if (requestId) {
+      await supabase.from("ride_requests").update({ status: "open" }).eq("id", requestId);
+    }
+    setCancelReason(""); setCancelOther("");
+    toast({ title: "Order renewed" });
+    setScreen("allDetails");
+  };
+
+  const deleteOrder = async () => {
+    if (requestId) {
+      await supabase.from("ride_offers").delete().eq("request_id", requestId);
+      await supabase.from("ride_requests").delete().eq("id", requestId);
+    }
+    toast({ title: "Order deleted" });
     onExit();
   };
+
 
   return (
     <>
