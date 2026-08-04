@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, LayoutDashboard, LogOut, Settings, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
