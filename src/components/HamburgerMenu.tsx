@@ -78,12 +78,13 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
     },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast({
       title: "Logged out",
       description: "You have been successfully logged out.",
     });
-    navigate("/auth");
+    navigate("/welcome", { replace: true });
     onClose();
   };
 

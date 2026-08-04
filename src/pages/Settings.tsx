@@ -76,9 +76,9 @@ export default function Settings() {
     document.documentElement.classList.toggle('dark', checked);
   };
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-    navigate("/auth");
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/welcome", { replace: true });
   };
 
   const handleDeleteAccount = () => {
