@@ -4,8 +4,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UnreadMessagesProvider } from "@/contexts/UnreadMessagesContext";
+import { AuthProvider } from "@/hooks/use-auth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import Welcome from "./pages/Welcome";
+import Onboarding from "./pages/Onboarding";
+import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import Messages from "./pages/Messages";
@@ -27,37 +32,44 @@ import DriverMode from "./pages/DriverMode";
 
 const queryClient = new QueryClient();
 
+const protect = (element: React.ReactNode) => <ProtectedRoute>{element}</ProtectedRoute>;
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <UnreadMessagesProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/messages" element={<Messages />} />
-            <Route path="/notifications" element={<Notifications />} />
-            
+        <AuthProvider>
+          <UnreadMessagesProvider>
+            <Routes>
+              {/* Public / auth routes */}
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/onboarding" element={<Onboarding />} />
 
-            
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/dashboard" element={<ServicesDashboard />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="/groups" element={<Groups />} />
-            <Route path="/people-suggestions" element={<PeopleSuggestions />} />
-            <Route path="/user/:id" element={<UserProfile />} />
-            <Route path="/admin/moderation" element={<AdminModeration />} />
-            <Route path="/transport" element={<Transport />} />
-            <Route path="/driver" element={<DriverMode />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </UnreadMessagesProvider>
+              {/* App routes */}
+              <Route path="/" element={protect(<Home />)} />
+              <Route path="/profile" element={protect(<Profile />)} />
+              <Route path="/explore" element={protect(<Explore />)} />
+              <Route path="/messages" element={protect(<Messages />)} />
+              <Route path="/notifications" element={protect(<Notifications />)} />
+              <Route path="/services" element={protect(<Services />)} />
+              <Route path="/services/dashboard" element={protect(<ServicesDashboard />)} />
+              <Route path="/settings" element={protect(<Settings />)} />
+              <Route path="/change-password" element={protect(<ChangePassword />)} />
+              <Route path="/groups" element={protect(<Groups />)} />
+              <Route path="/people-suggestions" element={protect(<PeopleSuggestions />)} />
+              <Route path="/user/:id" element={protect(<UserProfile />)} />
+              <Route path="/admin/moderation" element={protect(<AdminModeration />)} />
+              <Route path="/transport" element={protect(<Transport />)} />
+              <Route path="/driver" element={protect(<DriverMode />)} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </UnreadMessagesProvider>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
