@@ -1,23 +1,129 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 type AuthView = "login" | "signup" | "forgot";
 
 const Auth = () => {
-  const [view, setView] = useState<AuthView>("login");
+  const [searchParams] = useSearchParams();
+  const initialView = (searchParams.get("view") as AuthView) || "login";
+  const [view, setView] = useState<AuthView>(initialView);
   const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
+
+  // Login state
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
+  // Signup state
+  const [firstName, setFirstName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+
+  // Forgot state
+  const [recoverEmail, setRecoverEmail] = useState("");
 
   // Sample data for date dropdowns
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+
+  useEffect(() => {
+    const v = searchParams.get("view") as AuthView | null;
+    if (v && v !== view) setView(v);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  const goAfterAuth = async (userId: string) => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("id", userId)
+      .maybeSingle();
+    navigate(data?.onboarding_completed ? "/" : "/onboarding", { replace: true });
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail.trim() || !loginPassword) {
+      toast({ title: "Missing details", description: "Enter your email and password.", variant: "destructive" });
+      return;
+    }
+    setBusy(true);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: loginEmail.trim(),
+      password: loginPassword,
+    });
+    setBusy(false);
+    if (error) {
+      toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (data.user) await goAfterAuth(data.user.id);
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signupEmail.trim() || !signupPassword) {
+      toast({ title: "Missing details", description: "Enter an email address and password.", variant: "destructive" });
+      return;
+    }
+    if (signupPassword.length < 6) {
+      toast({ title: "Password too short", description: "Use at least 6 characters.", variant: "destructive" });
+      return;
+    }
+    setBusy(true);
+    const { data, error } = await supabase.auth.signUp({
+      email: signupEmail.trim(),
+      password: signupPassword,
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: { full_name: `${firstName} ${surname}`.trim() },
+      },
+    });
+    setBusy(false);
+    if (error) {
+      toast({ title: "Could not create account", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (data.session) {
+      navigate("/onboarding", { replace: true });
+      return;
+    }
+    toast({
+      title: "Confirm your email",
+      description: "We sent you a confirmation link. Click it to finish creating your account.",
+    });
+    setView("login");
+  };
+
+  const handleRecover = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!recoverEmail.trim()) {
+      toast({ title: "Enter your email", description: "We need your email to find your account.", variant: "destructive" });
+      return;
+    }
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(recoverEmail.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setBusy(false);
+    if (error) {
+      toast({ title: "Could not send email", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Check your email", description: "We sent you a link to reset your password." });
+    setView("login");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-white">
@@ -40,11 +146,13 @@ const Auth = () => {
                 Log in
               </h1>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleLogin}>
                 <div>
                   <Input
                     type="text"
                     placeholder="Email address or phone number"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
                     className="h-12 sm:h-14 rounded-xl border-gray-300 text-base sm:text-lg px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
@@ -53,12 +161,15 @@ const Auth = () => {
                   <Input
                     type="password"
                     placeholder="Password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
                     className="h-12 sm:h-14 rounded-xl border-gray-300 text-base sm:text-lg px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
 
                 <Button
                   type="submit"
+                  disabled={busy}
                   className="w-full h-12 sm:h-14 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl text-base sm:text-lg transition-all shadow-sm hover:shadow-md"
                 >
                   Log in
@@ -111,16 +222,20 @@ const Auth = () => {
                 <p className="text-gray-600 text-sm sm:text-base">It's quick and easy.</p>
               </div>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSignup}>
                 <div className="grid grid-cols-2 gap-3">
                   <Input
                     type="text"
                     placeholder="First name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     className="h-11 sm:h-12 rounded-xl border-gray-300 text-sm sm:text-base px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                   <Input
                     type="text"
                     placeholder="Surname"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
                     className="h-11 sm:h-12 rounded-xl border-gray-300 text-sm sm:text-base px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
@@ -193,6 +308,8 @@ const Auth = () => {
                   <Input
                     type="text"
                     placeholder="Mobile number or email address"
+                    value={signupEmail}
+                    onChange={(e) => setSignupEmail(e.target.value)}
                     className="h-11 sm:h-12 rounded-xl border-gray-300 text-sm sm:text-base px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
@@ -201,6 +318,8 @@ const Auth = () => {
                   <Input
                     type="password"
                     placeholder="New password"
+                    value={signupPassword}
+                    onChange={(e) => setSignupPassword(e.target.value)}
                     className="h-11 sm:h-12 rounded-xl border-gray-300 text-sm sm:text-base px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
@@ -231,6 +350,7 @@ const Auth = () => {
 
                 <Button
                   type="submit"
+                  disabled={busy}
                   className="w-full h-11 sm:h-12 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl text-base sm:text-lg transition-all shadow-sm hover:shadow-md"
                 >
                   Sign Up
@@ -265,11 +385,13 @@ const Auth = () => {
                 Please enter your email address or mobile number to search for your account.
               </p>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleRecover}>
                 <div>
                   <Input
                     type="text"
                     placeholder="Email address or mobile number"
+                    value={recoverEmail}
+                    onChange={(e) => setRecoverEmail(e.target.value)}
                     className="h-12 sm:h-14 rounded-xl border-gray-300 text-base sm:text-lg px-4 focus:border-primary focus:ring-2 focus:ring-primary/20"
                   />
                 </div>
@@ -285,6 +407,7 @@ const Auth = () => {
                   </Button>
                   <Button
                     type="submit"
+                    disabled={busy}
                     className="flex-1 h-11 sm:h-12 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl text-base transition-all shadow-sm hover:shadow-md"
                   >
                     Search

@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, LayoutDashboard, LogOut, Settings, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -78,12 +79,13 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
     },
   ];
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast({
       title: "Logged out",
       description: "You have been successfully logged out.",
     });
-    navigate("/auth");
+    navigate("/welcome", { replace: true });
     onClose();
   };
 
