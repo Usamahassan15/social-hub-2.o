@@ -261,6 +261,39 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          interests: string[]
+          onboarding_completed: boolean
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          interests?: string[]
+          onboarding_completed?: boolean
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          interests?: string[]
+          onboarding_completed?: boolean
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
       ride_messages: {
         Row: {
           body: string
