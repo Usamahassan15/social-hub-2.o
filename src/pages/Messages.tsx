@@ -21,7 +21,7 @@ import {
 
 import { toast } from "@/hooks/use-toast";
 import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
-import EmptyState from "@/components/EmptyState";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface Conversation {
   id: number;

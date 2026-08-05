@@ -17,7 +17,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
-import { EmptyState } from "@/components/ui/empty-state";
 import ServiceAuthDialog from "@/components/ServiceAuthDialog";
 import ServiceBookingFlow from "@/components/ServiceBookingFlow";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -146,6 +145,7 @@ export default function Services() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
+  const [serviceType, setServiceType] = useState<"digital" | "physical">("digital");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [showPostDialog, setShowPostDialog] = useState(false);
   const initialOpenProjects = searchParams.get("openProjects") === "1";
