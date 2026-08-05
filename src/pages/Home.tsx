@@ -221,7 +221,7 @@ const Home = () => {
           <div className="space-y-3 sm:space-y-4">
             {isLoading && posts.length === 0 && (
               <div className="space-y-3 sm:space-y-4">
-                {[1, 2, 3].map((i) => (
+                {[1, 2, 3, 4, 5].map((i) => (
                   <FeedSkeleton key={i} />
                 ))}
               </div>

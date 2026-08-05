@@ -19,6 +19,8 @@ import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
 import { EmptyState } from "@/components/ui/empty-state";
 import ServiceAuthDialog from "@/components/ServiceAuthDialog";
+import ServiceBookingFlow from "@/components/ServiceBookingFlow";
+import { EmptyState } from "@/components/ui/empty-state";
 
 const digitalServices = [
   {
@@ -161,12 +163,12 @@ export default function Services() {
     const matchesCategory = selectedCategory === "All Categories" || s.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
-  const services = serviceType === "digital" ? digitalServices : physicalServices;
   const [serviceImages, setServiceImages] = useState<string[]>([]);
   const [selectedService, setSelectedService] = useState<typeof digitalServices[0] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newService, setNewService] = useState({ title: "", description: "", category: "", price: "", location: "" });
   const [likedServices, setLikedServices] = useState<Set<number>>(new Set());
+  const [bookingService, setBookingService] = useState<typeof digitalServices[0] | null>(null);
 
   const toggleLike = useCallback((e: React.MouseEvent, id: number) => {
     e.stopPropagation();
@@ -419,13 +421,15 @@ export default function Services() {
               </motion.div>
             ))}
           </div>
+          {services.length === 0 && <EmptyState icon={Search} title="No services found" description="Try another keyword or category." actionLabel="Clear filters" onAction={() => { setSearchQuery(""); setSelectedCategory("All Categories"); }} />}
         </div>
           )}
       </main>
 
       <MobileNav />
       <ServiceProjectsBidding isOpen={showProjectsBidding} onClose={() => { setShowProjectsBidding(false); if (searchParams.get("openProjects")) { searchParams.delete("openProjects"); setSearchParams(searchParams, { replace: true }); } }} initialTab={projectsBiddingTab} />
-      <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} />
+      <ServiceProviderProfile service={selectedService} isOpen={!!selectedService} onClose={() => setSelectedService(null)} onContact={handleContact} onBook={() => { if (selectedService) { setBookingService(selectedService); setSelectedService(null); } }} />
+      <ServiceBookingFlow service={bookingService} open={!!bookingService} onOpenChange={(open) => { if (!open) setBookingService(null); }} onMessage={() => { setBookingService(null); navigate("/messages"); }} />
       <ServiceAuthDialog open={showAuthDialog} onOpenChange={setShowAuthDialog} onAuthComplete={() => { if (pendingProvider) { navigate("/messages"); setPendingProvider(null); } }} />
     </div>
   );
