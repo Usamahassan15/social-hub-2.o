@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import ServiceProjectsBidding from "@/components/ServiceProjectsBidding";
 import ServiceProviderProfile from "@/components/ServiceProviderProfile";
+import { EmptyState } from "@/components/ui/empty-state";
 import ServiceAuthDialog from "@/components/ServiceAuthDialog";
 
 const digitalServices = [
@@ -155,7 +156,11 @@ export default function Services() {
       setShowProjectsBidding(true);
     }
   }, [searchParams]);
-  const [serviceType, setServiceType] = useState<"digital" | "physical">("digital");
+  const services = (serviceType === "digital" ? digitalServices : physicalServices).filter(s => {
+    const matchesSearch = s.title.toLowerCase().includes(searchQuery.toLowerCase()) || s.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "All Categories" || s.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
   const services = serviceType === "digital" ? digitalServices : physicalServices;
   const [serviceImages, setServiceImages] = useState<string[]>([]);
   const [selectedService, setSelectedService] = useState<typeof digitalServices[0] | null>(null);
