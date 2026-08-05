@@ -13,6 +13,8 @@ import LivePost from "@/components/LivePost";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useFeed } from "@/hooks/use-feed";
+import { Layout } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const SUGGESTED_POSTS = [
@@ -186,7 +188,7 @@ const Home = () => {
     }
   }, [feedType]);
 
-  const feedPosts = posts.length > 0 ? posts : filteredSuggested;
+  const feedPosts = posts.length > 0 ? posts : (isLoading ? [] : filteredSuggested);
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -217,6 +219,19 @@ const Home = () => {
 
           {/* Feed - render suggested posts immediately, replace when live data arrives */}
           <div className="space-y-3 sm:space-y-4">
+            {isLoading && posts.length === 0 && (
+              <div className="space-y-3 sm:space-y-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <FeedSkeleton key={i} />
+                ))}
+              </div>
+            )}
+
+            {!isLoading && feedPosts.length === 0 && (
+              <div className="py-12">
+                <EmptyState icon={Layout} title="No posts yet" description="Follow more people or explore categories to fill your feed." />
+              </div>
+            )}
             {feedPosts.map((post, index) => (
               <React.Fragment key={post.id}>
                 {index === 3 && <PeopleYouMayKnow />}

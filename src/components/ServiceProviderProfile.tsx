@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Star, MapPin, Clock, MessageCircle, Award, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, MapPin, Clock, MessageCircle, Award, X, ChevronLeft, ChevronRight, CalendarCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,7 @@ interface ServiceProviderProfileProps {
   isOpen: boolean;
   onClose: () => void;
   onContact: (providerName: string) => void;
+  onBook: () => void;
 }
 
 const tabs = ["about", "services", "portfolio", "reviews"] as const;
@@ -61,6 +62,7 @@ export default function ServiceProviderProfile({
   isOpen,
   onClose,
   onContact,
+  onBook,
 }: ServiceProviderProfileProps) {
   const [activeTab, setActiveTab] = useState<TabType>("about");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -130,13 +132,10 @@ export default function ServiceProviderProfile({
                     <span>{service.responseTime}</span>
                   </div>
                 </div>
-                <Button
-                  className="bg-gradient-to-r from-primary to-primary/80 w-full sm:w-auto"
-                  onClick={() => onContact(service.provider)}
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Contact
-                </Button>
+                <div className="flex w-full gap-2 sm:w-auto">
+                  <Button variant="outline" className="flex-1 sm:flex-none" onClick={() => onContact(service.provider)}><MessageCircle className="mr-2 h-4 w-4" />Contact</Button>
+                  <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80 sm:flex-none" onClick={onBook}><CalendarCheck className="mr-2 h-4 w-4" />Book Now</Button>
+                </div>
               </div>
             </div>
 

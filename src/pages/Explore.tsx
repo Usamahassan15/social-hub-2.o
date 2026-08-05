@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Search, X, Users, CalendarDays, ShoppingBag, Layers, TrendingUp, Flame, Sparkles } from "lucide-react";
+import { Search, X, Users, CalendarDays, Layers, TrendingUp, Flame, Sparkles, AtSign } from "lucide-react";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
 import TopBar from "@/components/TopBar";
@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { useFeed, useTrendingTopics } from "@/hooks/use-feed";
 import LivePost from "@/components/LivePost";
+import { EmptyState } from "@/components/ui/empty-state";
 
 const mockPeople = [
   { id: 1, name: "Sarah Connor", username: "@sarahconnor", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", bio: "Tech enthusiast & designer", mutualFriends: 12 },
@@ -114,11 +115,13 @@ const Explore = () => {
                 </TabsList>
 
                 {!hasResults && (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <Search className="w-12 h-12 mx-auto mb-3 opacity-40" />
-                    <p className="text-lg font-medium">No results found</p>
-                    <p className="text-sm">Try a different search term</p>
-                  </div>
+                  <EmptyState 
+                    icon={Search} 
+                    title="No results found" 
+                    description={`We couldn't find anything matching "${searchQuery}". Try a different search term.`}
+                    actionLabel="Clear Search"
+                    onAction={() => setSearchQuery("")}
+                  />
                 )}
 
                 <TabsContent value="all" className="space-y-4">
@@ -139,13 +142,13 @@ const Explore = () => {
                   )}
                 </TabsContent>
                 <TabsContent value="people" className="space-y-2">
-                  {filteredPeople.length > 0 ? filteredPeople.map(person => <PersonCard key={person.id} person={person} />) : <NoResults />}
+                  {filteredPeople.length > 0 ? filteredPeople.map(person => <PersonCard key={person.id} person={person} />) : <EmptyState title="No people found" />}
                 </TabsContent>
                 <TabsContent value="groups" className="space-y-2">
-                  {filteredGroups.length > 0 ? filteredGroups.map(group => <GroupCard key={group.id} group={group} />) : <NoResults />}
+                  {filteredGroups.length > 0 ? filteredGroups.map(group => <GroupCard key={group.id} group={group} />) : <EmptyState title="No groups found" />}
                 </TabsContent>
                 <TabsContent value="events" className="space-y-2">
-                  {filteredEvents.length > 0 ? filteredEvents.map(event => <EventCard key={event.id} event={event} />) : <NoResults />}
+                  {filteredEvents.length > 0 ? filteredEvents.map(event => <EventCard key={event.id} event={event} />) : <EmptyState title="No events found" />}
                 </TabsContent>
               </Tabs>
             </motion.div>
@@ -202,10 +205,7 @@ const Explore = () => {
                     ))}
                   </div>
                 ) : trendingPosts.length === 0 ? (
-                  <Card className="p-6 text-center text-muted-foreground">
-                    <TrendingUp className="w-10 h-10 mx-auto mb-2 opacity-40" />
-                    <p className="text-sm">No trending posts yet. Be the first to create one!</p>
-                  </Card>
+                  <EmptyState icon={TrendingUp} title="No trending posts yet" description="Be the first to create one!" />
                 ) : (
                   <div className="space-y-3">
                     {trendingPosts.map((post, index) => (
@@ -294,12 +294,6 @@ const EventCard = ({ event }: { event: typeof mockEvents[0] }) => (
     </div>
     <Button size="sm" variant="outline" className="shrink-0">Interested</Button>
   </Card>
-);
-
-const NoResults = () => (
-  <div className="text-center py-8 text-muted-foreground">
-    <p className="text-sm">No results in this category</p>
-  </div>
 );
 
 export default Explore;

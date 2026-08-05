@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, X, Reply, ChevronRight, Filter, Pin, CheckSquare, User, Archive, Ban, Star, Inbox, MailOpen, Flag, AlertTriangle } from "lucide-react";
+import { Search, Send, MoreVertical, Phone, Video, Paperclip, FileText, Trash2, X, Reply, ChevronRight, Filter, Pin, CheckSquare, User, Archive, Ban, Star, Inbox, MailOpen, Flag, AlertTriangle, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -21,6 +21,7 @@ import {
 
 import { toast } from "@/hooks/use-toast";
 import { useUnreadMessages } from "@/contexts/UnreadMessagesContext";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface Conversation {
   id: number;
@@ -29,6 +30,8 @@ interface Conversation {
   lastMessage: string;
   time: string;
   unread?: number;
+  online: boolean;
+  lastSeen?: string;
 }
 
 interface Message {
@@ -36,6 +39,9 @@ interface Message {
   sender: "user" | "other";
   content: string;
   time: string;
+  image?: string;
+  status?: "sent" | "delivered" | "seen";
+  dateLabel?: string;
   replyTo?: {
     content: string;
     sender: string;
@@ -50,6 +56,7 @@ const conversations: Conversation[] = [
     lastMessage: "Hey! How's your project going?",
     time: "2m ago",
     unread: 2,
+    online: true,
   },
   {
     id: 2,
@@ -57,6 +64,8 @@ const conversations: Conversation[] = [
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
     lastMessage: "Thanks for the help yesterday!",
     time: "1h ago",
+    online: false,
+    lastSeen: "Last seen 2 minutes ago",
   },
   {
     id: 3,
@@ -64,6 +73,7 @@ const conversations: Conversation[] = [
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
     lastMessage: "Let's catch up this weekend",
     time: "3h ago",
+    online: true,
   },
   {
     id: 4,
@@ -71,6 +81,8 @@ const conversations: Conversation[] = [
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jake",
     lastMessage: "Check out this link!",
     time: "5h ago",
+    online: false,
+    lastSeen: "Offline",
   },
 ];
 
@@ -80,12 +92,14 @@ const initialMessages: Message[] = [
     sender: "other",
     content: "Hey! How's your project going?",
     time: "10:30 AM",
+    dateLabel: "Today",
   },
   {
     id: 2,
     sender: "user",
     content: "It's going great! Just finished the main features.",
     time: "10:32 AM",
+    status: "seen",
   },
   {
     id: 3,
@@ -98,6 +112,7 @@ const initialMessages: Message[] = [
     sender: "user",
     content: "Sure! I'll share the demo link soon.",
     time: "10:35 AM",
+    status: "delivered",
   },
 ];
 
@@ -143,6 +158,7 @@ const Messages = () => {
         sender: "user",
         content: messageInput,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        status: "sent",
         ...(replyingTo && {
           replyTo: {
             content: replyingTo.content,
@@ -328,10 +344,7 @@ const Messages = () => {
                         {isSelected && <CheckSquare className="w-3 h-3 text-primary-foreground" />}
                       </div>
                     )}
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage src={conversation.avatar} />
-                      <AvatarFallback>{conversation.user[0]}</AvatarFallback>
-                    </Avatar>
+                    <div className="relative shrink-0"><Avatar className="w-12 h-12"><AvatarImage src={conversation.avatar} /><AvatarFallback>{conversation.user[0]}</AvatarFallback></Avatar><span className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-card ${conversation.online ? "bg-green-500" : "bg-muted-foreground"}`} /></div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
                         <h3 className="font-semibold text-foreground truncate flex items-center gap-1">
@@ -356,6 +369,9 @@ const Messages = () => {
                   </motion.div>
                   );
                 })}
+                {conversations.filter(c => activeFilter === "archived" ? archived.includes(c.id) : activeFilter === "unread" ? !!c.unread : activeFilter === "favorites" ? favorites.includes(c.id) : !archived.includes(c.id)).length === 0 && (
+                  <EmptyState className="py-10" icon={MessageCircle} title="No conversations yet" description="Start chatting with people after connecting with them." actionLabel="Explore Users" onAction={() => navigate("/people-suggestions")} />
+                )}
               </div>
             </ScrollArea>
           </div>
@@ -377,15 +393,12 @@ const Messages = () => {
                 >
                   <span className="text-xl">←</span>
                 </Button>
-                <Avatar className="w-10 h-10">
-                  <AvatarImage src={selectedUser?.avatar} />
-                  <AvatarFallback>{selectedUser?.user[0]}</AvatarFallback>
-                </Avatar>
+                <div className="relative"><Avatar className="w-10 h-10"><AvatarImage src={selectedUser?.avatar} /><AvatarFallback>{selectedUser?.user[0]}</AvatarFallback></Avatar><span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-card ${selectedUser?.online ? "bg-green-500" : "bg-muted-foreground"}`} /></div>
                 <div>
                   <h3 className="font-semibold text-foreground">
                     {selectedUser?.user}
                   </h3>
-                  <p className="text-xs text-muted-foreground">Active now</p>
+                   <p className="text-xs text-muted-foreground">{selectedUser?.online ? "Online" : selectedUser?.lastSeen || "Offline"}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -424,12 +437,12 @@ const Messages = () => {
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4 max-w-3xl mx-auto">
                 {messages.map((message) => (
-                  <MessageBubble
-                    key={message.id}
-                    message={message}
-                    onReply={handleReply}
-                  />
+                  <div key={message.id}>
+                    {message.dateLabel && <div className="my-4 flex items-center gap-3"><div className="h-px flex-1 bg-border" /><span className="text-xs font-medium text-muted-foreground">{message.dateLabel}</span><div className="h-px flex-1 bg-border" /></div>}
+                    <MessageBubble message={message} onReply={handleReply} />
+                  </div>
                 ))}
+                {selectedUser?.online && <div className="flex items-center gap-2 px-2 text-xs text-muted-foreground"><span>{selectedUser.user} is typing</span><span className="flex gap-1" aria-label="Typing"><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:-0.3s]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:-0.15s]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground" /></span></div>}
               </div>
             </ScrollArea>
 
@@ -489,8 +502,8 @@ const Messages = () => {
                       transition={{ duration: 0.2 }}
                       className="flex items-center gap-1 overflow-hidden flex-shrink-0"
                     >
-                      <label className="cursor-pointer flex-shrink-0">
-                        <input type="file" accept="*/*" className="hidden" />
+                       <label className="cursor-pointer flex-shrink-0">
+                         <input type="file" accept="image/*" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; setMessages(prev => [...prev, { id: Date.now(), sender: "user", content: "", image: URL.createObjectURL(file), time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), status: "sent" }]); }} />
                         <div className="h-9 w-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors">
                           <Paperclip className="w-5 h-5 text-muted-foreground" />
                         </div>

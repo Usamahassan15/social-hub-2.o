@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bookmark } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface SavedPostsDialogProps {
   isOpen: boolean;
@@ -23,13 +24,11 @@ const SavedPostsDialog = ({ isOpen, onClose }: SavedPostsDialogProps) => {
         
         <ScrollArea className="h-full max-h-[60vh]">
           {savedPosts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <Bookmark className="w-16 h-16 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No saved posts yet</h3>
-              <p className="text-sm text-muted-foreground">
-                Posts you save will appear here
-              </p>
-            </div>
+            <EmptyState
+              icon={Bookmark}
+              title="No saved posts yet"
+              description="Posts you save will appear here for quick access later."
+            />
           ) : (
             <div className="space-y-4">
               {savedPosts.map((post) => (
