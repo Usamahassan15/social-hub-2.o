@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
-import { Reply, MoreVertical, Copy, Forward, Trash2 } from "lucide-react";
+import { Reply, MoreVertical, Copy, Forward, Trash2, Check, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +14,8 @@ interface Message {
   sender: "user" | "other";
   content: string;
   time: string;
+  image?: string;
+  status?: "sent" | "delivered" | "seen";
   replyTo?: {
     content: string;
     sender: string;
@@ -138,14 +140,18 @@ const MessageBubble = ({ message, onReply, onDelete }: MessageBubbleProps) => {
           </div>
         )}
         
-        <p className="text-sm">{message.content}</p>
-        <p
-          className={`text-xs mt-1 ${
+        {message.image && <img src={message.image} alt="Shared in conversation" className="mb-2 max-h-72 w-full rounded-lg object-cover" />}
+        {message.content && <p className="text-sm">{message.content}</p>}
+        <div
+          className={`text-xs mt-1 flex items-center justify-end gap-1 ${
             isUser ? "text-primary-foreground/70" : "text-muted-foreground"
           }`}
         >
-          {message.time}
-        </p>
+          <span>{message.time}</span>
+          {isUser && message.status === "sent" && <Check className="h-3.5 w-3.5" aria-label="Sent" />}
+          {isUser && message.status === "delivered" && <CheckCheck className="h-3.5 w-3.5" aria-label="Delivered" />}
+          {isUser && message.status === "seen" && <CheckCheck className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} aria-label="Seen" />}
+        </div>
       </motion.div>
     </div>
   );

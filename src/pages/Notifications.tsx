@@ -1,4 +1,4 @@
-import { Bell, Heart, MessageCircle, UserPlus, Share2, Briefcase } from "lucide-react";
+import { Bell, Heart, MessageCircle, UserPlus, Share2, Briefcase, AtSign } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -79,7 +79,6 @@ const NotificationIcon = ({ type }: { type: string }) => {
 export default function Notifications() {
   const navigate = useNavigate();
 
-  // Redirect to home on desktop - notifications are in dropdown
   useEffect(() => {
     const checkScreenSize = () => {
       if (window.innerWidth >= 768) {
@@ -91,6 +90,8 @@ export default function Notifications() {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, [navigate]);
 
+  const unreadNotifications = notifications.filter(n => n.unread);
+
   return (
     <div className="flex min-h-screen bg-background md:hidden">
       <Sidebar />
@@ -98,7 +99,6 @@ export default function Notifications() {
       
       <main className="flex-1 pb-16 pt-14">
         <div className="max-w-lg mx-auto px-2 sm:px-4 pt-4">
-          {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,7 +109,6 @@ export default function Notifications() {
             </h1>
           </motion.div>
 
-          {/* Tabs */}
           <Tabs defaultValue="all" className="mb-6">
             <TabsList className="w-full grid grid-cols-3 mb-4">
               <TabsTrigger value="all" className="text-sm">All</TabsTrigger>
@@ -118,86 +117,95 @@ export default function Notifications() {
             </TabsList>
 
             <TabsContent value="all" className="space-y-2 sm:space-y-3">
-              {notifications.map((notification, index) => (
-                <motion.div
-                  key={notification.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className={`p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer ${
-                    notification.unread ? 'bg-accent/30 border-primary/20' : ''
-                  }`}>
-                    <div className="flex items-start gap-3">
-                      <div className="relative">
-                        <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
-                          <AvatarImage src={notification.avatar} />
-                          <AvatarFallback>{notification.user[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 shadow-md">
-                          <NotificationIcon type={notification.type} />
+              {notifications.length > 0 ? (
+                notifications.map((notification, index) => (
+                  <motion.div
+                    key={notification.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className={`p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer ${
+                      notification.unread ? 'bg-accent/30 border-primary/20' : ''
+                    }`}>
+                      <div className="flex items-start gap-3">
+                        <div className="relative">
+                          <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
+                            <AvatarImage src={notification.avatar} />
+                            <AvatarFallback>{notification.user[0]}</AvatarFallback>
+                          </Avatar>
+                          <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 shadow-md">
+                            <NotificationIcon type={notification.type} />
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm">
-                          <span className="font-semibold text-foreground">{notification.user}</span>
-                          {' '}
-                          <span className="text-muted-foreground">{notification.action}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
-                      </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm">
+                            <span className="font-semibold text-foreground">{notification.user}</span>
+                            {' '}
+                            <span className="text-muted-foreground">{notification.action}</span>
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                        </div>
 
-                      {notification.unread && (
-                        <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2" />
-                      )}
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
+                        {notification.unread && (
+                          <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2" />
+                        )}
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))
+              ) : (
+                <EmptyState icon={Bell} title="No notifications yet" description="Stay tuned for updates and interactions." />
+              )}
             </TabsContent>
 
             <TabsContent value="unread" className="space-y-2 sm:space-y-3">
-              {notifications.filter(n => n.unread).map((notification, index) => (
-                <motion.div
-                  key={notification.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="p-3 sm:p-4 bg-accent/30 border-primary/20 hover:shadow-md transition-all cursor-pointer">
-                    <div className="flex items-start gap-3">
-                      <div className="relative">
-                        <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
-                          <AvatarImage src={notification.avatar} />
-                          <AvatarFallback>{notification.user[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 shadow-md">
-                          <NotificationIcon type={notification.type} />
+              {unreadNotifications.length > 0 ? (
+                unreadNotifications.map((notification, index) => (
+                  <motion.div
+                    key={notification.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className="p-3 sm:p-4 bg-accent/30 border-primary/20 hover:shadow-md transition-all cursor-pointer">
+                      <div className="flex items-start gap-3">
+                        <div className="relative">
+                          <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
+                            <AvatarImage src={notification.avatar} />
+                            <AvatarFallback>{notification.user[0]}</AvatarFallback>
+                          </Avatar>
+                          <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 shadow-md">
+                            <NotificationIcon type={notification.type} />
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm">
-                          <span className="font-semibold text-foreground">{notification.user}</span>
-                          {' '}
-                          <span className="text-muted-foreground">{notification.action}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
-                      </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm">
+                            <span className="font-semibold text-foreground">{notification.user}</span>
+                            {' '}
+                            <span className="text-muted-foreground">{notification.action}</span>
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
+                        </div>
 
-                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2" />
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
+                        <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2" />
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))
+              ) : (
+                <EmptyState icon={Bell} title="All caught up!" description="You have no unread notifications." />
+              )}
             </TabsContent>
 
             <TabsContent value="mentions">
-              <Card className="p-8 text-center">
-                <Bell className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-                <p className="text-muted-foreground">No mentions yet</p>
-              </Card>
+              <EmptyState 
+                icon={AtSign} 
+                title="No mentions yet" 
+                description="When someone mentions you in a post or comment, it will appear here." 
+              />
             </TabsContent>
           </Tabs>
         </div>
