@@ -370,7 +370,7 @@ const Messages = () => {
                   );
                 })}
                 {conversations.filter(c => activeFilter === "archived" ? archived.includes(c.id) : activeFilter === "unread" ? !!c.unread : activeFilter === "favorites" ? favorites.includes(c.id) : !archived.includes(c.id)).length === 0 && (
-                  <EmptyState compact icon={MessageCircle} title="No conversations yet" description="Start chatting with people after connecting with them." actionLabel="Explore Users" onAction={() => navigate("/people-suggestions")} />
+                  <EmptyState className="py-10" icon={MessageCircle} title="No conversations yet" description="Start chatting with people after connecting with them." actionLabel="Explore Users" onAction={() => navigate("/people-suggestions")} />
                 )}
               </div>
             </ScrollArea>
