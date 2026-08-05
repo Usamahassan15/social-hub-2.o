@@ -419,6 +419,7 @@ export default function Services() {
                 </Card>
               </motion.div>
             ))}
+          </div>
           )}
         </div>
       </main>
