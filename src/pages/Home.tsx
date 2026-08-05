@@ -13,6 +13,8 @@ import LivePost from "@/components/LivePost";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useFeed } from "@/hooks/use-feed";
+import { Layout } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const SUGGESTED_POSTS = [
@@ -227,7 +229,7 @@ const Home = () => {
 
             {!isLoading && feedPosts.length === 0 && (
               <div className="py-12">
-                <p className="text-center text-muted-foreground">No posts found.</p>
+                <EmptyState icon={Layout} title="No posts yet" description="Follow more people or explore categories to fill your feed." />
               </div>
             )}
             {feedPosts.map((post, index) => (

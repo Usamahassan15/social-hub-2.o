@@ -332,6 +332,18 @@ export default function Services() {
             )}
           </motion.div>
 
+          {services.length === 0 ? (
+            <EmptyState
+              icon={Search}
+              title="No services found"
+              description="Try adjusting your search or filters to find what you are looking for."
+              actionLabel="Clear filters"
+              onAction={() => {
+                setSearchQuery("");
+                setSelectedCategory("All Categories");
+              }}
+            />
+          ) : (
           {/* Services Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 px-1 sm:px-0">
             {services.map((service, index) => (
@@ -408,6 +420,7 @@ export default function Services() {
             ))}
           </div>
         </div>
+          )}
       </main>
 
       <MobileNav />
