@@ -186,7 +186,7 @@ const Home = () => {
     }
   }, [feedType]);
 
-  const feedPosts = posts.length > 0 ? posts : filteredSuggested;
+  const feedPosts = posts.length > 0 ? posts : (isLoading ? [] : filteredSuggested);
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -217,6 +217,19 @@ const Home = () => {
 
           {/* Feed - render suggested posts immediately, replace when live data arrives */}
           <div className="space-y-3 sm:space-y-4">
+            {isLoading && posts.length === 0 && (
+              <div className="space-y-3 sm:space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <FeedSkeleton key={i} />
+                ))}
+              </div>
+            )}
+
+            {!isLoading && feedPosts.length === 0 && (
+              <div className="py-12">
+                <p className="text-center text-muted-foreground">No posts found.</p>
+              </div>
+            )}
             {feedPosts.map((post, index) => (
               <React.Fragment key={post.id}>
                 {index === 3 && <PeopleYouMayKnow />}
