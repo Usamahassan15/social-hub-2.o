@@ -346,7 +346,6 @@ export default function Services() {
               }}
             />
           ) : (
-          {/* Services Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 px-1 sm:px-0">
             {services.map((service, index) => (
               <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}>
@@ -420,10 +419,8 @@ export default function Services() {
                 </Card>
               </motion.div>
             ))}
-          </div>
-          {services.length === 0 && <EmptyState icon={Search} title="No services found" description="Try another keyword or category." actionLabel="Clear filters" onAction={() => { setSearchQuery(""); setSelectedCategory("All Categories"); }} />}
-        </div>
           )}
+        </div>
       </main>
 
       <MobileNav />
