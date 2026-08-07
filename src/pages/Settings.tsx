@@ -265,8 +265,36 @@ export default function Settings() {
                     <h3 className="font-semibold text-sm sm:text-base text-foreground">Alex Johnson</h3>
                     <p className="text-xs sm:text-sm text-muted-foreground">alex.johnson@email.com</p>
                   </div>
-                  <Button variant="outline" size="sm" className="w-full sm:w-auto">Edit Profile</Button>
+                  <Button variant="outline" size="sm" className="w-full sm:w-auto" onClick={() => navigate("/profile")}>Edit Profile</Button>
                 </div>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowEmailDialog(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm sm:text-base text-foreground">Email</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{emailValue}</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowPhoneDialog(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm sm:text-base text-foreground">Phone</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{phoneValue || "Not added"}</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
               </CardContent>
             </Card>
 
