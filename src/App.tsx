@@ -29,6 +29,11 @@ import UserProfile from "./pages/UserProfile";
 import AdminModeration from "./pages/AdminModeration";
 import Transport from "./pages/Transport";
 import DriverMode from "./pages/DriverMode";
+import PostDetail from "./pages/PostDetail";
+import Wallet from "./pages/Wallet";
+import ReportCenter from "./pages/ReportCenter";
+import TwoFactor from "./pages/TwoFactor";
+
 
 const queryClient = new QueryClient();
 

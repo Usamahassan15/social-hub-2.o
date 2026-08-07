@@ -307,7 +307,7 @@ export default function Settings() {
                 </div>
                 <CardDescription className="text-xs sm:text-sm">Customize how the app looks</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="dark-mode" className="text-sm sm:text-base">Dark Mode</Label>
@@ -319,6 +319,59 @@ export default function Settings() {
                     onCheckedChange={handleDarkModeToggle}
                   />
                 </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base">Theme</Label>
+                  <RadioGroup
+                    value={appearanceMode}
+                    onValueChange={(v) => handleAppearanceModeChange(v as "light" | "dark" | "system")}
+                    className="flex flex-col sm:flex-row gap-3 pt-1"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="light" id="theme-light" />
+                      <Label htmlFor="theme-light" className="text-sm font-normal cursor-pointer">Light</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="dark" id="theme-dark" />
+                      <Label htmlFor="theme-dark" className="text-sm font-normal cursor-pointer">Dark</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="system" id="theme-system" />
+                      <Label htmlFor="theme-system" className="text-sm font-normal cursor-pointer">System Default</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Language */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Language</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">Choose your preferred language</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Select
+                  value={language}
+                  onValueChange={(v) => {
+                    setLanguage(v);
+                    toast({ title: "Language updated" });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="ur">اردو</SelectItem>
+                    <SelectItem value="ar">العربية</SelectItem>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                  </SelectContent>
+                </Select>
               </CardContent>
             </Card>
 
