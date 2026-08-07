@@ -12,6 +12,11 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 import { 
   User, 
   Bell, 
@@ -28,7 +33,18 @@ import {
   Ban,
   ChevronRight,
   Share2,
-  Volume2
+  Volume2,
+  Mail,
+  Phone,
+  ShieldCheck,
+  Smartphone,
+  Activity,
+  Globe,
+  FileText,
+  Info,
+  MessageCircle,
+  Users2,
+  Eye
 } from "lucide-react";
 import {
   AlertDialog,
@@ -71,10 +87,57 @@ export default function Settings() {
     allowMessages: true,
     privateAccount: false,
   });
+  const [messagePermission, setMessagePermission] = useState("everyone");
+  const [followPermission, setFollowPermission] = useState("everyone");
+  const [postsVisibility, setPostsVisibility] = useState("everyone");
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showPhoneDialog, setShowPhoneDialog] = useState(false);
+  const [emailValue, setEmailValue] = useState("alex.johnson@email.com");
+  const [phoneValue, setPhoneValue] = useState("");
+  const [showLoginDevices, setShowLoginDevices] = useState(false);
+  const [showSecurityActivity, setShowSecurityActivity] = useState(false);
+  const [showHelpCenter, setShowHelpCenter] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(true);
+  const [notifExtra, setNotifExtra] = useState({
+    services: true,
+    transport: true,
+  });
+  const [appearanceMode, setAppearanceMode] = useState<"light" | "dark" | "system">("light");
+  const [language, setLanguage] = useState("en");
+  const [devices, setDevices] = useState([
+    { id: 1, name: "iPhone 14 Pro", location: "San Francisco, CA", current: true },
+    { id: 2, name: "Chrome on Windows", location: "New York, NY", current: false },
+    { id: 3, name: "iPad Air", location: "Los Angeles, CA", current: false },
+  ]);
+  const securityActivity = [
+    { id: 1, action: "Signed in from new device", time: "2 hours ago" },
+    { id: 2, action: "Password changed", time: "3 days ago" },
+    { id: 3, action: "Signed in from Chrome on Windows", time: "1 week ago" },
+  ];
 
   const handleDarkModeToggle = (checked: boolean) => {
     setDarkMode(checked);
     document.documentElement.classList.toggle('dark', checked);
+  };
+
+  const handleAppearanceModeChange = (mode: "light" | "dark" | "system") => {
+    setAppearanceMode(mode);
+    if (mode === "light") {
+      handleDarkModeToggle(false);
+    } else if (mode === "dark") {
+      handleDarkModeToggle(true);
+    } else {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      handleDarkModeToggle(prefersDark);
+    }
+  };
+
+  const handleRemoveDevice = (id: number) => {
+    setDevices((prev) => prev.filter((d) => d.id !== id));
+    toast({ title: "Logged out from device" });
   };
 
   const handleLogout = async () => {
