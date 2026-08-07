@@ -45,6 +45,11 @@ export default function ServiceBookingFlow({ service, open, onOpenChange, onMess
   const optionMultiplier = option === "Premium" ? 1.5 : option === "Custom" ? 1.25 : 1;
   const subtotal = Math.round(basePrice * optionMultiplier);
   const platformFee = Math.round(subtotal * 0.08);
+  const promoCode = promo.trim().toUpperCase();
+  const discount = promoCode === "SAVE10" ? Math.round(subtotal * 0.1) : promoCode === "FLAT5" ? 5 : 0;
+  const total = Math.max(0, subtotal + platformFee - discount);
+  const bookingId = useMemo(() => `BK-${Math.random().toString(36).slice(2, 7).toUpperCase()}`, [step === "success"]);
+
 
   if (!service) return null;
 
