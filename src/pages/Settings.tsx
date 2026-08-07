@@ -581,6 +581,57 @@ export default function Settings() {
                   </motion.div>
                 )}
                 <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Who can message me</Label>
+                  <Select value={messagePermission} onValueChange={setMessagePermission}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="everyone">Everyone</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="nobody">Nobody</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base flex items-center gap-2"><Users2 className="w-4 h-4" /> Who can follow me</Label>
+                  <Select value={followPermission} onValueChange={setFollowPermission}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="everyone">Everyone</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="nobody">Nobody</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base flex items-center gap-2"><Eye className="w-4 h-4" /> Who can see my posts</Label>
+                  <Select value={postsVisibility} onValueChange={setPostsVisibility}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="everyone">Everyone</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="nobody">Nobody</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator />
+                <Button 
+                  variant="outline" 
+                  className="w-full gap-2 h-10 sm:h-11 text-sm sm:text-base"
+                  onClick={() => setShowBlockedPeople(true)}
+                >
+                  <Ban className="w-4 h-4" />
+                  Blocked Users
+                </Button>
+                <Separator />
                 <Button 
                   variant="outline" 
                   className="w-full gap-2 h-10 sm:h-11 text-sm sm:text-base"
@@ -589,6 +640,107 @@ export default function Settings() {
                   <Lock className="w-4 h-4" />
                   Change Password
                 </Button>
+              </CardContent>
+            </Card>
+
+            {/* Security */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Security</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">Keep your account secure</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => navigate("/two-factor")}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Two-Factor Authentication</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowLoginDevices(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Login Devices</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowSecurityActivity(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Security Activity</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </CardContent>
+            </Card>
+
+            {/* Other */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <Info className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Other</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">More info & support</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowSupport(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <HeadphonesIcon className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Help Center</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowTerms(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Terms of Service</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowPrivacyPolicy(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Privacy Policy</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowAbout(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Info className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">About</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
               </CardContent>
             </Card>
 
