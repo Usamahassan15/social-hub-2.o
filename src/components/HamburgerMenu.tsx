@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, LayoutDashboard, LogOut, Settings, Car } from "lucide-react";
+import { Heart, UserPlus, Bookmark, HeadphonesIcon, Ban, LayoutDashboard, LogOut, Settings, Car, Wallet, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
@@ -56,6 +56,22 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       },
     },
     {
+      icon: Wallet,
+      label: "Wallet",
+      onClick: () => {
+        navigate("/wallet");
+        onClose();
+      },
+    },
+    {
+      icon: Flag,
+      label: "Report Center",
+      onClick: () => {
+        navigate("/report-center");
+        onClose();
+      },
+    },
+    {
       icon: Car,
       label: "Transport",
       onClick: () => {
@@ -63,6 +79,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
         onClose();
       },
     },
+
     {
       icon: HeadphonesIcon,
       label: "Support",

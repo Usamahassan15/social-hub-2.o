@@ -1,6 +1,6 @@
-import { Calendar, MapPin, Link as LinkIcon, Camera, Edit, Plus, Settings, Image, Type, Briefcase, Users } from "lucide-react";
+import { Calendar, MapPin, Link as LinkIcon, Camera, Edit, Plus, Settings, Image, Type, Briefcase, Users, BadgeCheck, Share2, Bookmark, Grid3x3 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "@/components/Sidebar";
 import MobileNav from "@/components/MobileNav";
@@ -11,10 +11,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EmptyState } from "@/components/ui/empty-state";
 import { toast } from "@/hooks/use-toast";
 import WorkProfile from "@/components/profile/WorkProfile";
 import SocialProfile from "@/components/profile/SocialProfile";
 import FollowersFollowingDialog from "@/components/FollowersFollowingDialog";
+import ShareProfileModal from "@/components/ShareProfileModal";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -28,6 +32,15 @@ export default function Profile() {
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [isCoverPreviewOpen, setIsCoverPreviewOpen] = useState(false);
   const [connectionsTab, setConnectionsTab] = useState<"followers" | "following" | null>(null);
+  const [isShareProfileOpen, setIsShareProfileOpen] = useState(false);
+  const [contentTab, setContentTab] = useState<"posts" | "saved">("posts");
+  const [isLoading, setIsLoading] = useState(true);
+  const isVerified = true;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, []);
   
   const [profileData, setProfileData] = useState({
     name: "Alex Johnson",
@@ -129,6 +142,9 @@ export default function Profile() {
                 <Button variant="outline" size="sm" className="gap-2 flex-1 sm:flex-none h-9 sm:h-10" onClick={() => setIsStoryOptionsOpen(true)}>
                   <Plus className="w-3 h-3 sm:w-4 sm:h-4" /> Your Story
                 </Button>
+                <Button variant="outline" size="icon" className="h-9 w-9 sm:h-10 sm:w-10" onClick={() => setIsShareProfileOpen(true)}>
+                  <Share2 className="w-4 h-4" />
+                </Button>
                 <Button variant="outline" size="icon" className="h-9 w-9 sm:h-10 sm:w-10" onClick={() => navigate('/settings')}>
                   <Settings className="w-4 h-4" />
                 </Button>
@@ -137,7 +153,10 @@ export default function Profile() {
 
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-1">{profileData.name}</h1>
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground mb-1 flex items-center gap-1.5">
+                  {profileData.name}
+                  {isVerified && <BadgeCheck className="w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0" />}
+                </h1>
                 <p className="text-sm sm:text-base text-muted-foreground">{profileData.bio}</p>
               </div>
               <div className="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
@@ -153,30 +172,67 @@ export default function Profile() {
             </div>
           </motion.div>
 
-          {/* Work / Social Toggle */}
-          <div className="px-3 sm:px-4 md:px-6 mb-4">
-            <div className="flex rounded-xl bg-muted p-1 gap-1">
-              <button onClick={() => setProfileMode("social")}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${profileMode === "social" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
-                <Users className="w-4 h-4" /> Social
-              </button>
-              <button onClick={() => setProfileMode("work")}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${profileMode === "work" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
-                <Briefcase className="w-4 h-4" /> Work
-              </button>
+          {isLoading ? (
+            <div className="px-3 sm:px-4 md:px-6 space-y-3">
+              <Skeleton className="h-10 w-full rounded-xl" />
+              <Skeleton className="h-40 w-full rounded-xl" />
+              <Skeleton className="h-40 w-full rounded-xl" />
             </div>
-          </div>
+          ) : (
+            <>
+              {/* Work / Social Toggle */}
+              <div className="px-3 sm:px-4 md:px-6 mb-4">
+                <div className="flex rounded-xl bg-muted p-1 gap-1">
+                  <button onClick={() => setProfileMode("social")}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${profileMode === "social" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
+                    <Users className="w-4 h-4" /> Social
+                  </button>
+                  <button onClick={() => setProfileMode("work")}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${profileMode === "work" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}>
+                    <Briefcase className="w-4 h-4" /> Work
+                  </button>
+                </div>
+              </div>
 
-          {/* Dynamic Content */}
-          <div className="px-0 sm:px-4 md:px-6 lg:px-0">
-            <div className="w-full max-w-[560px]">
-              <AnimatePresence mode="wait">
-                <motion.div key={profileMode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
-                  {profileMode === "social" ? <SocialProfile /> : <WorkProfile />}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
+              {profileMode === "social" && (
+                <div className="px-3 sm:px-4 md:px-6 mb-4">
+                  <Tabs value={contentTab} onValueChange={(v) => setContentTab(v as "posts" | "saved")} className="w-full">
+                    <TabsList className="w-full grid grid-cols-2">
+                      <TabsTrigger value="posts" className="gap-2">
+                        <Grid3x3 className="w-4 h-4" /> User Posts
+                      </TabsTrigger>
+                      <TabsTrigger value="saved" className="gap-2">
+                        <Bookmark className="w-4 h-4" /> Saved Posts
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+              )}
+
+              {/* Dynamic Content */}
+              <div className="px-0 sm:px-4 md:px-6 lg:px-0">
+                <div className="w-full max-w-[560px]">
+                  <AnimatePresence mode="wait">
+                    <motion.div key={`${profileMode}-${contentTab}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
+                      {profileMode === "work" ? (
+                        <WorkProfile />
+                      ) : contentTab === "saved" ? (
+                        <div className="px-3 sm:px-0">
+                          <EmptyState
+                            icon={Bookmark}
+                            title="No saved posts"
+                            description="Posts you save will appear here for quick access later."
+                          />
+                        </div>
+                      ) : (
+                        <SocialProfile />
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </main>
 
@@ -187,6 +243,8 @@ export default function Profile() {
         onClose={() => setConnectionsTab(null)}
         initialTab={connectionsTab ?? "followers"}
       />
+
+      <ShareProfileModal isOpen={isShareProfileOpen} onClose={() => setIsShareProfileOpen(false)} />
 
       {/* Cover Photo Preview Dialog */}
       <Dialog open={isCoverPreviewOpen} onOpenChange={(open) => !open && cancelCoverPreview()}>

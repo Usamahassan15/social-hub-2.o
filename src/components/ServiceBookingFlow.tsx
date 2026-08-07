@@ -45,6 +45,11 @@ export default function ServiceBookingFlow({ service, open, onOpenChange, onMess
   const optionMultiplier = option === "Premium" ? 1.5 : option === "Custom" ? 1.25 : 1;
   const subtotal = Math.round(basePrice * optionMultiplier);
   const platformFee = Math.round(subtotal * 0.08);
+  const promoCode = promo.trim().toUpperCase();
+  const discount = promoCode === "SAVE10" ? Math.round(subtotal * 0.1) : promoCode === "FLAT5" ? 5 : 0;
+  const total = Math.max(0, subtotal + platformFee - discount);
+  const bookingId = useMemo(() => `BK-${Math.random().toString(36).slice(2, 7).toUpperCase()}`, [step === "success"]);
+
 
   if (!service) return null;
 
@@ -98,7 +103,8 @@ export default function ServiceBookingFlow({ service, open, onOpenChange, onMess
                 <div className="flex justify-between"><dt className="text-muted-foreground">Selected Time</dt><dd>{time}</dd></div>
                 <div className="flex justify-between"><dt className="text-muted-foreground">Service price</dt><dd>${subtotal}</dd></div>
                 <div className="flex justify-between"><dt className="text-muted-foreground">Platform fee</dt><dd>${platformFee}</dd></div>
-                <div className="flex justify-between border-t border-border pt-3 text-base font-bold"><dt>Total</dt><dd className="text-primary">${subtotal + platformFee}</dd></div>
+                <div className="flex justify-between"><dt className="text-muted-foreground">Discount{discount > 0 ? ` (${promoCode})` : ""}</dt><dd>{discount > 0 ? `-$${discount}` : "$0"}</dd></div>
+                <div className="flex justify-between border-t border-border pt-3 text-base font-bold"><dt>Total</dt><dd className="text-primary">${total}</dd></div>
               </dl>
               <div className="mt-6 flex gap-3"><Button variant="outline" className="flex-1" onClick={() => setStep("form")}>Back</Button><Button className="flex-1" onClick={() => setStep("success")}>Confirm Booking</Button></div>
             </motion.div>
@@ -107,8 +113,15 @@ export default function ServiceBookingFlow({ service, open, onOpenChange, onMess
             <motion.div key="success" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="py-6 text-center">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", delay: 0.1 }} className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary/10"><CheckCircle2 className="h-12 w-12 text-primary" /></motion.div>
               <h2 className="mt-5 text-2xl font-bold">Booking Confirmed</h2><p className="mx-auto mt-2 max-w-sm text-muted-foreground">Your booking request has been sent successfully.</p>
+              <div className="mx-auto mt-5 max-w-sm divide-y divide-border rounded-xl border border-border text-left">
+                <div className="flex items-center justify-between px-4 py-2.5"><span className="text-sm text-muted-foreground">Booking ID</span><span className="text-sm font-medium">{bookingId}</span></div>
+                <div className="flex items-center justify-between px-4 py-2.5"><span className="text-sm text-muted-foreground">Date</span><span className="text-sm font-medium">{date ? format(date, "PPP") : "—"}</span></div>
+                <div className="flex items-center justify-between px-4 py-2.5"><span className="text-sm text-muted-foreground">Time</span><span className="text-sm font-medium">{time || "—"}</span></div>
+                <div className="flex items-center justify-between px-4 py-2.5"><span className="text-sm text-muted-foreground">Provider</span><span className="text-sm font-medium">{service.provider}</span></div>
+              </div>
               <div className="mt-7 space-y-2"><Button className="w-full" onClick={onMessage}><MessageCircle className="mr-2 h-4 w-4" />Message Provider</Button><Button variant="outline" className="w-full" onClick={resetAndClose}>View Booking</Button><Button variant="ghost" className="w-full" onClick={resetAndClose}>Back to Home</Button></div>
             </motion.div>
+
           )}
         </AnimatePresence>
       </DialogContent>

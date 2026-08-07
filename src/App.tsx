@@ -29,6 +29,11 @@ import UserProfile from "./pages/UserProfile";
 import AdminModeration from "./pages/AdminModeration";
 import Transport from "./pages/Transport";
 import DriverMode from "./pages/DriverMode";
+import PostDetail from "./pages/PostDetail";
+import Wallet from "./pages/Wallet";
+import ReportCenter from "./pages/ReportCenter";
+import TwoFactor from "./pages/TwoFactor";
+
 
 const queryClient = new QueryClient();
 
@@ -65,6 +70,11 @@ const App = () => (
               <Route path="/admin/moderation" element={protect(<AdminModeration />)} />
               <Route path="/transport" element={protect(<Transport />)} />
               <Route path="/driver" element={protect(<DriverMode />)} />
+              <Route path="/post/:id" element={protect(<PostDetail />)} />
+              <Route path="/wallet" element={protect(<Wallet />)} />
+              <Route path="/report-center" element={protect(<ReportCenter />)} />
+              <Route path="/two-factor" element={protect(<TwoFactor />)} />
+
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

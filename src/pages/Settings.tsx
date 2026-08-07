@@ -12,6 +12,11 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 import { 
   User, 
   Bell, 
@@ -28,7 +33,18 @@ import {
   Ban,
   ChevronRight,
   Share2,
-  Volume2
+  Volume2,
+  Mail,
+  Phone,
+  ShieldCheck,
+  Smartphone,
+  Activity,
+  Globe,
+  FileText,
+  Info,
+  MessageCircle,
+  Users2,
+  Eye
 } from "lucide-react";
 import {
   AlertDialog,
@@ -71,10 +87,57 @@ export default function Settings() {
     allowMessages: true,
     privateAccount: false,
   });
+  const [messagePermission, setMessagePermission] = useState("everyone");
+  const [followPermission, setFollowPermission] = useState("everyone");
+  const [postsVisibility, setPostsVisibility] = useState("everyone");
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showPhoneDialog, setShowPhoneDialog] = useState(false);
+  const [emailValue, setEmailValue] = useState("alex.johnson@email.com");
+  const [phoneValue, setPhoneValue] = useState("");
+  const [showLoginDevices, setShowLoginDevices] = useState(false);
+  const [showSecurityActivity, setShowSecurityActivity] = useState(false);
+  const [showHelpCenter, setShowHelpCenter] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(true);
+  const [notifExtra, setNotifExtra] = useState({
+    services: true,
+    transport: true,
+  });
+  const [appearanceMode, setAppearanceMode] = useState<"light" | "dark" | "system">("light");
+  const [language, setLanguage] = useState("en");
+  const [devices, setDevices] = useState([
+    { id: 1, name: "iPhone 14 Pro", location: "San Francisco, CA", current: true },
+    { id: 2, name: "Chrome on Windows", location: "New York, NY", current: false },
+    { id: 3, name: "iPad Air", location: "Los Angeles, CA", current: false },
+  ]);
+  const securityActivity = [
+    { id: 1, action: "Signed in from new device", time: "2 hours ago" },
+    { id: 2, action: "Password changed", time: "3 days ago" },
+    { id: 3, action: "Signed in from Chrome on Windows", time: "1 week ago" },
+  ];
 
   const handleDarkModeToggle = (checked: boolean) => {
     setDarkMode(checked);
     document.documentElement.classList.toggle('dark', checked);
+  };
+
+  const handleAppearanceModeChange = (mode: "light" | "dark" | "system") => {
+    setAppearanceMode(mode);
+    if (mode === "light") {
+      handleDarkModeToggle(false);
+    } else if (mode === "dark") {
+      handleDarkModeToggle(true);
+    } else {
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      handleDarkModeToggle(prefersDark);
+    }
+  };
+
+  const handleRemoveDevice = (id: number) => {
+    setDevices((prev) => prev.filter((d) => d.id !== id));
+    toast({ title: "Logged out from device" });
   };
 
   const handleLogout = async () => {
@@ -202,8 +265,36 @@ export default function Settings() {
                     <h3 className="font-semibold text-sm sm:text-base text-foreground">Alex Johnson</h3>
                     <p className="text-xs sm:text-sm text-muted-foreground">alex.johnson@email.com</p>
                   </div>
-                  <Button variant="outline" size="sm" className="w-full sm:w-auto">Edit Profile</Button>
+                  <Button variant="outline" size="sm" className="w-full sm:w-auto" onClick={() => navigate("/profile")}>Edit Profile</Button>
                 </div>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowEmailDialog(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm sm:text-base text-foreground">Email</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{emailValue}</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowPhoneDialog(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm sm:text-base text-foreground">Phone</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{phoneValue || "Not added"}</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
               </CardContent>
             </Card>
 
@@ -216,7 +307,7 @@ export default function Settings() {
                 </div>
                 <CardDescription className="text-xs sm:text-sm">Customize how the app looks</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label htmlFor="dark-mode" className="text-sm sm:text-base">Dark Mode</Label>
@@ -228,6 +319,59 @@ export default function Settings() {
                     onCheckedChange={handleDarkModeToggle}
                   />
                 </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base">Theme</Label>
+                  <RadioGroup
+                    value={appearanceMode}
+                    onValueChange={(v) => handleAppearanceModeChange(v as "light" | "dark" | "system")}
+                    className="flex flex-col sm:flex-row gap-3 pt-1"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="light" id="theme-light" />
+                      <Label htmlFor="theme-light" className="text-sm font-normal cursor-pointer">Light</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="dark" id="theme-dark" />
+                      <Label htmlFor="theme-dark" className="text-sm font-normal cursor-pointer">Dark</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="system" id="theme-system" />
+                      <Label htmlFor="theme-system" className="text-sm font-normal cursor-pointer">System Default</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Language */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Language</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">Choose your preferred language</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Select
+                  value={language}
+                  onValueChange={(v) => {
+                    setLanguage(v);
+                    toast({ title: "Language updated" });
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="ur">اردو</SelectItem>
+                    <SelectItem value="ar">العربية</SelectItem>
+                    <SelectItem value="fr">Français</SelectItem>
+                    <SelectItem value="es">Español</SelectItem>
+                  </SelectContent>
+                </Select>
               </CardContent>
             </Card>
 
@@ -269,9 +413,22 @@ export default function Settings() {
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="notif-push" className="text-sm sm:text-base font-semibold">Push Notifications</Label>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Master switch for all notifications</p>
+                  </div>
+                  <Switch
+                    id="notif-push"
+                    checked={pushEnabled}
+                    onCheckedChange={setPushEnabled}
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
                   <Label htmlFor="notif-likes" className="text-sm sm:text-base">Likes</Label>
                   <Switch
                     id="notif-likes"
+                    disabled={!pushEnabled}
                     checked={notifications.likes}
                     onCheckedChange={(checked) => 
                       setNotifications({ ...notifications, likes: checked })
@@ -283,6 +440,7 @@ export default function Settings() {
                   <Label htmlFor="notif-comments" className="text-sm sm:text-base">Comments</Label>
                   <Switch
                     id="notif-comments"
+                    disabled={!pushEnabled}
                     checked={notifications.comments}
                     onCheckedChange={(checked) => 
                       setNotifications({ ...notifications, comments: checked })
@@ -291,9 +449,22 @@ export default function Settings() {
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="notif-follows" className="text-sm sm:text-base">New Follows</Label>
+                  <Label htmlFor="notif-messages" className="text-sm sm:text-base">Messages</Label>
+                  <Switch
+                    id="notif-messages"
+                    disabled={!pushEnabled}
+                    checked={notifications.messages}
+                    onCheckedChange={(checked) => 
+                      setNotifications({ ...notifications, messages: checked })
+                    }
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-follows" className="text-sm sm:text-base">Followers</Label>
                   <Switch
                     id="notif-follows"
+                    disabled={!pushEnabled}
                     checked={notifications.follows}
                     onCheckedChange={(checked) => 
                       setNotifications({ ...notifications, follows: checked })
@@ -302,12 +473,25 @@ export default function Settings() {
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="notif-messages" className="text-sm sm:text-base">Messages</Label>
+                  <Label htmlFor="notif-services" className="text-sm sm:text-base">Services</Label>
                   <Switch
-                    id="notif-messages"
-                    checked={notifications.messages}
+                    id="notif-services"
+                    disabled={!pushEnabled}
+                    checked={notifExtra.services}
                     onCheckedChange={(checked) => 
-                      setNotifications({ ...notifications, messages: checked })
+                      setNotifExtra({ ...notifExtra, services: checked })
+                    }
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-transport" className="text-sm sm:text-base">Transport</Label>
+                  <Switch
+                    id="notif-transport"
+                    disabled={!pushEnabled}
+                    checked={notifExtra.transport}
+                    onCheckedChange={(checked) => 
+                      setNotifExtra({ ...notifExtra, transport: checked })
                     }
                   />
                 </div>
@@ -397,6 +581,57 @@ export default function Settings() {
                   </motion.div>
                 )}
                 <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Who can message me</Label>
+                  <Select value={messagePermission} onValueChange={setMessagePermission}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="everyone">Everyone</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="nobody">Nobody</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base flex items-center gap-2"><Users2 className="w-4 h-4" /> Who can follow me</Label>
+                  <Select value={followPermission} onValueChange={setFollowPermission}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="everyone">Everyone</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="nobody">Nobody</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator />
+                <div className="space-y-2">
+                  <Label className="text-sm sm:text-base flex items-center gap-2"><Eye className="w-4 h-4" /> Who can see my posts</Label>
+                  <Select value={postsVisibility} onValueChange={setPostsVisibility}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="everyone">Everyone</SelectItem>
+                      <SelectItem value="followers">Followers</SelectItem>
+                      <SelectItem value="nobody">Nobody</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Separator />
+                <Button 
+                  variant="outline" 
+                  className="w-full gap-2 h-10 sm:h-11 text-sm sm:text-base"
+                  onClick={() => setShowBlockedPeople(true)}
+                >
+                  <Ban className="w-4 h-4" />
+                  Blocked Users
+                </Button>
+                <Separator />
                 <Button 
                   variant="outline" 
                   className="w-full gap-2 h-10 sm:h-11 text-sm sm:text-base"
@@ -405,6 +640,107 @@ export default function Settings() {
                   <Lock className="w-4 h-4" />
                   Change Password
                 </Button>
+              </CardContent>
+            </Card>
+
+            {/* Security */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Security</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">Keep your account secure</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => navigate("/two-factor")}
+                >
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Two-Factor Authentication</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowLoginDevices(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Login Devices</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowSecurityActivity(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Security Activity</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </CardContent>
+            </Card>
+
+            {/* Other */}
+            <Card>
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex items-center gap-2">
+                  <Info className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                  <CardTitle className="text-base sm:text-lg">Other</CardTitle>
+                </div>
+                <CardDescription className="text-xs sm:text-sm">More info & support</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowSupport(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <HeadphonesIcon className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Help Center</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowTerms(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Terms of Service</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowPrivacyPolicy(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">Privacy Policy</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
+                <Separator />
+                <button
+                  className="w-full flex items-center justify-between py-2 text-left"
+                  onClick={() => setShowAbout(true)}
+                >
+                  <div className="flex items-center gap-2">
+                    <Info className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm sm:text-base text-foreground">About</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                </button>
               </CardContent>
             </Card>
 
@@ -474,6 +810,195 @@ export default function Settings() {
       <BlockedPeopleDialog isOpen={showBlockedPeople} onClose={() => setShowBlockedPeople(false)} />
       <ShareProfileModal isOpen={showShareProfile} onClose={() => setShowShareProfile(false)} />
       <SupportDialog isOpen={showSupport} onClose={() => setShowSupport(false)} />
+
+      {/* Email Dialog */}
+      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Change Email</DialogTitle>
+            <DialogDescription>Update the email address associated with your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="email-input">Email Address</Label>
+              <input
+                id="email-input"
+                type="email"
+                value={emailValue}
+                onChange={(e) => setEmailValue(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                setShowEmailDialog(false);
+                toast({ title: "Email updated successfully" });
+              }}
+            >
+              Save Email
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Phone Dialog */}
+      <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Change Phone Number</DialogTitle>
+            <DialogDescription>Update the phone number associated with your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="phone-input">Phone Number</Label>
+              <input
+                id="phone-input"
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                value={phoneValue}
+                onChange={(e) => setPhoneValue(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                setShowPhoneDialog(false);
+                toast({ title: "Phone number updated successfully" });
+              }}
+            >
+              Save Phone
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Login Devices Dialog */}
+      <Dialog open={showLoginDevices} onOpenChange={setShowLoginDevices}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Login Devices</DialogTitle>
+            <DialogDescription>Devices currently signed in to your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            {devices.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-6">No other devices logged in.</p>
+            )}
+            {devices.map((device) => (
+              <div key={device.id} className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
+                <div className="flex items-center gap-3">
+                  <Smartphone className="w-5 h-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{device.name} {device.current && <span className="text-xs text-primary">(This device)</span>}</p>
+                    <p className="text-xs text-muted-foreground">{device.location}</p>
+                  </div>
+                </div>
+                {!device.current && (
+                  <Button variant="outline" size="sm" onClick={() => handleRemoveDevice(device.id)}>
+                    Log out
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Security Activity Dialog */}
+      <Dialog open={showSecurityActivity} onOpenChange={setShowSecurityActivity}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Security Activity</DialogTitle>
+            <DialogDescription>Recent activity on your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            {securityActivity.map((item) => (
+              <div key={item.id} className="flex items-start gap-3 rounded-lg border border-border p-3">
+                <Activity className="w-4 h-4 text-muted-foreground mt-0.5" />
+                <div>
+                  <p className="text-sm text-foreground">{item.action}</p>
+                  <p className="text-xs text-muted-foreground">{item.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Help Center Dialog */}
+      <Dialog open={showHelpCenter} onOpenChange={setShowHelpCenter}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Help Center</DialogTitle>
+            <DialogDescription>Frequently asked questions</DialogDescription>
+          </DialogHeader>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-sm">How do I reset my password?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Go to Settings &gt; Account &gt; Change Password and follow the instructions.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-sm">How do I delete my account?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Go to Settings &gt; Account Actions &gt; Delete Account and provide a reason.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-sm">How do I block someone?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Visit the user's profile and select Block User from the menu, or manage blocked users in Settings.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </DialogContent>
+      </Dialog>
+
+      {/* Terms Dialog */}
+      <Dialog open={showTerms} onOpenChange={setShowTerms}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Terms of Service</DialogTitle>
+            <DialogDescription>Last updated January 2024</DialogDescription>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground space-y-2 max-h-80 overflow-y-auto">
+            <p>By using this app, you agree to abide by our community guidelines and applicable laws.</p>
+            <p>You are responsible for the content you post and must respect the rights of other users.</p>
+            <p>We reserve the right to suspend accounts that violate these terms.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Privacy Policy Dialog */}
+      <Dialog open={showPrivacyPolicy} onOpenChange={setShowPrivacyPolicy}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Privacy Policy</DialogTitle>
+            <DialogDescription>Last updated January 2024</DialogDescription>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground space-y-2 max-h-80 overflow-y-auto">
+            <p>We collect minimal data required to provide our services and never sell your personal information.</p>
+            <p>You can control what information is visible to others via Privacy settings.</p>
+            <p>You may request deletion of your data at any time by deleting your account.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* About Dialog */}
+      <Dialog open={showAbout} onOpenChange={setShowAbout}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>About</DialogTitle>
+            <DialogDescription>App information</DialogDescription>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground space-y-2">
+            <p>Version 1.0.0</p>
+            <p>Made with care for connecting people around the world.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
