@@ -413,9 +413,22 @@ export default function Settings() {
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="notif-push" className="text-sm sm:text-base font-semibold">Push Notifications</Label>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Master switch for all notifications</p>
+                  </div>
+                  <Switch
+                    id="notif-push"
+                    checked={pushEnabled}
+                    onCheckedChange={setPushEnabled}
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
                   <Label htmlFor="notif-likes" className="text-sm sm:text-base">Likes</Label>
                   <Switch
                     id="notif-likes"
+                    disabled={!pushEnabled}
                     checked={notifications.likes}
                     onCheckedChange={(checked) => 
                       setNotifications({ ...notifications, likes: checked })
@@ -427,6 +440,7 @@ export default function Settings() {
                   <Label htmlFor="notif-comments" className="text-sm sm:text-base">Comments</Label>
                   <Switch
                     id="notif-comments"
+                    disabled={!pushEnabled}
                     checked={notifications.comments}
                     onCheckedChange={(checked) => 
                       setNotifications({ ...notifications, comments: checked })
@@ -435,9 +449,22 @@ export default function Settings() {
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="notif-follows" className="text-sm sm:text-base">New Follows</Label>
+                  <Label htmlFor="notif-messages" className="text-sm sm:text-base">Messages</Label>
+                  <Switch
+                    id="notif-messages"
+                    disabled={!pushEnabled}
+                    checked={notifications.messages}
+                    onCheckedChange={(checked) => 
+                      setNotifications({ ...notifications, messages: checked })
+                    }
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-follows" className="text-sm sm:text-base">Followers</Label>
                   <Switch
                     id="notif-follows"
+                    disabled={!pushEnabled}
                     checked={notifications.follows}
                     onCheckedChange={(checked) => 
                       setNotifications({ ...notifications, follows: checked })
@@ -446,12 +473,25 @@ export default function Settings() {
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="notif-messages" className="text-sm sm:text-base">Messages</Label>
+                  <Label htmlFor="notif-services" className="text-sm sm:text-base">Services</Label>
                   <Switch
-                    id="notif-messages"
-                    checked={notifications.messages}
+                    id="notif-services"
+                    disabled={!pushEnabled}
+                    checked={notifExtra.services}
                     onCheckedChange={(checked) => 
-                      setNotifications({ ...notifications, messages: checked })
+                      setNotifExtra({ ...notifExtra, services: checked })
+                    }
+                  />
+                </div>
+                <Separator />
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="notif-transport" className="text-sm sm:text-base">Transport</Label>
+                  <Switch
+                    id="notif-transport"
+                    disabled={!pushEnabled}
+                    checked={notifExtra.transport}
+                    onCheckedChange={(checked) => 
+                      setNotifExtra({ ...notifExtra, transport: checked })
                     }
                   />
                 </div>

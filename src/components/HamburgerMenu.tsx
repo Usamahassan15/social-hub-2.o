@@ -56,6 +56,22 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       },
     },
     {
+      icon: Wallet,
+      label: "Wallet",
+      onClick: () => {
+        navigate("/wallet");
+        onClose();
+      },
+    },
+    {
+      icon: Flag,
+      label: "Report Center",
+      onClick: () => {
+        navigate("/report-center");
+        onClose();
+      },
+    },
+    {
       icon: Car,
       label: "Transport",
       onClick: () => {
@@ -63,6 +79,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
         onClose();
       },
     },
+
     {
       icon: HeadphonesIcon,
       label: "Support",
