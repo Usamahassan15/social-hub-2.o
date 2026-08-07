@@ -810,6 +810,195 @@ export default function Settings() {
       <BlockedPeopleDialog isOpen={showBlockedPeople} onClose={() => setShowBlockedPeople(false)} />
       <ShareProfileModal isOpen={showShareProfile} onClose={() => setShowShareProfile(false)} />
       <SupportDialog isOpen={showSupport} onClose={() => setShowSupport(false)} />
+
+      {/* Email Dialog */}
+      <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Change Email</DialogTitle>
+            <DialogDescription>Update the email address associated with your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="email-input">Email Address</Label>
+              <input
+                id="email-input"
+                type="email"
+                value={emailValue}
+                onChange={(e) => setEmailValue(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                setShowEmailDialog(false);
+                toast({ title: "Email updated successfully" });
+              }}
+            >
+              Save Email
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Phone Dialog */}
+      <Dialog open={showPhoneDialog} onOpenChange={setShowPhoneDialog}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Change Phone Number</DialogTitle>
+            <DialogDescription>Update the phone number associated with your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="phone-input">Phone Number</Label>
+              <input
+                id="phone-input"
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                value={phoneValue}
+                onChange={(e) => setPhoneValue(e.target.value)}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              />
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                setShowPhoneDialog(false);
+                toast({ title: "Phone number updated successfully" });
+              }}
+            >
+              Save Phone
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Login Devices Dialog */}
+      <Dialog open={showLoginDevices} onOpenChange={setShowLoginDevices}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Login Devices</DialogTitle>
+            <DialogDescription>Devices currently signed in to your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            {devices.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-6">No other devices logged in.</p>
+            )}
+            {devices.map((device) => (
+              <div key={device.id} className="flex items-center justify-between gap-3 rounded-lg border border-border p-3">
+                <div className="flex items-center gap-3">
+                  <Smartphone className="w-5 h-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{device.name} {device.current && <span className="text-xs text-primary">(This device)</span>}</p>
+                    <p className="text-xs text-muted-foreground">{device.location}</p>
+                  </div>
+                </div>
+                {!device.current && (
+                  <Button variant="outline" size="sm" onClick={() => handleRemoveDevice(device.id)}>
+                    Log out
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Security Activity Dialog */}
+      <Dialog open={showSecurityActivity} onOpenChange={setShowSecurityActivity}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Security Activity</DialogTitle>
+            <DialogDescription>Recent activity on your account.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            {securityActivity.map((item) => (
+              <div key={item.id} className="flex items-start gap-3 rounded-lg border border-border p-3">
+                <Activity className="w-4 h-4 text-muted-foreground mt-0.5" />
+                <div>
+                  <p className="text-sm text-foreground">{item.action}</p>
+                  <p className="text-xs text-muted-foreground">{item.time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Help Center Dialog */}
+      <Dialog open={showHelpCenter} onOpenChange={setShowHelpCenter}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Help Center</DialogTitle>
+            <DialogDescription>Frequently asked questions</DialogDescription>
+          </DialogHeader>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-sm">How do I reset my password?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Go to Settings &gt; Account &gt; Change Password and follow the instructions.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-sm">How do I delete my account?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Go to Settings &gt; Account Actions &gt; Delete Account and provide a reason.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-sm">How do I block someone?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Visit the user's profile and select Block User from the menu, or manage blocked users in Settings.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </DialogContent>
+      </Dialog>
+
+      {/* Terms Dialog */}
+      <Dialog open={showTerms} onOpenChange={setShowTerms}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Terms of Service</DialogTitle>
+            <DialogDescription>Last updated January 2024</DialogDescription>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground space-y-2 max-h-80 overflow-y-auto">
+            <p>By using this app, you agree to abide by our community guidelines and applicable laws.</p>
+            <p>You are responsible for the content you post and must respect the rights of other users.</p>
+            <p>We reserve the right to suspend accounts that violate these terms.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Privacy Policy Dialog */}
+      <Dialog open={showPrivacyPolicy} onOpenChange={setShowPrivacyPolicy}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Privacy Policy</DialogTitle>
+            <DialogDescription>Last updated January 2024</DialogDescription>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground space-y-2 max-h-80 overflow-y-auto">
+            <p>We collect minimal data required to provide our services and never sell your personal information.</p>
+            <p>You can control what information is visible to others via Privacy settings.</p>
+            <p>You may request deletion of your data at any time by deleting your account.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* About Dialog */}
+      <Dialog open={showAbout} onOpenChange={setShowAbout}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>About</DialogTitle>
+            <DialogDescription>App information</DialogDescription>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground space-y-2">
+            <p>Version 1.0.0</p>
+            <p>Made with care for connecting people around the world.</p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
