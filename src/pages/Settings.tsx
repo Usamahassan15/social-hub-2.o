@@ -62,6 +62,7 @@ import SavedPostsDialog from "@/components/SavedPostsDialog";
 import BlockedPeopleDialog from "@/components/BlockedPeopleDialog";
 import ShareProfileModal from "@/components/ShareProfileModal";
 import SupportDialog from "@/components/SupportDialog";
+import InterestsDialog from "@/components/InterestsDialog";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -72,6 +73,7 @@ export default function Settings() {
   const [deleteReason, setDeleteReason] = useState("");
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showSavedPosts, setShowSavedPosts] = useState(false);
+  const [showInterests, setShowInterests] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
   const [showShareProfile, setShowShareProfile] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
@@ -189,7 +191,7 @@ export default function Settings() {
                 <Button
                   variant="outline"
                   className="h-12 justify-start gap-3"
-                  onClick={() => console.log("My Interests")}
+                  onClick={() => setShowInterests(true)}
                 >
                   <Heart className="w-5 h-5 text-primary" />
                   My Interests
@@ -807,6 +809,7 @@ export default function Settings() {
 
       <InviteFriendsDialog isOpen={showInviteFriends} onClose={() => setShowInviteFriends(false)} />
       <SavedPostsDialog isOpen={showSavedPosts} onClose={() => setShowSavedPosts(false)} />
+      <InterestsDialog isOpen={showInterests} onClose={() => setShowInterests(false)} />
       <BlockedPeopleDialog isOpen={showBlockedPeople} onClose={() => setShowBlockedPeople(false)} />
       <ShareProfileModal isOpen={showShareProfile} onClose={() => setShowShareProfile(false)} />
       <SupportDialog isOpen={showSupport} onClose={() => setShowSupport(false)} />

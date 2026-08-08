@@ -19,6 +19,8 @@ import WorkProfile from "@/components/profile/WorkProfile";
 import SocialProfile from "@/components/profile/SocialProfile";
 import FollowersFollowingDialog from "@/components/FollowersFollowingDialog";
 import ShareProfileModal from "@/components/ShareProfileModal";
+import { savedPostsMock } from "@/lib/savedPosts";
+import Post from "@/components/Post";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -217,12 +219,27 @@ export default function Profile() {
                       {profileMode === "work" ? (
                         <WorkProfile />
                       ) : contentTab === "saved" ? (
-                        <div className="px-3 sm:px-0">
-                          <EmptyState
-                            icon={Bookmark}
-                            title="No saved posts"
-                            description="Posts you save will appear here for quick access later."
-                          />
+                        <div className="px-3 sm:px-0 space-y-3 sm:space-y-4">
+                          {savedPostsMock.length === 0 ? (
+                            <EmptyState
+                              icon={Bookmark}
+                              title="No saved posts"
+                              description="Posts you save will appear here for quick access later."
+                            />
+                          ) : (
+                            savedPostsMock.map((post) => (
+                              <Post
+                                key={post.id}
+                                author={post.author}
+                                avatar={post.avatar}
+                                time={post.time}
+                                content={post.content}
+                                image={post.image}
+                                likes={post.likes}
+                                comments={post.comments}
+                              />
+                            ))
+                          )}
                         </div>
                       ) : (
                         <SocialProfile />

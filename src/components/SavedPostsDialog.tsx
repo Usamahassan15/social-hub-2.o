@@ -1,7 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Heart, MessageCircle } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { savedPostsMock } from "@/lib/savedPosts";
 
 interface SavedPostsDialogProps {
   isOpen: boolean;
@@ -9,8 +11,7 @@ interface SavedPostsDialogProps {
 }
 
 const SavedPostsDialog = ({ isOpen, onClose }: SavedPostsDialogProps) => {
-  // This would normally come from a context or state management
-  const savedPosts: any[] = [];
+  const savedPosts = savedPostsMock;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -21,7 +22,7 @@ const SavedPostsDialog = ({ isOpen, onClose }: SavedPostsDialogProps) => {
             Saved Posts
           </DialogTitle>
         </DialogHeader>
-        
+
         <ScrollArea className="h-full max-h-[60vh]">
           {savedPosts.length === 0 ? (
             <EmptyState
@@ -30,11 +31,32 @@ const SavedPostsDialog = ({ isOpen, onClose }: SavedPostsDialogProps) => {
               description="Posts you save will appear here for quick access later."
             />
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 pr-1">
               {savedPosts.map((post) => (
-                <div key={post.id} className="p-4 border rounded-lg">
-                  {/* Saved post content would go here */}
-                  <p>{post.content}</p>
+                <div key={post.id} className="p-3 sm:p-4 border border-border rounded-lg bg-card">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Avatar className="w-9 h-9">
+                      <AvatarImage src={post.avatar} />
+                      <AvatarFallback>{post.author[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{post.author}</p>
+                      <p className="text-xs text-muted-foreground">{post.time}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-foreground">{post.content}</p>
+                  {post.image && (
+                    <img
+                      src={post.image}
+                      alt={`Saved post by ${post.author}`}
+                      loading="lazy"
+                      className="mt-3 w-full rounded-lg object-cover max-h-56"
+                    />
+                  )}
+                  <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" /> {post.likes}</span>
+                    <span className="flex items-center gap-1"><MessageCircle className="w-3.5 h-3.5" /> {post.comments}</span>
+                  </div>
                 </div>
               ))}
             </div>
