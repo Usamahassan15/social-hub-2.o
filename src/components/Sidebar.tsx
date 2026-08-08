@@ -1,4 +1,4 @@
-import { Home, Compass, MessageCircle, User, Handshake, Settings, FolderKanban, Car } from "lucide-react";
+import { Home, Compass, MessageCircle, User, Handshake, Settings, FolderKanban, Car, Wallet } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -15,6 +15,7 @@ const Sidebar = () => {
     { icon: FolderKanban, label: "Projects & Bidding", path: "/services?openProjects=1", forcedActive: isProjectsActive, forcedInactive: !isProjectsActive },
     { icon: Handshake, label: "Services", path: "/services", forcedActive: isServicesActive, forcedInactive: !isServicesActive },
     { icon: Car, label: "Transport", path: "/transport" },
+    { icon: Wallet, label: "Wallet", path: "/wallet" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
