@@ -174,12 +174,12 @@ export default function Wallet() {
       <Sidebar />
       <TopBar />
 
-      <main className="flex-1 md:ml-64 pb-20 sm:pb-24 md:pb-8 pt-14 md:pt-14">
-        <div className="max-w-2xl lg:max-w-3xl mx-auto lg:-translate-x-32 px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-5 md:pt-6">
+      <main className="flex-1 min-w-0 w-full overflow-x-hidden pb-20 sm:pb-24 md:pb-8 pt-14 md:pt-14">
+        <div className="w-full max-w-full sm:max-w-2xl lg:max-w-3xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-5 md:pt-6 overflow-x-hidden">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 sm:mb-7 md:mb-8 flex items-center justify-between gap-3"
+            className="mb-6 sm:mb-7 md:mb-8 flex flex-wrap items-center justify-between gap-3"
           >
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-1 sm:mb-2">
@@ -233,7 +233,7 @@ export default function Wallet() {
                 <CardDescription className="text-xs sm:text-sm">Your referral rewards, bonuses & cashback</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
                   <div className="rounded-lg bg-muted/50 p-3 text-center">
                     <Users className="w-4 h-4 mx-auto mb-1 text-primary" />
                     <p className="text-sm sm:text-base font-semibold text-foreground">Rs 500</p>
@@ -273,7 +273,7 @@ export default function Wallet() {
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="all">
-                  <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 mb-4 h-auto flex-wrap">
+                  <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 mb-4 h-auto gap-1">
                     <TabsTrigger value="all" className="text-xs sm:text-sm">All</TabsTrigger>
                     <TabsTrigger value="earning" className="text-xs sm:text-sm">Earnings</TabsTrigger>
                     <TabsTrigger value="payment" className="text-xs sm:text-sm">Payments</TabsTrigger>
