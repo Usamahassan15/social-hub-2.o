@@ -1,4 +1,4 @@
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

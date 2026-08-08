@@ -1,4 +1,6 @@
-import { ArrowLeft, Calendar, MapPin, Link as LinkIcon, Users, Briefcase } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Link as LinkIcon, Users, Briefcase, MoreHorizontal, Flag, Ban } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import ReportDialog from "@/components/ReportDialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,6 +43,8 @@ export default function UserProfile() {
   const profile = userProfiles[userId];
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
+  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   if (!user || !profile) {
     return (
@@ -109,6 +113,27 @@ export default function UserProfile() {
                 <Button variant="outline" size="sm" className="flex-1 sm:flex-none h-9 sm:h-10 px-6">
                   Message
                 </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-9 sm:h-10 px-3 shrink-0" aria-label="More options">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => setIsReportOpen(true)}>
+                      <Flag className="w-4 h-4 mr-2" /> Report user
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-destructive focus:text-destructive"
+                      onClick={() => {
+                        setIsBlocked((prev) => !prev);
+                        toast({ title: isBlocked ? `Unblocked ${user.name}` : `Blocked ${user.name}` });
+                      }}
+                    >
+                      <Ban className="w-4 h-4 mr-2" /> {isBlocked ? "Unblock user" : "Block user"}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
@@ -161,6 +186,8 @@ export default function UserProfile() {
           </div>
         </div>
       </main>
+
+      <ReportDialog isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} type="user" />
 
       <MobileNav />
     </div>
