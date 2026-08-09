@@ -55,21 +55,21 @@ const ShareProfileModal = ({ isOpen, onClose }: ShareProfileModalProps) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
-          />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50 p-4"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md"
           >
-            <Card className="p-6">
+            <Card className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-foreground">Share Profile</h2>
                 <Button variant="ghost" size="icon" onClick={onClose}>
@@ -118,7 +118,7 @@ const ShareProfileModal = ({ isOpen, onClose }: ShareProfileModalProps) => {
               </div>
             </Card>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   );
