@@ -9,6 +9,7 @@ import SavedPostsDialog from "./SavedPostsDialog";
 import InviteFriendsDialog from "./InviteFriendsDialog";
 import BlockedPeopleDialog from "./BlockedPeopleDialog";
 import SupportDialog from "./SupportDialog";
+import InterestsDialog from "./InterestsDialog";
 import { toast } from "@/hooks/use-toast";
 
 interface HamburgerMenuProps {
@@ -21,6 +22,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
   const [showInviteFriends, setShowInviteFriends] = useState(false);
   const [showBlockedPeople, setShowBlockedPeople] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [showInterests, setShowInterests] = useState(false);
   const [mode, setMode] = useState<"seller" | "buyer">("seller");
   const navigate = useNavigate();
 
@@ -29,8 +31,7 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
       icon: Heart,
       label: "My Interests",
       onClick: () => {
-        console.log("My Interests clicked");
-        onClose();
+        setShowInterests(true);
       },
     },
     {
@@ -197,6 +198,14 @@ const HamburgerMenu = ({ isOpen, onClose }: HamburgerMenuProps) => {
         isOpen={showSupport}
         onClose={() => {
           setShowSupport(false);
+          onClose();
+        }}
+      />
+
+      <InterestsDialog
+        isOpen={showInterests}
+        onClose={() => {
+          setShowInterests(false);
           onClose();
         }}
       />
