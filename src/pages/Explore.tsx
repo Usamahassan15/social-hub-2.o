@@ -387,7 +387,16 @@ const Explore = () => {
                     ))}
                   </div>
                 )}
+
+                {/* Instagram-style trending image gallery */}
+                <div className="mt-4">
+                  <ExploreGallery
+                    selectedCategory={selectedCategory}
+                    onCategorySelect={setSelectedCategory}
+                  />
+                </div>
               </div>
+
 
               {/* People suggestions */}
               <div>
