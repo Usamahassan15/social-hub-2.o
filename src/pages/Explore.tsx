@@ -16,6 +16,8 @@ import { useState, useMemo, useEffect } from "react";
 import { useFeed, useTrendingTopics } from "@/hooks/use-feed";
 import LivePost from "@/components/LivePost";
 import { EmptyState } from "@/components/ui/empty-state";
+import ExploreGallery from "@/components/ExploreGallery";
+
 
 const mockPeople = [
   { id: 1, name: "Sarah Connor", username: "@sarahconnor", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah", bio: "Tech enthusiast & designer", mutualFriends: 12 },
