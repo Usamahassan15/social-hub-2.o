@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Heart, MessageCircle, Send, Bookmark, X, ArrowLeft } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import InstaPost from "@/components/InstaPost";
 
 const CATEGORIES = [
   { name: "Technology", emoji: "💻" },
@@ -222,55 +223,20 @@ const GalleryViewer = ({
         ref={containerRef}
         className="h-[calc(100vh-3.5rem)] overflow-y-auto overscroll-contain"
       >
-        <div className="mx-auto w-full max-w-[560px] pb-16">
+        <div className="mx-auto w-full max-w-[560px] pb-16 space-y-3">
           {items.map((item, idx) => (
-            <article key={item.id} data-idx={idx} className="border-b border-border pb-3 mb-3">
-              <div className="flex items-center gap-2 px-3 py-2.5">
-                <Avatar className="w-9 h-9">
-                  <AvatarImage src={item.avatar} alt={item.author} />
-                  <AvatarFallback>{item.author.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">{item.author}</p>
-                  <p className="text-xs text-muted-foreground truncate">#{item.category}</p>
-                </div>
-              </div>
-              <img
-                src={item.image}
-                alt={item.caption}
-                loading="lazy"
-                className="w-full aspect-square object-cover bg-muted"
+            <div key={item.id} data-idx={idx}>
+              <InstaPost
+                id={item.id}
+                content={item.caption}
+                media_url={item.image}
+                category={item.category}
+                likes_count={item.likes}
+                comments_count={item.comments}
+                author={item.author}
+                avatar={item.avatar}
               />
-              <div className="flex items-center gap-4 px-3 pt-2.5">
-                <button
-                  onClick={() => setLiked((p) => ({ ...p, [item.id]: !p[item.id] }))}
-                  className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Heart
-                    className={`w-5 h-5 ${liked[item.id] ? "fill-red-500 text-red-500" : ""}`}
-                  />
-                  {item.likes + (liked[item.id] ? 1 : 0)}
-                </button>
-                <span className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-                  <MessageCircle className="w-5 h-5" />
-                  {item.comments}
-                </span>
-                <Send className="w-5 h-5 text-muted-foreground" />
-                <button
-                  className="ml-auto"
-                  onClick={() => setSaved((p) => ({ ...p, [item.id]: !p[item.id] }))}
-                  aria-label="Save"
-                >
-                  <Bookmark
-                    className={`w-5 h-5 ${saved[item.id] ? "fill-primary text-primary" : "text-muted-foreground"}`}
-                  />
-                </button>
-              </div>
-              <p className="px-3 pt-2 text-sm text-foreground">
-                <span className="font-semibold mr-1.5">{item.author}</span>
-                {item.caption}
-              </p>
-            </article>
+            </div>
           ))}
         </div>
       </div>

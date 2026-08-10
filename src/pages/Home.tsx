@@ -9,7 +9,7 @@ import PeopleYouMayKnow from "@/components/PeopleYouMayKnow";
 import CreatePost from "@/components/CreatePost";
 import FeedTypeSelector from "@/components/FeedTypeSelector";
 import TrendingSection from "@/components/TrendingSection";
-import LivePost from "@/components/LivePost";
+import InstaPost from "@/components/InstaPost";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useFeed } from "@/hooks/use-feed";
@@ -235,7 +235,7 @@ const Home = () => {
             {feedPosts.map((post, index) => (
               <React.Fragment key={post.id}>
                 {index === 3 && <PeopleYouMayKnow />}
-                <LivePost {...post} />
+                <InstaPost {...post} />
               </React.Fragment>
             ))}
 
