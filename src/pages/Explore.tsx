@@ -386,7 +386,7 @@ const Explore = () => {
                       </motion.div>
                     ))}
                   </div>
-                ) : null)}
+                ) : null}
 
                 {/* Instagram-style trending image gallery */}
                 <div className="mt-4">
