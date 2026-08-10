@@ -373,9 +373,7 @@ const Explore = () => {
                       </Card>
                     ))}
                   </div>
-                ) : trendingPosts.length === 0 ? (
-                  <EmptyState icon={TrendingUp} title="No trending posts yet" description="Be the first to create one!" />
-                ) : (
+                ) : trendingPosts.length > 0 ? (
                   <div className="space-y-3">
                     {trendingPosts.map((post, index) => (
                       <motion.div
