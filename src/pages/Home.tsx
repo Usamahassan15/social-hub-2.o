@@ -235,7 +235,7 @@ const Home = () => {
             {feedPosts.map((post, index) => (
               <React.Fragment key={post.id}>
                 {index === 3 && <PeopleYouMayKnow />}
-                <LivePost {...post} />
+                <InstaPost {...post} />
               </React.Fragment>
             ))}
 
