@@ -288,9 +288,9 @@ const Messages = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-destructive"
-                          onClick={() => { handleDeleteConversation(); exitSelect(); }}
+                          onClick={() => { handleDeleteConversation(selectedIds); exitSelect(); }}
                         >
-                          <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          <Trash2 className="w-4 h-4 mr-2" /> Delete Chat
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
