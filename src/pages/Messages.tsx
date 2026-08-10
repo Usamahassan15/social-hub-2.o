@@ -197,7 +197,11 @@ const Messages = () => {
   const handleDeleteConversation = (ids?: number[]) => {
     const targets = ids && ids.length ? ids : selectedIds;
     if (!targets.length) return;
-    setConversations(prev => prev.filter(c => !targets.includes(c.id)));
+    setConversations(prev => {
+      const next = prev.filter(c => !targets.includes(c.id));
+      if (targets.includes(selectedConversation) && next.length) setSelectedConversation(next[0].id);
+      return next;
+    });
     toast({ title: targets.length > 1 ? `${targets.length} chats deleted` : "Chat deleted" });
   };
 
