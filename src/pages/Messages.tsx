@@ -194,8 +194,11 @@ const Messages = () => {
 
 
 
-  const handleDeleteConversation = () => {
-    toast({ title: "Conversation deleted" });
+  const handleDeleteConversation = (ids?: number[]) => {
+    const targets = ids && ids.length ? ids : selectedIds;
+    if (!targets.length) return;
+    setConversations(prev => prev.filter(c => !targets.includes(c.id)));
+    toast({ title: targets.length > 1 ? `${targets.length} chats deleted` : "Chat deleted" });
   };
 
   const handleClearChat = () => {
