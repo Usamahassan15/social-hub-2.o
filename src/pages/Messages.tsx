@@ -48,7 +48,7 @@ interface Message {
   };
 }
 
-const conversations: Conversation[] = [
+const initialConversations: Conversation[] = [
   {
     id: 1,
     user: "Sarah Johnson",
@@ -132,7 +132,23 @@ const Messages = () => {
   const [blocked, setBlocked] = useState<number[]>([]);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+  const [msgSelectMode, setMsgSelectMode] = useState(false);
+  const [selectedMsgIds, setSelectedMsgIds] = useState<number[]>([]);
+  const [showDeleteMsgOptions, setShowDeleteMsgOptions] = useState(false);
   const { clearUnread } = useUnreadMessages();
+
+  const exitMsgSelect = () => { setMsgSelectMode(false); setSelectedMsgIds([]); setShowDeleteMsgOptions(false); };
+
+  const toggleMsgSelect = (id: number) => {
+    setSelectedMsgIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const deleteSelectedMessages = (scope: "everyone" | "me") => {
+    setMessages(prev => prev.filter(m => !selectedMsgIds.includes(m.id)));
+    toast({ title: scope === "everyone" ? "Deleted for everyone" : "Deleted for you" });
+    exitMsgSelect();
+  };
 
   const toggleIn = (list: number[], setList: (v: number[]) => void, id: number) => {
     setList(list.includes(id) ? list.filter(x => x !== id) : [...list, id]);
@@ -178,8 +194,15 @@ const Messages = () => {
 
 
 
-  const handleDeleteConversation = () => {
-    toast({ title: "Conversation deleted" });
+  const handleDeleteConversation = (ids?: number[]) => {
+    const targets = ids && ids.length ? ids : selectedIds;
+    if (!targets.length) return;
+    setConversations(prev => {
+      const next = prev.filter(c => !targets.includes(c.id));
+      if (targets.includes(selectedConversation) && next.length) setSelectedConversation(next[0].id);
+      return next;
+    });
+    toast({ title: targets.length > 1 ? `${targets.length} chats deleted` : "Chat deleted" });
   };
 
   const handleClearChat = () => {
@@ -269,9 +292,9 @@ const Messages = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="text-destructive"
-                          onClick={() => { handleDeleteConversation(); exitSelect(); }}
+                          onClick={() => { handleDeleteConversation(selectedIds); exitSelect(); }}
                         >
-                          <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          <Trash2 className="w-4 h-4 mr-2" /> Delete Chat
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -383,6 +406,16 @@ const Messages = () => {
             } md:flex flex-1 flex-col bg-background`}
           >
             {/* Chat Header */}
+            {msgSelectMode ? (
+              <div className="p-4 border-b border-border bg-card flex items-center justify-between sticky top-0 z-10">
+                <h3 className="font-semibold text-foreground text-sm sm:text-base">
+                  Delete {selectedMsgIds.length > 0 ? `(${selectedMsgIds.length}) ` : ""}message{selectedMsgIds.length === 1 ? "" : "s"} ?
+                </h3>
+                <Button variant="ghost" size="icon" aria-label="Cancel message selection" onClick={exitMsgSelect}>
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+            ) : (
             <div className="p-4 border-b border-border bg-card flex items-center justify-between sticky top-0 z-10">
               <div className="flex items-center gap-3">
                 <Button
@@ -425,6 +458,16 @@ const Messages = () => {
                       <Ban className="w-4 h-4 mr-2" /> Block
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => { setMsgSelectMode(true); setSelectedMsgIds([]); }}>
+                      <Trash2 className="w-4 h-4 mr-2" /> Delete Messages
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => { handleDeleteConversation([selectedConversation]); setShowConversationList(true); }}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" /> Delete Chat
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => toast({ title: "Technical problem reported", description: "We'll look into it shortly." })}>
                       <AlertTriangle className="w-4 h-4 mr-2" /> Report Technical Problem
                     </DropdownMenuItem>
@@ -432,6 +475,7 @@ const Messages = () => {
                 </DropdownMenu>
               </div>
             </div>
+            )}
 
             {/* Messages */}
             <ScrollArea className="flex-1 p-4">
@@ -439,12 +483,58 @@ const Messages = () => {
                 {messages.map((message) => (
                   <div key={message.id}>
                     {message.dateLabel && <div className="my-4 flex items-center gap-3"><div className="h-px flex-1 bg-border" /><span className="text-xs font-medium text-muted-foreground">{message.dateLabel}</span><div className="h-px flex-1 bg-border" /></div>}
-                    <MessageBubble message={message} onReply={handleReply} />
+                    {msgSelectMode ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleMsgSelect(message.id)}
+                        aria-pressed={selectedMsgIds.includes(message.id)}
+                        className={`w-full flex items-start gap-2 rounded-2xl p-1 text-left transition-colors ${selectedMsgIds.includes(message.id) ? "bg-primary/10" : "hover:bg-muted/50"}`}
+                      >
+                        <span className={`mt-3 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border ${selectedMsgIds.includes(message.id) ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>
+                          {selectedMsgIds.includes(message.id) && <CheckSquare className="h-3 w-3" />}
+                        </span>
+                        <span className="flex-1 pointer-events-none">
+                          <MessageBubble message={message} onReply={handleReply} />
+                        </span>
+                      </button>
+                    ) : (
+                      <MessageBubble message={message} onReply={handleReply} />
+                    )}
                   </div>
                 ))}
-                {selectedUser?.online && <div className="flex items-center gap-2 px-2 text-xs text-muted-foreground"><span>{selectedUser.user} is typing</span><span className="flex gap-1" aria-label="Typing"><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:-0.3s]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:-0.15s]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground" /></span></div>}
+                {!msgSelectMode && selectedUser?.online && <div className="flex items-center gap-2 px-2 text-xs text-muted-foreground"><span>{selectedUser.user} is typing</span><span className="flex gap-1" aria-label="Typing"><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:-0.3s]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:-0.15s]" /><i className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground" /></span></div>}
               </div>
             </ScrollArea>
+
+            {/* Delete messages action bar */}
+            {msgSelectMode && (
+              <div className="border-t border-border bg-card p-3 sm:p-4">
+                <div className="max-w-3xl mx-auto">
+                  {showDeleteMsgOptions ? (
+                    <div className="space-y-2">
+                      <Button variant="destructive" className="w-full" onClick={() => deleteSelectedMessages("everyone")}>
+                        Delete for everyone
+                      </Button>
+                      <Button variant="outline" className="w-full" onClick={() => deleteSelectedMessages("me")}>
+                        Delete for you
+                      </Button>
+                      <Button variant="ghost" className="w-full" onClick={() => setShowDeleteMsgOptions(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="destructive"
+                      className="w-full"
+                      disabled={selectedMsgIds.length === 0}
+                      onClick={() => setShowDeleteMsgOptions(true)}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" /> Delete{selectedMsgIds.length ? ` (${selectedMsgIds.length})` : ""}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Reply Preview */}
             <AnimatePresence>
