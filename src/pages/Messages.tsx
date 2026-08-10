@@ -48,7 +48,7 @@ interface Message {
   };
 }
 
-const conversations: Conversation[] = [
+const initialConversations: Conversation[] = [
   {
     id: 1,
     user: "Sarah Johnson",
@@ -132,7 +132,23 @@ const Messages = () => {
   const [blocked, setBlocked] = useState<number[]>([]);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+  const [msgSelectMode, setMsgSelectMode] = useState(false);
+  const [selectedMsgIds, setSelectedMsgIds] = useState<number[]>([]);
+  const [showDeleteMsgOptions, setShowDeleteMsgOptions] = useState(false);
   const { clearUnread } = useUnreadMessages();
+
+  const exitMsgSelect = () => { setMsgSelectMode(false); setSelectedMsgIds([]); setShowDeleteMsgOptions(false); };
+
+  const toggleMsgSelect = (id: number) => {
+    setSelectedMsgIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const deleteSelectedMessages = (scope: "everyone" | "me") => {
+    setMessages(prev => prev.filter(m => !selectedMsgIds.includes(m.id)));
+    toast({ title: scope === "everyone" ? "Deleted for everyone" : "Deleted for you" });
+    exitMsgSelect();
+  };
 
   const toggleIn = (list: number[], setList: (v: number[]) => void, id: number) => {
     setList(list.includes(id) ? list.filter(x => x !== id) : [...list, id]);
