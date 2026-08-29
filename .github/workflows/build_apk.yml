@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,6 +24,14 @@ jobs:
         with:
           flutter-version: '3.x'
           channel: 'stable'
+
+      - name: Initialize Flutter Project
+        run: |
+          # Generate platform files if they don't exist
+          if [ ! -d "android" ]; then
+            flutter create --platforms=android .
+          fi
+        working-directory: flutter_app
           
       - name: Install dependencies
         run: flutter pub get
