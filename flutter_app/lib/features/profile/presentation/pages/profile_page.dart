@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/profile_provider.dart';
+import '../widgets/work_profile.dart';
+import '../widgets/social_profile.dart';
+import '../widgets/followers_following_dialog.dart';
+import '../widgets/share_profile_modal.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -29,27 +33,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
   void _showStatsDialog(String title, List<String> items) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (context, index) => ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.person)),
-              title: Text(items[index]),
-              trailing: TextButton(
-                onPressed: () {},
-                child: const Text('Remove'),
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => context.pop(), child: const Text('Close')),
-        ],
-      ),
+      builder: (context) => FollowersFollowingDialog(title: title, users: items),
     );
   }
 
@@ -231,10 +215,21 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
                                 const SizedBox(width: 8),
                                 _ActionButton(
                                   icon: Icons.share_outlined,
-                                  onTap: () {},
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (context) => ShareProfileModal(username: profile.username ?? 'user'),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 16),
+                            // Profile Details based on mode
+                            isWorkMode
+                                ? WorkProfile(profile: profile)
+                                : SocialProfile(profile: profile),
                           ],
                         ),
                       ),
