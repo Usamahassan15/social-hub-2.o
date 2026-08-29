@@ -30,22 +30,19 @@ jobs:
 
       - name: Initialize Flutter Project
         run: |
-          # Generate platform files if they don't exist
-          if [ ! -d "android" ]; then
-            flutter create --platforms=android --project-name=nexus_connect .
-          fi
+          # Remove existing platform folders to ensure a clean slate
+          rm -rf android ios web linux macos windows
+          flutter create --platforms=android --project-name=nexus_connect --force .
         working-directory: flutter_app
           
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
         working-directory: flutter_app
 
-      - name: Run Build Runner
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-        working-directory: flutter_app
-        
       - name: Build APK
-        run: flutter build apk --release --no-pub
+        run: flutter build apk --release --no-pub --verbose
         working-directory: flutter_app
         
       - name: Upload APK
