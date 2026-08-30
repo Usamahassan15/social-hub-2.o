@@ -1,5 +1,5 @@
 name: Build Flutter APK
-# Trigger build on push or manual dispatch
+
 on:
   push:
     branches: [ main ]
@@ -11,7 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
       
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -22,24 +23,27 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
           channel: 'stable'
 
       - name: Initialize Platform Files
-        run: flutter create --project-name=nexus_connect .
-        working-directory: flutter_app
+        run: |
+          cd flutter_app
+          flutter create --project-name=nexus_connect .
           
       - name: Install Dependencies
-        run: flutter pub get
-        working-directory: flutter_app
+        run: |
+          cd flutter_app
+          flutter pub get
 
       - name: Build Runner
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-        working-directory: flutter_app
+        run: |
+          cd flutter_app
+          flutter pub run build_runner build --delete-conflicting-outputs
         
       - name: Build APK
-        run: flutter build apk --release
-        working-directory: flutter_app
+        run: |
+          cd flutter_app
+          flutter build apk --release
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
